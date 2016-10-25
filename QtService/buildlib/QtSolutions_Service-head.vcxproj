@@ -1,0 +1,199 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{2FAA3C94-9434-3701-854B-4623825DDB16}</ProjectGuid>
+    <RootNamespace>QtSolutions_Service-head</RootNamespace>
+    <Keyword>Qt4VSv1.0</Keyword>
+    <ProjectName>QtService</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <PlatformToolSet>v120</PlatformToolSet>
+    <OutputDirectory>..\lib\</OutputDirectory>
+    <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+    <CharacterSet>NotSet</CharacterSet>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <IntermediateDirectory>release\</IntermediateDirectory>
+    <PrimaryOutput>QtSolutions_Service-head</PrimaryOutput>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <PlatformToolSet>v120</PlatformToolSet>
+    <OutputDirectory>..\lib\</OutputDirectory>
+    <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+    <CharacterSet>NotSet</CharacterSet>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <IntermediateDirectory>debug\</IntermediateDirectory>
+    <PrimaryOutput>QtSolutions_Service-headd</PrimaryOutput>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\lib\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">QtSolutions_Service-head</TargetName>
+    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</IgnoreImportLibrary>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <PostBuildEventUseInBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</PostBuildEventUseInBuild>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)\$(PlatformTarget)\$(Configuration)</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">QtService</TargetName>
+    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</IgnoreImportLibrary>
+    <PostBuildEventUseInBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</PostBuildEventUseInBuild>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>.;..\src;C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include;C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtGui;C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtANGLE;C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtCore;release;C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\mkspecs\win32-msvc2013;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>-Zc:strictStrings -w34100 -w34189 -w44996 %(AdditionalOptions)</AdditionalOptions>
+      <AssemblerListingLocation>release\</AssemblerListingLocation>
+      <BrowseInformation>false</BrowseInformation>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ObjectFileName>release\</ObjectFileName>
+      <Optimization>MaxSpeed</Optimization>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;WIN64;QT_QTSERVICE_EXPORT;QT_NO_DEBUG;QT_GUI_LIB;QT_CORE_LIB;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessToFile>false</PreprocessToFile>
+      <ProgramDataBaseFileName>
+      </ProgramDataBaseFileName>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>user32.lib;Wtsapi32.lib;Advapi32.lib;C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\lib\Qt5Gui.lib;C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\lib\Qt5Core.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <DataExecutionPrevention>true</DataExecutionPrevention>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreImportLibrary>true</IgnoreImportLibrary>
+      <LinkDLL>true</LinkDLL>
+      <LinkIncremental>false</LinkIncremental>
+      <OutputFile>$(OutDir)\QtSolutions_Service-head.dll</OutputFile>
+      <RandomizedBaseAddress>true</RandomizedBaseAddress>
+      <SubSystem>Windows</SubSystem>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Link>
+    <Midl>
+      <DefaultCharType>Unsigned</DefaultCharType>
+      <EnableErrorChecks>None</EnableErrorChecks>
+      <WarningLevel>0</WarningLevel>
+    </Midl>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;WIN64;QT_QTSERVICE_EXPORT;QT_NO_DEBUG;QT_GUI_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <PostBuildEvent>
+      <Command>copy "$(TargetPath)" C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin</Command>
+      <Message>Copy QtSolutions_Service-head.dll to C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin</Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>.;..\src;C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include;C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtGui;C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtANGLE;C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtCore;debug;C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\mkspecs\win32-msvc2013;..\..\RemoteService;..\..\MongoDbWrapper;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>-w34100 -w34189 -w44996 %(AdditionalOptions)</AdditionalOptions>
+      <AssemblerListingLocation>debug\</AssemblerListingLocation>
+      <BrowseInformation>true</BrowseInformation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ObjectFileName>debug\</ObjectFileName>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;WIN64;QT_QTSERVICE_EXPORT;QT_GUI_LIB;QT_CORE_LIB;QTSERVICE_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessToFile>false</PreprocessToFile>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>user32.lib;Wtsapi32.lib;Advapi32.lib;C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\lib\Qt5Guid.lib;C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\lib\Qt5Cored.lib;MongoDbWrapper.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\lib;..\..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <DataExecutionPrevention>true</DataExecutionPrevention>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreImportLibrary>true</IgnoreImportLibrary>
+      <LinkDLL>true</LinkDLL>
+      <OutputFile>$(OutDir)\QtService.dll</OutputFile>
+      <RandomizedBaseAddress>true</RandomizedBaseAddress>
+      <SubSystem>Windows</SubSystem>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Link>
+    <Midl>
+      <DefaultCharType>Unsigned</DefaultCharType>
+      <EnableErrorChecks>None</EnableErrorChecks>
+      <WarningLevel>0</WarningLevel>
+    </Midl>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;WIN64;QT_QTSERVICE_EXPORT;QT_GUI_LIB;QT_CORE_LIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <PostBuildEvent>
+      <Command>copy $(ProjectDir)$(PlatformTarget)\$(Configuration)\$(ProjectName).dll  $(ProjectDir)..\..\bin
+copy $(ProjectDir)$(PlatformTarget)\$(Configuration)\$(ProjectName).lib  $(ProjectDir)..\..\lib
+</Command>
+      <Message>
+      </Message>
+    </PostBuildEvent>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\qtservice.cpp" />
+    <ClCompile Include="..\src\qtservice_win.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\qtservice.h" />
+    <ClInclude Include="..\src\qtservice_p.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="debug\qtservice.moc">
+      <FileType>Document</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\src\qtservice.cpp;C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_QTSERVICE_EXPORT -DQT_GUI_LIB -DQT_CORE_LIB -D_MSC_VER=1800 -D_WIN32 -D_WIN64 -IC:/tool/RemotePkg/Qt/Qt5.7.0/5.7/msvc2013_64/mkspecs/win32-msvc2013 -IC:/Projekte/test/qt-solutions-master/qtservice/buildlib -IC:/Projekte/test/qt-solutions-master/qtservice/src -IC:/tool/RemotePkg/Qt/Qt5.7.0/5.7/msvc2013_64/include -IC:/tool/RemotePkg/Qt/Qt5.7.0/5.7/msvc2013_64/include/QtGui -IC:/tool/RemotePkg/Qt/Qt5.7.0/5.7/msvc2013_64/include/QtANGLE -IC:/tool/RemotePkg/Qt/Qt5.7.0/5.7/msvc2013_64/include/QtCore ..\src\qtservice.cpp -o debug\qtservice.moc</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC ../src/qtservice.cpp</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug\qtservice.moc;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="release\qtservice.moc">
+      <FileType>Document</FileType>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\src\qtservice.cpp;C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_QTSERVICE_EXPORT -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -D_MSC_VER=1800 -D_WIN32 -D_WIN64 -IC:/tool/RemotePkg/Qt/Qt5.7.0/5.7/msvc2013_64/mkspecs/win32-msvc2013 -IC:/Projekte/test/qt-solutions-master/qtservice/buildlib -IC:/Projekte/test/qt-solutions-master/qtservice/src -IC:/tool/RemotePkg/Qt/Qt5.7.0/5.7/msvc2013_64/include -IC:/tool/RemotePkg/Qt/Qt5.7.0/5.7/msvc2013_64/include/QtGui -IC:/tool/RemotePkg/Qt/Qt5.7.0/5.7/msvc2013_64/include/QtANGLE -IC:/tool/RemotePkg/Qt/Qt5.7.0/5.7/msvc2013_64/include/QtCore ..\src\qtservice.cpp -o release\qtservice.moc</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC ../src/qtservice.cpp</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release\qtservice.moc;%(Outputs)</Outputs>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </CustomBuild>
+    <CustomBuild Include="debug\qtservice_win.moc">
+      <FileType>Document</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\src\qtservice_win.cpp;C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_QTSERVICE_EXPORT -DQT_GUI_LIB -DQT_CORE_LIB -D_MSC_VER=1800 -D_WIN32 -D_WIN64 -IC:/tool/RemotePkg/Qt/Qt5.7.0/5.7/msvc2013_64/mkspecs/win32-msvc2013 -IC:/Projekte/test/qt-solutions-master/qtservice/buildlib -IC:/Projekte/test/qt-solutions-master/qtservice/src -IC:/tool/RemotePkg/Qt/Qt5.7.0/5.7/msvc2013_64/include -IC:/tool/RemotePkg/Qt/Qt5.7.0/5.7/msvc2013_64/include/QtGui -IC:/tool/RemotePkg/Qt/Qt5.7.0/5.7/msvc2013_64/include/QtANGLE -IC:/tool/RemotePkg/Qt/Qt5.7.0/5.7/msvc2013_64/include/QtCore ..\src\qtservice_win.cpp -o debug\qtservice_win.moc</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC ../src/qtservice_win.cpp</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug\qtservice_win.moc;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="release\qtservice_win.moc">
+      <FileType>Document</FileType>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\src\qtservice_win.cpp;C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_QTSERVICE_EXPORT -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -D_MSC_VER=1800 -D_WIN32 -D_WIN64 -IC:/tool/RemotePkg/Qt/Qt5.7.0/5.7/msvc2013_64/mkspecs/win32-msvc2013 -IC:/Projekte/test/qt-solutions-master/qtservice/buildlib -IC:/Projekte/test/qt-solutions-master/qtservice/src -IC:/tool/RemotePkg/Qt/Qt5.7.0/5.7/msvc2013_64/include -IC:/tool/RemotePkg/Qt/Qt5.7.0/5.7/msvc2013_64/include/QtGui -IC:/tool/RemotePkg/Qt/Qt5.7.0/5.7/msvc2013_64/include/QtANGLE -IC:/tool/RemotePkg/Qt/Qt5.7.0/5.7/msvc2013_64/include/QtCore ..\src\qtservice_win.cpp -o release\qtservice_win.moc</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC ../src/qtservice_win.cpp</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release\qtservice_win.moc;%(Outputs)</Outputs>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </CustomBuild>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+</Project>
