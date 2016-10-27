@@ -1,0 +1,366 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Helper">
+      <UniqueIdentifier>{102ef2e1-6cf5-4fab-bb35-58ea40003a15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Helper\Shutdown">
+      <UniqueIdentifier>{84da5e7f-df1c-4fdb-bc13-b2a1dce41106}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Hardware">
+      <UniqueIdentifier>{3102ea2f-9705-4d55-83bd-e545254412e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Helper\Logger">
+      <UniqueIdentifier>{c3a24e6b-ec99-4fea-a779-d22e6515d77b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scheduler">
+      <UniqueIdentifier>{4fc0a699-4a0e-431f-90d9-b7265d38044b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Helper\CanEasy">
+      <UniqueIdentifier>{6014b4ea-e44a-4e50-a733-3b3e0f28ef43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Helper\FHostSP">
+      <UniqueIdentifier>{1203a99d-b11e-4b1e-b31b-e0b30c935a68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Helper\MKS">
+      <UniqueIdentifier>{7b8b4529-4873-4997-bd12-b22bd43b0e27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Helper\Flash">
+      <UniqueIdentifier>{d36ce539-b07b-4895-b753-49bb7dd27eeb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Helper\WindowsApI">
+      <UniqueIdentifier>{a802ea99-9b03-43bf-858d-784d5259ff6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Communication">
+      <UniqueIdentifier>{00defb77-320f-4b79-aac3-90bb12cea005}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Communication\Websocket">
+      <UniqueIdentifier>{8eb81196-2e01-4fc3-ae6e-1fac4116da73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Communication\LocalSocket">
+      <UniqueIdentifier>{e561f9d9-a2b1-44fd-8c50-610c5ef839c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Communication\TcpSocket">
+      <UniqueIdentifier>{81cd12ae-d4c2-474e-a868-e547d08e287b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Generierte Dateien">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;moc;h;def;odl;idl;res;</Extensions>
+    </Filter>
+    <Filter Include="Generierte Dateien\Debug">
+      <UniqueIdentifier>{056b8afb-acd5-434c-bd98-e5f320e17e50}</UniqueIdentifier>
+      <Extensions>cpp;moc</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="Generierte Dateien\Release">
+      <UniqueIdentifier>{1d7e02a1-e2e1-4442-9277-081d111c90f2}</UniqueIdentifier>
+      <Extensions>cpp;moc</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="Source Dateien">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="ShutdownHandler.hpp">
+      <Filter>Helper\Shutdown</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Inactivitywatcher.hpp">
+      <Filter>Helper\Shutdown</Filter>
+    </CustomBuild>
+    <CustomBuild Include="JobScheduler.h">
+      <Filter>Scheduler</Filter>
+    </CustomBuild>
+    <CustomBuild Include="AbstractCommand.h">
+      <Filter>Scheduler</Filter>
+    </CustomBuild>
+    <CustomBuild Include="JobQueue.h">
+      <Filter>Scheduler</Filter>
+    </CustomBuild>
+    <CustomBuild Include="DeviceManager.h">
+      <Filter>Hardware</Filter>
+    </CustomBuild>
+    <CustomBuild Include="AbstractDevice.h">
+      <Filter>Hardware</Filter>
+    </CustomBuild>
+    <CustomBuild Include="CanEasyHelper.h">
+      <Filter>Helper\CanEasy</Filter>
+    </CustomBuild>
+    <CustomBuild Include="FHostSPHelper.h">
+      <Filter>Helper\FHostSP</Filter>
+    </CustomBuild>
+    <CustomBuild Include="MKSHelper.h">
+      <Filter>Helper\MKS</Filter>
+    </CustomBuild>
+    <CustomBuild Include="FlashCmdProcessor.h">
+      <Filter>Helper\Flash</Filter>
+    </CustomBuild>
+    <CustomBuild Include="WebSocketThread.h">
+      <Filter>Communication\Websocket</Filter>
+    </CustomBuild>
+    <CustomBuild Include="WebSocketServer.h">
+      <Filter>Communication\Websocket</Filter>
+    </CustomBuild>
+    <CustomBuild Include="CommandInterpreter.hpp">
+      <Filter>Communication\TcpSocket</Filter>
+    </CustomBuild>
+    <CustomBuild Include="LocalServer.h">
+      <Filter>Communication\LocalSocket</Filter>
+    </CustomBuild>
+    <CustomBuild Include="TCPServer.h">
+      <Filter>Communication\TcpSocket</Filter>
+    </CustomBuild>
+    <CustomBuild Include="IPCThread.h">
+      <Filter>Communication\TcpSocket</Filter>
+    </CustomBuild>
+    <CustomBuild Include="EnumDefinitions.h">
+      <Filter>Source Dateien</Filter>
+    </CustomBuild>
+    <CustomBuild Include="UtilProcess.h">
+      <Filter>Helper</Filter>
+    </CustomBuild>
+    <CustomBuild Include="MongoDbSink.h">
+      <Filter>Helper\Logger</Filter>
+    </CustomBuild>
+    <CustomBuild Include="WinApiHelper.h">
+      <Filter>Helper\WindowsApI</Filter>
+    </CustomBuild>
+    <CustomBuild Include="AnelHome.h">
+      <Filter>Hardware</Filter>
+    </CustomBuild>
+    <CustomBuild Include="PowerStripeDevice.h">
+      <Filter>Hardware</Filter>
+    </CustomBuild>
+    <CustomBuild Include="PowerSupplyDevice.h">
+      <Filter>Hardware</Filter>
+    </CustomBuild>
+    <CustomBuild Include="RemoteBoxDevice.h">
+      <Filter>Hardware</Filter>
+    </CustomBuild>
+    <CustomBuild Include="VoltCraft.h">
+      <Filter>Hardware</Filter>
+    </CustomBuild>
+    <CustomBuild Include="AbstractCommandBuilder.h">
+      <Filter>Scheduler</Filter>
+    </CustomBuild>
+    <CustomBuild Include="CommandBuilder.h">
+      <Filter>Scheduler</Filter>
+    </CustomBuild>
+    <CustomBuild Include="BasicServer.h">
+      <Filter>Communication</Filter>
+    </CustomBuild>
+    <CustomBuild Include="CommunicationServer.h">
+      <Filter>Communication</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="GeneratedFiles\Debug\moc_CommandInterpreter.cpp">
+      <Filter>Generierte Dateien\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_CommandInterpreter.cpp">
+      <Filter>Generierte Dateien\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_Inactivitywatcher.cpp">
+      <Filter>Generierte Dateien\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_Inactivitywatcher.cpp">
+      <Filter>Generierte Dateien\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_IPCThread.cpp">
+      <Filter>Generierte Dateien\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_IPCThread.cpp">
+      <Filter>Generierte Dateien\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_ShutdownHandler.cpp">
+      <Filter>Generierte Dateien\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_ShutdownHandler.cpp">
+      <Filter>Generierte Dateien\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_TCPServer.cpp">
+      <Filter>Generierte Dateien\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_TCPServer.cpp">
+      <Filter>Generierte Dateien\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Dateien</Filter>
+    </ClCompile>
+    <ClCompile Include="ShutdownHandler.cpp">
+      <Filter>Helper\Shutdown</Filter>
+    </ClCompile>
+    <ClCompile Include="Intactivitywatcher.cpp">
+      <Filter>Helper\Shutdown</Filter>
+    </ClCompile>
+    <ClCompile Include="AbstractDevice.cpp">
+      <Filter>Hardware</Filter>
+    </ClCompile>
+    <ClCompile Include="VoltCraft.cpp">
+      <Filter>Hardware</Filter>
+    </ClCompile>
+    <ClCompile Include="AnelHome.cpp">
+      <Filter>Hardware</Filter>
+    </ClCompile>
+    <ClCompile Include="JobScheduler.cpp">
+      <Filter>Scheduler</Filter>
+    </ClCompile>
+    <ClCompile Include="AbstractCommand.cpp">
+      <Filter>Scheduler</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_JobScheduler.cpp">
+      <Filter>Generierte Dateien\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_JobScheduler.cpp">
+      <Filter>Generierte Dateien\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="JobQueue.cpp">
+      <Filter>Scheduler</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_JobQueue.cpp">
+      <Filter>Generierte Dateien\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_JobQueue.cpp">
+      <Filter>Generierte Dateien\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_WebSocketThread.cpp">
+      <Filter>Generierte Dateien\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_WebSocketThread.cpp">
+      <Filter>Generierte Dateien\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_WebSocketServer.cpp">
+      <Filter>Generierte Dateien\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_WebSocketServer.cpp">
+      <Filter>Generierte Dateien\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="DeviceManager.cpp">
+      <Filter>Hardware</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_DeviceManager.cpp">
+      <Filter>Generierte Dateien\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_DeviceManager.cpp">
+      <Filter>Generierte Dateien\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="RemoteBoxDevice.cpp">
+      <Filter>Hardware</Filter>
+    </ClCompile>
+    <ClCompile Include="PowerSupplyDevice.cpp">
+      <Filter>Hardware</Filter>
+    </ClCompile>
+    <ClCompile Include="PowerStripeDevice.cpp">
+      <Filter>Hardware</Filter>
+    </ClCompile>
+    <ClCompile Include="CommandBuilder.cpp">
+      <Filter>Scheduler</Filter>
+    </ClCompile>
+    <ClCompile Include="AbstractCommandBuilder.cpp">
+      <Filter>Scheduler</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_AbstractCommand.cpp">
+      <Filter>Generierte Dateien\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_AbstractCommand.cpp">
+      <Filter>Generierte Dateien\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_AbstractDevice.cpp">
+      <Filter>Generierte Dateien\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_AbstractDevice.cpp">
+      <Filter>Generierte Dateien\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_CanEasyHelper.cpp">
+      <Filter>Generierte Dateien\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_CanEasyHelper.cpp">
+      <Filter>Generierte Dateien\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="CanEasyHelper.cpp">
+      <Filter>Helper\CanEasy</Filter>
+    </ClCompile>
+    <ClCompile Include="FHostSPHelper.cpp">
+      <Filter>Helper\FHostSP</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_FHostSPHelper.cpp">
+      <Filter>Generierte Dateien\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_FHostSPHelper.cpp">
+      <Filter>Generierte Dateien\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_MKSHelper.cpp">
+      <Filter>Generierte Dateien\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_MKSHelper.cpp">
+      <Filter>Generierte Dateien\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="MKSHelper.cpp">
+      <Filter>Helper\MKS</Filter>
+    </ClCompile>
+    <ClCompile Include="UtilProcess.cpp">
+      <Filter>Helper</Filter>
+    </ClCompile>
+    <ClCompile Include="FlashCmdProcessor.cpp">
+      <Filter>Helper\Flash</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_FlashCmdProcessor.cpp">
+      <Filter>Generierte Dateien\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_FlashCmdProcessor.cpp">
+      <Filter>Generierte Dateien\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="WinApiHelper.cpp">
+      <Filter>Helper\WindowsApI</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_LocalServer.cpp">
+      <Filter>Generierte Dateien\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_LocalServer.cpp">
+      <Filter>Generierte Dateien\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="CommunicationServer.cpp">
+      <Filter>Communication</Filter>
+    </ClCompile>
+    <ClCompile Include="WebSocketServer.cpp">
+      <Filter>Communication\Websocket</Filter>
+    </ClCompile>
+    <ClCompile Include="WebSocketThread.cpp">
+      <Filter>Communication\Websocket</Filter>
+    </ClCompile>
+    <ClCompile Include="CommandInterpreter.cpp">
+      <Filter>Communication\TcpSocket</Filter>
+    </ClCompile>
+    <ClCompile Include="IPCThread.cpp">
+      <Filter>Communication\TcpSocket</Filter>
+    </ClCompile>
+    <ClCompile Include="TCPServer.cpp">
+      <Filter>Communication\TcpSocket</Filter>
+    </ClCompile>
+    <ClCompile Include="LocalServer.cpp">
+      <Filter>Communication\LocalSocket</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicServer.cpp">
+      <Filter>Communication</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_CommunicationServer.cpp">
+      <Filter>Generierte Dateien\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_CommunicationServer.cpp">
+      <Filter>Generierte Dateien\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_BasicServer.cpp">
+      <Filter>Generierte Dateien\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_BasicServer.cpp">
+      <Filter>Generierte Dateien\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_RemoteBoxDevice.cpp">
+      <Filter>Generierte Dateien\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_RemoteBoxDevice.cpp">
+      <Filter>Generierte Dateien\Release</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

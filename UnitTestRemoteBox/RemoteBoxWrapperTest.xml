@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TestCase name="RemoteBoxWrapperTest">
+<Environment>
+    <QtVersion>5.7.0</QtVersion>
+    <QtBuild>Qt 5.7.0 (x86_64&#x002D;little_endian&#x002D;llp64 shared (dynamic) debug build; by MSVC 2013)</QtBuild>
+    <QTestVersion>5.7.0</QTestVersion>
+</Environment>
+<TestFunction name="initTestCase">
+<Message type="info" file="c:\projekte\remoteservice\unittestremotebox\generatedfiles\debug\../../WrapperTest.h" line="22">
+    <Description><![CDATA[QVERIFY(success)]]></Description>
+</Message>
+<Incident type="pass" file="" line="0" />
+    <Duration msecs="4359.794602"/>
+</TestFunction>
+<TestFunction name="SetDIOPinState_ON_Positiv">
+<Message type="info" file="c:\projekte\remoteservice\unittestremotebox\generatedfiles\debug\../../WrapperTest.h" line="32">
+    <Description><![CDATA[QVERIFY(m_Wrapper->SetDIOPinState(0x01, on))]]></Description>
+</Message>
+<Incident type="pass" file="" line="0" />
+    <Duration msecs="133.612342"/>
+</TestFunction>
+<TestFunction name="GetDIOPinState_Positiv">
+<Message type="info" file="c:\projekte\remoteservice\unittestremotebox\generatedfiles\debug\../../WrapperTest.h" line="38">
+    <Description><![CDATA[QVERIFY(m_Wrapper->GetDIOPinState(0x01, on))]]></Description>
+</Message>
+<Message type="info" file="c:\projekte\remoteservice\unittestremotebox\generatedfiles\debug\../../WrapperTest.h" line="39">
+    <Description><![CDATA[QVERIFY(on)]]></Description>
+</Message>
+<Incident type="pass" file="" line="0" />
+    <Duration msecs="49.645941"/>
+</TestFunction>
+<TestFunction name="SetDIOPinState_OFF_Positiv">
+<Message type="info" file="c:\projekte\remoteservice\unittestremotebox\generatedfiles\debug\../../WrapperTest.h" line="46">
+    <Description><![CDATA[QVERIFY(m_Wrapper->SetDIOPinState(0x01, on))]]></Description>
+</Message>
+<Message type="info" file="c:\projekte\remoteservice\unittestremotebox\generatedfiles\debug\../../WrapperTest.h" line="47">
+    <Description><![CDATA[QVERIFY(m_Wrapper->GetDIOPinState(0x01, on))]]></Description>
+</Message>
+<Message type="info" file="c:\projekte\remoteservice\unittestremotebox\generatedfiles\debug\../../WrapperTest.h" line="48">
+    <Description><![CDATA[QVERIFY(!on)]]></Description>
+</Message>
+<Incident type="pass" file="" line="0" />
+    <Duration msecs="99.482837"/>
+</TestFunction>
+<TestFunction name="SetRelay_ON_Positiv">
+<Message type="info" file="c:\projekte\remoteservice\unittestremotebox\generatedfiles\debug\../../WrapperTest.h" line="54">
+    <Description><![CDATA[QVERIFY(m_Wrapper->SetRelayState(0x01))]]></Description>
+</Message>
+<Incident type="pass" file="" line="0" />
+    <Duration msecs="49.919310"/>
+</TestFunction>
+<TestFunction name="GetRelayState_Positiv">
+<Message type="info" file="c:\projekte\remoteservice\unittestremotebox\generatedfiles\debug\../../WrapperTest.h" line="60">
+    <Description><![CDATA[QVERIFY(m_Wrapper->GetRelayState(state))]]></Description>
+</Message>
+<Message type="info" file="c:\projekte\remoteservice\unittestremotebox\generatedfiles\debug\../../WrapperTest.h" line="61">
+    <Description><![CDATA[QCOMPARE(QTest::toString(state), QTest::toString(0x01))]]></Description>
+</Message>
+<Incident type="pass" file="" line="0" />
+    <Duration msecs="49.997994"/>
+</TestFunction>
+<TestFunction name="SetRelay_OFF_Positiv">
+<Message type="info" file="c:\projekte\remoteservice\unittestremotebox\generatedfiles\debug\../../WrapperTest.h" line="67">
+    <Description><![CDATA[QVERIFY(m_Wrapper->SetRelayState(0x00))]]></Description>
+</Message>
+<Message type="info" file="c:\projekte\remoteservice\unittestremotebox\generatedfiles\debug\../../WrapperTest.h" line="68">
+    <Description><![CDATA[QVERIFY(m_Wrapper->GetRelayState(state))]]></Description>
+</Message>
+<Message type="info" file="c:\projekte\remoteservice\unittestremotebox\generatedfiles\debug\../../WrapperTest.h" line="69">
+    <Description><![CDATA[QCOMPARE(QTest::toString(state), QTest::toString(0x00))]]></Description>
+</Message>
+<Incident type="pass" file="" line="0" />
+    <Duration msecs="100.048236"/>
+</TestFunction>
+<TestFunction name="SetUsbState_ON_Positiv">
+<Message type="info" file="c:\projekte\remoteservice\unittestremotebox\generatedfiles\debug\../../WrapperTest.h" line="74">
+    <Description><![CDATA[QVERIFY(m_Wrapper->SetUsbState(0x01, 0x01))]]></Description>
+</Message>
+<Incident type="pass" file="" line="0" />
+    <Duration msecs="49.825077"/>
+</TestFunction>
+<TestFunction name="GetUsbState_Positiv">
+<Message type="info" file="c:\projekte\remoteservice\unittestremotebox\generatedfiles\debug\../../WrapperTest.h" line="81">
+    <Description><![CDATA[QVERIFY(m_Wrapper->GetUsbState(0x01, state))]]></Description>
+</Message>
+<Message type="info" file="c:\projekte\remoteservice\unittestremotebox\generatedfiles\debug\../../WrapperTest.h" line="82">
+    <Description><![CDATA[QCOMPARE(QTest::toString(state), QTest::toString(0x01))]]></Description>
+</Message>
+<Incident type="pass" file="" line="0" />
+    <Duration msecs="49.975291"/>
+</TestFunction>
+<TestFunction name="SetUsbState_OFF_Positiv">
+<Message type="info" file="c:\projekte\remoteservice\unittestremotebox\generatedfiles\debug\../../WrapperTest.h" line="88">
+    <Description><![CDATA[QVERIFY(m_Wrapper->SetUsbState(0x01, 0x00))]]></Description>
+</Message>
+<Message type="info" file="c:\projekte\remoteservice\unittestremotebox\generatedfiles\debug\../../WrapperTest.h" line="89">
+    <Description><![CDATA[QCOMPARE(QTest::toString(state), QTest::toString(0x00))]]></Description>
+</Message>
+<Incident type="pass" file="" line="0" />
+    <Duration msecs="49.898784"/>
+</TestFunction>
+<TestFunction name="SetPwmValue_200_Positiv">
+<Message type="info" file="c:\projekte\remoteservice\unittestremotebox\generatedfiles\debug\../../WrapperTest.h" line="94">
+    <Description><![CDATA[QVERIFY(m_Wrapper->SetPwmValue(0x00, 200))]]></Description>
+</Message>
+<Incident type="pass" file="" line="0" />
+    <Duration msecs="50.034692"/>
+</TestFunction>
+<TestFunction name="GetPwmValue_200_Positiv">
+<Message type="info" file="c:\projekte\remoteservice\unittestremotebox\generatedfiles\debug\../../WrapperTest.h" line="100">
+    <Description><![CDATA[QVERIFY(m_Wrapper->GetPwmValue(0x00, value))]]></Description>
+</Message>
+<Message type="info" file="c:\projekte\remoteservice\unittestremotebox\generatedfiles\debug\../../WrapperTest.h" line="101">
+    <Description><![CDATA[QCOMPARE(QTest::toString(value), QTest::toString(200))]]></Description>
+</Message>
+<Incident type="pass" file="" line="0" />
+    <Duration msecs="49.932372"/>
+</TestFunction>
+<TestFunction name="SetPwmValue_0_Positiv">
+<Message type="info" file="c:\projekte\remoteservice\unittestremotebox\generatedfiles\debug\../../WrapperTest.h" line="107">
+    <Description><![CDATA[QVERIFY(m_Wrapper->SetPwmValue(0x00, 0))]]></Description>
+</Message>
+<Message type="info" file="c:\projekte\remoteservice\unittestremotebox\generatedfiles\debug\../../WrapperTest.h" line="108">
+    <Description><![CDATA[QVERIFY(m_Wrapper->GetPwmValue(0x00, value))]]></Description>
+</Message>
+<Message type="info" file="c:\projekte\remoteservice\unittestremotebox\generatedfiles\debug\../../WrapperTest.h" line="109">
+    <Description><![CDATA[QCOMPARE(QTest::toString(value), QTest::toString(0))]]></Description>
+</Message>
+<Incident type="pass" file="" line="0" />
+    <Duration msecs="99.987902"/>
+</TestFunction>
+<TestFunction name="SetADCValue_200_Positiv">
+<Message type="info" file="c:\projekte\remoteservice\unittestremotebox\generatedfiles\debug\../../WrapperTest.h" line="114">
+    <Description><![CDATA[QVERIFY(m_Wrapper->SetDacValue(0x00,200))]]></Description>
+</Message>
+<Incident type="pass" file="" line="0" />
+    <Duration msecs="49.905626"/>
+</TestFunction>
+<TestFunction name="GetADCValue_0_Positiv">
+<Message type="info" file="c:\projekte\remoteservice\unittestremotebox\generatedfiles\debug\../../WrapperTest.h" line="120">
+    <Description><![CDATA[QVERIFY(m_Wrapper->GetAdcValue(0x01, value))]]></Description>
+</Message>
+<Message type="info" file="c:\projekte\remoteservice\unittestremotebox\generatedfiles\debug\../../WrapperTest.h" line="121">
+    <Description><![CDATA[QCOMPARE(QTest::toString(value), QTest::toString(0))]]></Description>
+</Message>
+<Incident type="fail" file="c:\projekte\remoteservice\unittestremotebox\generatedfiles\debug\../../WrapperTest.h" line="121">
+    <Description><![CDATA[Compared strings are not the same
+   Actual   (QTest::toString(value)): 16
+   Expected (QTest::toString(0))    : 0]]></Description>
+</Incident>
+    <Duration msecs="50.072634"/>
+</TestFunction>
+<TestFunction name="SetADCValue_0_Positiv">
+<Message type="info" file="c:\projekte\remoteservice\unittestremotebox\generatedfiles\debug\../../WrapperTest.h" line="127">
+    <Description><![CDATA[QVERIFY(m_Wrapper->SetDacValue(0x00, 0))]]></Description>
+</Message>
+<Incident type="pass" file="" line="0" />
+    <Duration msecs="49.853378"/>
+</TestFunction>
+<TestFunction name="GetHardwareSerialNumber_Positiv">
+<Message type="info" file="c:\projekte\remoteservice\unittestremotebox\generatedfiles\debug\../../WrapperTest.h" line="133">
+    <Description><![CDATA[QVERIFY(m_Wrapper->GetHardwareSerialNumber(data))]]></Description>
+</Message>
+<Incident type="fail" file="c:\projekte\remoteservice\unittestremotebox\generatedfiles\debug\../../WrapperTest.h" line="133">
+    <Description><![CDATA['m_Wrapper->GetHardwareSerialNumber(data)' returned FALSE. ()]]></Description>
+</Incident>
+    <Duration msecs="50.582985"/>
+</TestFunction>
+<TestFunction name="cleanupTestCase">
+<Incident type="pass" file="" line="0" />
+    <Duration msecs="2320.969923"/>
+</TestFunction>
+<Duration msecs="7714.347292"/>
+</TestCase>
