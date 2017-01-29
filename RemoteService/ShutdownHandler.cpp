@@ -1,30 +1,38 @@
 #include "ShutdownHandler.hpp"
-#include "MongoDbClient.hpp"
-#include "GeneralObject.hpp"
+
 #include "WinApiHelper.h"
 #include "DeviceManager.h"
+
+#if defined(DEBUG) && defined(DEBUG_WITHOUT_SHUTDOWN)
+#define DEFAULT_SHUTDOWN_TIMEOUT 60*60
+#elif defined(DEBUG)
+#define DEFAULT_SHUTDOWN_TIMEOUT 60*60*1000
+#else
+#define DEFAULT_SHUTDOWN_TIMEOUT 1000*60*30
+#endif
+
 
 
 namespace RW{
 	namespace CORE{
 
-#define DEFAULT_SHUTDOWN_TIMEOUT 60*5*60
 			namespace HW{
 	
 	}
 
 		ShutdownHandler::ShutdownHandler(RW::HW::DeviceManager* Manager, QString Version ,QObject *Parent) : QObject(Parent),
-			m_DeviceManager(Manager)
+			m_DeviceManager(Manager),
+			m_logger(spdlog::get("file_logger")),
+			m_ShutdownTimer(nullptr)
 		{
-			MONGO::GeneralObject *obj = (MONGO::GeneralObject*) MONGO::MongoDbClient::Instance()->GeneralInformation(Version);
-			if (obj == nullptr)
+			if (true)
 			{
 				//Set the default timeout value
 				m_Timeout = DEFAULT_SHUTDOWN_TIMEOUT;
 			}
 			else
 			{
-				m_Timeout = obj->LogoutTimout();
+				//m_Timeout = obj->LogoutTimout();
 			}
 		}
 
@@ -39,9 +47,12 @@ namespace RW{
 			{
 				m_ShutdownTimer = new QTimer(this);
 			}
-			connect(m_ShutdownTimer, SIGNAL(timeout()), this, SLOT(Shutdown));
-			m_ShutdownTimer->start(m_Timeout);
+			connect(m_ShutdownTimer, &QTimer::timeout, this, &ShutdownHandler::Shutdown);
+			m_ShutdownTimer->start(DEFAULT_SHUTDOWN_TIMEOUT);
 			m_logger->debug("Shutdown timger started");
+#ifdef DEBUG
+			m_logger->flush();
+#endif // DEBUG
 		}
 
 		void ShutdownHandler::StopShutdownTimer()
@@ -51,6 +62,9 @@ namespace RW{
 				m_ShutdownTimer->stop();
 				m_logger->debug("Shutdown timer stopped.");
 			}
+#ifdef DEBUG
+			m_logger->flush();
+#endif // DEBUG
 		}
 
 		void ShutdownHandler::Shutdown()
@@ -58,16 +72,29 @@ namespace RW{
 			WinApiHelper helper;
 
 			//All registered device will be shutdown now
-			m_DeviceManager->DeInit();
+			//m_DeviceManager->DeInit();
 
+#ifdef DEBUG_WITHOUT_SHUTDOWN
+			//This is for testing propes of the shutdown mechanism. 
+			//After the execution of this statment the mechanism is broken because we wont get back in initial state without restart.
+			m_logger->debug("ShutdownHandler: PC shutdown");
+			m_ShutdownTimer->stop();
+			emit ShutdownEvt();
+#else
 			if (helper.Shutdown())
 			{
+				m_ShutdownTimer->stop();
+				emit ShutdownEvt();
 				m_logger->debug("ShutdownHandler: PC shutdown");
 			}
 			else
 			{
 				m_logger->debug("ShutdownHandler: PC don't shutdown");
 			}
+#endif // DEBUG
+#ifdef DEBUG
+			m_logger->flush();
+#endif // DEBUG
 		}
 
 	}

@@ -34,9 +34,6 @@
     <Filter Include="Communication">
       <UniqueIdentifier>{00defb77-320f-4b79-aac3-90bb12cea005}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Communication\Websocket">
-      <UniqueIdentifier>{8eb81196-2e01-4fc3-ae6e-1fac4116da73}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Communication\LocalSocket">
       <UniqueIdentifier>{e561f9d9-a2b1-44fd-8c50-610c5ef839c1}</UniqueIdentifier>
     </Filter>
@@ -96,12 +93,6 @@
     <CustomBuild Include="FlashCmdProcessor.h">
       <Filter>Helper\Flash</Filter>
     </CustomBuild>
-    <CustomBuild Include="WebSocketThread.h">
-      <Filter>Communication\Websocket</Filter>
-    </CustomBuild>
-    <CustomBuild Include="WebSocketServer.h">
-      <Filter>Communication\Websocket</Filter>
-    </CustomBuild>
     <CustomBuild Include="CommandInterpreter.hpp">
       <Filter>Communication\TcpSocket</Filter>
     </CustomBuild>
@@ -119,9 +110,6 @@
     </CustomBuild>
     <CustomBuild Include="UtilProcess.h">
       <Filter>Helper</Filter>
-    </CustomBuild>
-    <CustomBuild Include="MongoDbSink.h">
-      <Filter>Helper\Logger</Filter>
     </CustomBuild>
     <CustomBuild Include="WinApiHelper.h">
       <Filter>Helper\WindowsApI</Filter>
@@ -224,18 +212,6 @@
     <ClCompile Include="GeneratedFiles\Release\moc_JobQueue.cpp">
       <Filter>Generierte Dateien\Release</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_WebSocketThread.cpp">
-      <Filter>Generierte Dateien\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_WebSocketThread.cpp">
-      <Filter>Generierte Dateien\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_WebSocketServer.cpp">
-      <Filter>Generierte Dateien\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_WebSocketServer.cpp">
-      <Filter>Generierte Dateien\Release</Filter>
-    </ClCompile>
     <ClCompile Include="DeviceManager.cpp">
       <Filter>Hardware</Filter>
     </ClCompile>
@@ -322,12 +298,6 @@
     </ClCompile>
     <ClCompile Include="CommunicationServer.cpp">
       <Filter>Communication</Filter>
-    </ClCompile>
-    <ClCompile Include="WebSocketServer.cpp">
-      <Filter>Communication\Websocket</Filter>
-    </ClCompile>
-    <ClCompile Include="WebSocketThread.cpp">
-      <Filter>Communication\Websocket</Filter>
     </ClCompile>
     <ClCompile Include="CommandInterpreter.cpp">
       <Filter>Communication\TcpSocket</Filter>

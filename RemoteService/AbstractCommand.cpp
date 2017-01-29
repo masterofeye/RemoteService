@@ -111,7 +111,7 @@ namespace RW{
 			else
 			{
 				QMetaEnum enumVar = this->staticMetaObject.enumerator(0);
-				m_logger->alert("The execute function of RelayCommand don't have the execution variant: ") << enumVar.key((int)m_ExecutionVariant);
+				m_logger->warn("The execute function of RelayCommand don't have the execution variant: "); //<< enumVar.key((int)m_ExecutionVariant);
 			}
 			emit finished(this);
 			return this->m_Success;
@@ -174,7 +174,7 @@ namespace RW{
 			else
 			{
 				QMetaEnum enumVar = this->staticMetaObject.enumerator(0);
-				m_logger->alert("The execute function of IOCommand don't have the execution variant: ") << enumVar.key((int)m_ExecutionVariant);
+				m_logger->warn("The execute function of IOCommand don't have the execution variant: "); //<< enumVar.key((int)m_ExecutionVariant);
 			}
 			emit finished(this);
 			return this->m_Success;
@@ -237,7 +237,7 @@ namespace RW{
 			else
 			{
 				QMetaEnum enumVar = this->staticMetaObject.enumerator(0);
-				m_logger->alert("The execute function of USBCommand don't have the execution variant: ") << enumVar.key((int)m_ExecutionVariant);
+				m_logger->warn("The execute function of USBCommand don't have the execution variant: "); //<< enumVar.key((int)m_ExecutionVariant);
 			}
 			emit finished(this);
 			return this->m_Success;
@@ -286,7 +286,7 @@ namespace RW{
 				else
 				{
 					QMetaEnum enumVar = this->staticMetaObject.enumerator(0);
-					m_logger->alert("The execute function of ADCCommand don't have the execution variant: ") << enumVar.key((int)m_ExecutionVariant);
+					m_logger->warn("The execute function of ADCCommand don't have the execution variant: "); //<< enumVar.key((int)m_ExecutionVariant);
 				}
 			}
 			emit finished(this);
@@ -335,7 +335,7 @@ namespace RW{
 				else
 				{
 					QMetaEnum enumVar = this->staticMetaObject.enumerator(0);
-					m_logger->alert("The execute function of DACCommand don't have the execution variant: ") << enumVar.key((int)m_ExecutionVariant);
+					m_logger->warn("The execute function of DACCommand don't have the execution variant: "); //<< enumVar.key((int)m_ExecutionVariant);
 				}
 			}
 			emit finished(this);
@@ -391,7 +391,7 @@ namespace RW{
 				else
 				{
 					QMetaEnum enumVar = this->staticMetaObject.enumerator(0);
-					m_logger->alert("The execute function of PowerStripeCommand don't have the execution variant: ") << enumVar.key((int)m_ExecutionVariant);
+					m_logger->warn("The execute function of PowerStripeCommand don't have the execution variant: "); //<< enumVar.key((int)m_ExecutionVariant);
 				}
 			}
 			emit finished(this);
@@ -494,7 +494,7 @@ namespace RW{
 			else
 			{
 				QMetaEnum enumVar = this->staticMetaObject.enumerator(0);
-				m_logger->alert("The execute function of PowerSupplyCommand don't have the execution variant: ") << enumVar.key((int)m_ExecutionVariant);
+				m_logger->warn("The execute function of PowerSupplyCommand don't have the execution variant: "); //<< enumVar.key((int)m_ExecutionVariant);
 			}
 			emit finished(this);
 			return this->m_Success;

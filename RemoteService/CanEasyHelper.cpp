@@ -16,6 +16,7 @@ bool CanEasyHelper::InitializeCom()
 	HRESULT hr = ::CoInitialize(NULL);
 	if (hr != S_OK)
 		return false;
+	return true;
 }
 
 bool CanEasyHelper::LoadWorkSpace(QString WorkspacePath){ return false; }

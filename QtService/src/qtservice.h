@@ -181,7 +181,9 @@ protected:
     }
 
     virtual int executeApplication()
-    { return Application::exec(); }
+    { 
+		return Application::exec(); 
+	}
 
 private:
     Application *app;

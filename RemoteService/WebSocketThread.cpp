@@ -33,7 +33,7 @@ namespace RW{
 
 		void WebSocketThread::ProcessTextMessage(QString message)
 		{
-			m_logger->debug("Message received: ") << message.toStdString();
+			m_logger->debug("Message received: "); //  << message.toStdString();
 			QJsonParseError error;
 			QJsonDocument  jsonResponse = QJsonDocument::fromJson(message.toUtf8(), &error);
 			if (error.error != QJsonParseError::NoError)
@@ -58,7 +58,7 @@ namespace RW{
 			/*Prüfen ob die JSON Anweisung erfolgreich geparst werden konnte*/
 			if (cmd == nullptr)
 			{
-				m_logger->error("Cmdbuilder wasn't able to create the CMD: ") << (int)id;
+				m_logger->error("Cmdbuilder wasn't able to create the CMD: ");// << (int)id;
 				emit SocketError(nullptr, 0);
 				return;
 			}
@@ -67,7 +67,7 @@ namespace RW{
 				emit Message(cmd);
 			else
 			{
-				m_logger->error("Json command couldn't successfuly parsed. CmdID: ") << (int)id;
+				m_logger->error("Json command couldn't successfuly parsed. CmdID: "); // << (int)id;
 				emit SocketError(cmd, 0);
 			}
 
@@ -75,7 +75,7 @@ namespace RW{
 
 		void WebSocketThread::ProcessBinaryMessage(QByteArray message)
 		{
-			m_logger->debug("Message received: ") << message.toStdString();
+			m_logger->debug("Message received: ");// << message.toStdString();
 			emit Message(new AbstractCommand(nullptr));
 		}
 

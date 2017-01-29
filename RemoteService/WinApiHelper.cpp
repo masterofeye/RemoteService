@@ -40,7 +40,7 @@ namespace RW
 					if (wts.State == WTSActive)
 					{
 						SessioNumber = wts.SessionId;
-						m_logger->debug("SessionNumber is: ") << SessioNumber;
+						m_logger->debug("SessionNumber is: ");// << SessioNumber;
 					}
 				}
 				return true;
@@ -48,7 +48,7 @@ namespace RW
 			else
 			{
 				DWORD err = GetLastError();
-				m_logger->error("WTSEnumerateSessions failed. GetLastError: ") << err;
+				m_logger->error("WTSEnumerateSessions failed. GetLastError: ");// << err;
 				return false;
 			}
 		}
@@ -64,7 +64,7 @@ namespace RW
 			if (!WTSLogoffSession(WTS_CURRENT_SERVER_HANDLE, SessioNumber, true))
 			{
 				DWORD err = GetLastError();
-				m_logger->error("WTSLogoffSession failed. GetLastError: ") << err;
+				m_logger->error("WTSLogoffSession failed. GetLastError: ");// << err;
 				return false;
 			}
 			else

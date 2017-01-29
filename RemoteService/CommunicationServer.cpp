@@ -1,16 +1,19 @@
 #include "CommunicationServer.h"
-#include "qmetaobject.h"
+#include <qtcpsocket.h>
 
-#include "WebSocketServer.h"
+#include "qmetaobject.h"
 #include "LocalServer.h"
 #include "JobScheduler.h"
+
+
+#include <Lmcons.h>
 
 namespace RW{
 	namespace CORE{
 		CommunicationServer::CommunicationServer(QObject *Parent = nullptr) : BasicServer(Parent),
 			m_logger(spdlog::get("file_logger")), 
-			m_WebSocketServer(new WebSocketServer(this)),
-			m_LocalServer(new LocalServer(this))
+			m_LocalServer(new LocalServer(this)),
+			m_TcpServer(new QTcpServer(this))
 		{
 		}
 
@@ -22,30 +25,71 @@ namespace RW{
 
 		void CommunicationServer::PrepareIncomingConnection()
 		{
+			QTcpSocket* socket = m_TcpServer->nextPendingConnection();
+			if (socket != nullptr)
+			{
+				QByteArray command = socket->readAll();
+				if (QString(command).contains("UserInfo"))
+				{
+					socket->write("UserInfo");
 
+					char username[UNLEN + 1];
+					DWORD username_len = UNLEN + 1;
+					GetUserNameA(username, &username_len);
+
+					QByteArray answer;
+					answer.append(username + ',');
+					answer.append("false" + ',');
+
+					char computername[UNLEN + 1];
+					DWORD username_len = UNLEN + 1;
+					GetComputerNameA(computername, &username_len);
+
+					answer.append(computername + ',');
+					answer.append("192.156.244.111" + ',');
+					answer.append("192.156.244.111" + ',');
+					answer.append("" + ',');
+					answer.append("Streamlist{}");
+				}
+
+				
+
+			}
 		}
 
 		bool CommunicationServer::Listen(quint16 Port)
 		{
-			if (m_WebSocketServer == nullptr)
+			if (m_TcpServer == nullptr)
 			{
-				m_logger->emerg("WebSocketServer isn't created");
+				m_logger->error("TCP Server isn't created");
 				return false;
 			}
+
+			if (!m_TcpServer->listen(QHostAddress::Any, Port))
+			{
+				m_logger->error("Tcp Server couldn't list on port: ");
+				return false;
+			}
+
+			connect(m_TcpServer, &QTcpServer::newConnection, this, &CommunicationServer::PrepareIncomingConnection);
 
 			if (m_LocalServer == nullptr)
 			{
-				m_logger->emerg("LocalServer isn't created");
+				m_logger->error("LocalServer isn't created");
 				return false;
 			}
 
-			if (!m_WebSocketServer->Listen(Port))
+			if(!m_LocalServer->Listen(Port+1))
+			{
+				m_logger->error("LocalServer couldn't list on port: ");
 				return false;
-
-			if(!m_LocalServer->Listen(Port + 1))
-				return false;
+			}
 
 			m_logger->debug("CommunicationServer listen is finished.");
+#ifdef DEBUG
+			m_logger->flush();
+#endif // DEBUG
+
 			return true;
 		}
 
@@ -53,7 +97,7 @@ namespace RW{
 		{
 			if (Receiver == nullptr)
 			{
-				m_logger->error("Can't register Receicer because he is null for Object ") << Receiver->objectName().toStdString();;
+				m_logger->error("Can't register Receicer because he is null for Object "); //<< Receiver->objectName().toStdString();;
 			}
 			else
 			{
@@ -61,7 +105,7 @@ namespace RW{
 				const QMetaObject* metaObject = Receiver->metaObject();
 				if (metaObject == nullptr)
 				{
-					m_logger->error("Meta object is null for Object ") << Receiver->objectName().toStdString();
+					m_logger->error("Meta object is null for Object "); //<< Receiver->objectName().toStdString();
 					return;
 				}
 
@@ -70,7 +114,7 @@ namespace RW{
 				//TODO MagicNumber
 				if (methodIndex == -1)
 				{
-					m_logger->alert("There is no function called OnMessage for Object ") << Receiver->objectName().toStdString();;
+					m_logger->warn("There is no function called OnMessage for Object ");// << Receiver->objectName().toStdString();;
 					return;
 				}
 
@@ -80,7 +124,7 @@ namespace RW{
 
 				if (metaObjectFromThis == nullptr)
 				{
-					m_logger->error("Meta object is null for Object ") << Receiver->objectName().toStdString();
+					m_logger->error("Meta object is null for Object ");//<< Receiver->objectName().toStdString();
 					return;
 				}
 
@@ -88,7 +132,7 @@ namespace RW{
 				//TODO MagicNumber
 				if (signalIndex == -1)
 				{
-					m_logger->alert("No Signal found with name NewCommand for Object ") << Receiver->objectName().toStdString();
+					m_logger->warn("No Signal found with name NewCommand for Object ");// << Receiver->objectName().toStdString();
 					return;
 				}
 
@@ -97,11 +141,11 @@ namespace RW{
 				QMetaObject::Connection con = connect(this, signal, Receiver, method);
 				if (((bool)con) == false)
 				{
-					m_logger->error("Connection couldn't established for Object: ") << Receiver->objectName().toStdString();
+					m_logger->error("Connection couldn't established for Object: "); //  << Receiver->objectName().toStdString();
 				}
 				else
 				{
-					m_logger->debug("Receiver was successfully connected to the signal. ") << Receiver->objectName().toStdString();
+					m_logger->debug("Receiver was successfully connected to the signal. ");// << Receiver->objectName().toStdString();
 				}
 			}
 		}

@@ -46,7 +46,7 @@ namespace RW{
 
 				if (!cmd->Execute())
 				{
-					m_logger->error("Command ") << cmd->CommandID() << " execution failed.";
+					m_logger->error("Command ");// << cmd->CommandID() << " execution failed.";
 				}
 				
 			}

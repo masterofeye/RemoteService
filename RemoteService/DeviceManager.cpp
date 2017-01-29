@@ -9,7 +9,8 @@
 namespace RW{
 	namespace HW{
 		DeviceManager::DeviceManager(QObject *Parent) : QObject(Parent),
-			m_DeviceList(new QMap<DeviceType, AbstractDevice*>())
+			m_DeviceList(new QMap<DeviceType, AbstractDevice*>()),
+			m_State(State::DeInit)
 		{
 
 		}
@@ -34,25 +35,33 @@ namespace RW{
 					{
 					case RW::HW::DeviceManager::DeviceType::PowerSupply:
 						m_logger->error("PowerSupply initialisation failed.");
+						m_State = State::Failure;
 						break;
 					case RW::HW::DeviceManager::DeviceType::RemoteBox:
 						m_logger->error("RemoteBox initialisation failed.");
+						m_State = State::Failure;
 						break;
 					case RW::HW::DeviceManager::DeviceType::PowerStripe:
 						m_logger->error("PowerStripe initialisation failed.");
+						m_State = State::Failure;
 						break;
 					}
-					
+					if (m_State == State::Failure)
+						return false;
 				}
+
 			}
 			return true;
 		}
 
 		bool DeviceManager::DeInit()
 		{
-			QMapIterator<DeviceType, AbstractDevice*> i(*m_DeviceList);
-			while (i.hasNext()) {
-				i.next().value()->Shutdown();
+			if (m_State == State::Init)
+			{
+				QMapIterator<DeviceType, AbstractDevice*> i(*m_DeviceList);
+				while (i.hasNext()) {
+					i.next().value()->Shutdown();
+				}
 			}
 			return true;
 		}

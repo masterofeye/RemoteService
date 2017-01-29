@@ -26,7 +26,7 @@ namespace RW{
 			ShutdownHandler(RW::HW::DeviceManager* Manager, QString Version, QObject *Parent = 0);
 			~ShutdownHandler();
 
-		public:
+		public slots:
 			void Shutdown();
 		signals:
 			void ShutdownEvt();

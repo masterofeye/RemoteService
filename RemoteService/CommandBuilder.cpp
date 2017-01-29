@@ -50,9 +50,10 @@ namespace RW{
 			case RW::CORE::CommandIds::SHUTDOWN:
 				return new ShutdownCommand(Obj);
 			default:
-				m_logger->alert("No command type was found that match the parameter.");
+				m_logger->warn("No command type was found that match the parameter.");
 				return nullptr;
 			}
+			return nullptr;
 		}
 	}
 }

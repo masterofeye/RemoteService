@@ -12,34 +12,34 @@
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="LocalServer.h">
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing LocalServer.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DREMOTESERVICE_DEBUG -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I.\3thparty" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\MongoDbWrapper" "-I.\..\RemoteBoxWrapper" "-I.\..\MySQLDbWrapper"</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DDEBUG_WITHOUT_SHUTDOWN -DDEBUG_WITHOUT_LOGOUT -DDEBUG -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DREMOTESERVICE_DEBUG -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\..\RemoteUtil\thirdparty" "-I.\..\..\RemoteUtil\RemoteDataConnectLibrary\Include" "-I.\..\..\RemoteUtil\RemoteBoxWrapper"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing LocalServer.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-I.\QtServiceClasses" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I$(QTDIR)\mkspecs\win32-msvc2013"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-I.\QtServiceClasses" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtWidgets" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtGui" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtANGLE" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtCore" "-I.\release" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\mkspecs\win32-msvc2013"</Command>
     </CustomBuild>
     <CustomBuild Include="BasicServer.h">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DREMOTESERVICE_DEBUG -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I.\3thparty" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\MongoDbWrapper" "-I.\..\RemoteBoxWrapper" "-I.\..\MySQLDbWrapper"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DDEBUG_WITHOUT_SHUTDOWN -DDEBUG_WITHOUT_LOGOUT -DDEBUG -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DREMOTESERVICE_DEBUG -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\..\RemoteUtil\thirdparty" "-I.\..\..\RemoteUtil\RemoteDataConnectLibrary\Include" "-I.\..\..\RemoteUtil\RemoteBoxWrapper"</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing BasicServer.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-I.\QtServiceClasses" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I$(QTDIR)\mkspecs\win32-msvc2013"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-I.\QtServiceClasses" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtWidgets" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtGui" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtANGLE" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtCore" "-I.\release" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\mkspecs\win32-msvc2013"</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing BasicServer.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe;%(FullPath)</AdditionalInputs>
     </CustomBuild>
     <CustomBuild Include="CommunicationServer.h">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DREMOTESERVICE_DEBUG -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I.\3thparty" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\MongoDbWrapper" "-I.\..\RemoteBoxWrapper" "-I.\..\MySQLDbWrapper"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DDEBUG_WITHOUT_SHUTDOWN -DDEBUG_WITHOUT_LOGOUT -DDEBUG -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DREMOTESERVICE_DEBUG -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\..\RemoteUtil\thirdparty" "-I.\..\..\RemoteUtil\RemoteDataConnectLibrary\Include" "-I.\..\..\RemoteUtil\RemoteBoxWrapper"</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing CommunicationServer.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-I.\QtServiceClasses" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I$(QTDIR)\mkspecs\win32-msvc2013"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-I.\QtServiceClasses" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtWidgets" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtGui" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtANGLE" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtCore" "-I.\release" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\mkspecs\win32-msvc2013"</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing CommunicationServer.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe;%(FullPath)</AdditionalInputs>
     </CustomBuild>
     <CustomBuild Include="EnumDefinitions.h">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -73,35 +73,15 @@
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </AdditionalInputs>
     </CustomBuild>
-    <CustomBuild Include="WebSocketServer.h">
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing WebSocketServer.h...</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DREMOTESERVICE_DEBUG -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I.\3thparty" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\MongoDbWrapper" "-I.\..\RemoteBoxWrapper" "-I.\..\MySQLDbWrapper"</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing WebSocketServer.h...</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-I.\QtServiceClasses" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I$(QTDIR)\mkspecs\win32-msvc2013"</Command>
-    </CustomBuild>
-    <CustomBuild Include="WebSocketThread.h">
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing WebSocketThread.h...</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DREMOTESERVICE_DEBUG -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I.\3thparty" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\MongoDbWrapper" "-I.\..\RemoteBoxWrapper" "-I.\..\MySQLDbWrapper"</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing WebSocketThread.h...</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-I.\QtServiceClasses" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I$(QTDIR)\mkspecs\win32-msvc2013"</Command>
-    </CustomBuild>
     <CustomBuild Include="AbstractCommand.h">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing AbstractCommand.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DREMOTESERVICE_DEBUG -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I.\3thparty" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\MongoDbWrapper" "-I.\..\RemoteBoxWrapper" "-I.\..\MySQLDbWrapper"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DDEBUG_WITHOUT_SHUTDOWN -DDEBUG_WITHOUT_LOGOUT -DDEBUG -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DREMOTESERVICE_DEBUG -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\..\RemoteUtil\thirdparty" "-I.\..\..\RemoteUtil\RemoteDataConnectLibrary\Include" "-I.\..\..\RemoteUtil\RemoteBoxWrapper"</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing AbstractCommand.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-I.\QtServiceClasses" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I$(QTDIR)\mkspecs\win32-msvc2013"</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-I.\QtServiceClasses" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtWidgets" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtGui" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtANGLE" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtCore" "-I.\release" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\mkspecs\win32-msvc2013"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe;%(FullPath)</AdditionalInputs>
     </CustomBuild>
     <CustomBuild Include="AbstractCommandBuilder.h">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -120,14 +100,14 @@
       </AdditionalInputs>
     </CustomBuild>
     <CustomBuild Include="AbstractDevice.h">
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing AbstractDevice.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DREMOTESERVICE_DEBUG -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I.\3thparty" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\MongoDbWrapper" "-I.\..\RemoteBoxWrapper" "-I.\..\MySQLDbWrapper"</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DDEBUG_WITHOUT_SHUTDOWN -DDEBUG_WITHOUT_LOGOUT -DDEBUG -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DREMOTESERVICE_DEBUG -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\..\RemoteUtil\thirdparty" "-I.\..\..\RemoteUtil\RemoteDataConnectLibrary\Include" "-I.\..\..\RemoteUtil\RemoteBoxWrapper"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing AbstractDevice.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-I.\QtServiceClasses" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I$(QTDIR)\mkspecs\win32-msvc2013"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-I.\QtServiceClasses" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtWidgets" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtGui" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtANGLE" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtCore" "-I.\release" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\mkspecs\win32-msvc2013"</Command>
     </CustomBuild>
     <CustomBuild Include="AnelHome.h">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -146,44 +126,44 @@
       </AdditionalInputs>
     </CustomBuild>
     <CustomBuild Include="JobScheduler.h">
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing JobScheduler.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DREMOTESERVICE_DEBUG -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I.\3thparty" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\MongoDbWrapper" "-I.\..\RemoteBoxWrapper" "-I.\..\MySQLDbWrapper"</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DDEBUG_WITHOUT_SHUTDOWN -DDEBUG_WITHOUT_LOGOUT -DDEBUG -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DREMOTESERVICE_DEBUG -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\..\RemoteUtil\thirdparty" "-I.\..\..\RemoteUtil\RemoteDataConnectLibrary\Include" "-I.\..\..\RemoteUtil\RemoteBoxWrapper"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing JobScheduler.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-I.\QtServiceClasses" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I$(QTDIR)\mkspecs\win32-msvc2013"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-I.\QtServiceClasses" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtWidgets" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtGui" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtANGLE" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtCore" "-I.\release" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\mkspecs\win32-msvc2013"</Command>
     </CustomBuild>
     <CustomBuild Include="JobQueue.h">
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing JobQueue.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DREMOTESERVICE_DEBUG -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I.\3thparty" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\MongoDbWrapper" "-I.\..\RemoteBoxWrapper" "-I.\..\MySQLDbWrapper"</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DDEBUG_WITHOUT_SHUTDOWN -DDEBUG_WITHOUT_LOGOUT -DDEBUG -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DREMOTESERVICE_DEBUG -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\..\RemoteUtil\thirdparty" "-I.\..\..\RemoteUtil\RemoteDataConnectLibrary\Include" "-I.\..\..\RemoteUtil\RemoteBoxWrapper"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing JobQueue.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-I.\QtServiceClasses" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I$(QTDIR)\mkspecs\win32-msvc2013"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-I.\QtServiceClasses" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtWidgets" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtGui" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtANGLE" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtCore" "-I.\release" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\mkspecs\win32-msvc2013"</Command>
     </CustomBuild>
     <CustomBuild Include="DeviceManager.h">
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing DeviceManager.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DREMOTESERVICE_DEBUG -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I.\3thparty" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\MongoDbWrapper" "-I.\..\RemoteBoxWrapper" "-I.\..\MySQLDbWrapper"</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DDEBUG_WITHOUT_SHUTDOWN -DDEBUG_WITHOUT_LOGOUT -DDEBUG -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DREMOTESERVICE_DEBUG -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\..\RemoteUtil\thirdparty" "-I.\..\..\RemoteUtil\RemoteDataConnectLibrary\Include" "-I.\..\..\RemoteUtil\RemoteBoxWrapper"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing DeviceManager.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-I.\QtServiceClasses" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I$(QTDIR)\mkspecs\win32-msvc2013"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-I.\QtServiceClasses" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtWidgets" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtGui" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtANGLE" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtCore" "-I.\release" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\mkspecs\win32-msvc2013"</Command>
     </CustomBuild>
     <CustomBuild Include="CanEasyHelper.h">
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing CanEasyHelper.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DREMOTESERVICE_DEBUG -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I.\3thparty" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\MongoDbWrapper" "-I.\..\RemoteBoxWrapper" "-I.\..\MySQLDbWrapper"</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DDEBUG_WITHOUT_SHUTDOWN -DDEBUG_WITHOUT_LOGOUT -DDEBUG -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DREMOTESERVICE_DEBUG -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\..\RemoteUtil\thirdparty" "-I.\..\..\RemoteUtil\RemoteDataConnectLibrary\Include" "-I.\..\..\RemoteUtil\RemoteBoxWrapper"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing CanEasyHelper.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-I.\QtServiceClasses" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I$(QTDIR)\mkspecs\win32-msvc2013"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-I.\QtServiceClasses" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtWidgets" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtGui" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtANGLE" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtCore" "-I.\release" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\mkspecs\win32-msvc2013"</Command>
     </CustomBuild>
     <CustomBuild Include="CommandBuilder.h">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -202,50 +182,34 @@
       </AdditionalInputs>
     </CustomBuild>
     <CustomBuild Include="FHostSPHelper.h">
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing FHostSPHelper.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DREMOTESERVICE_DEBUG -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I.\3thparty" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\MongoDbWrapper" "-I.\..\RemoteBoxWrapper" "-I.\..\MySQLDbWrapper"</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DDEBUG_WITHOUT_SHUTDOWN -DDEBUG_WITHOUT_LOGOUT -DDEBUG -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DREMOTESERVICE_DEBUG -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\..\RemoteUtil\thirdparty" "-I.\..\..\RemoteUtil\RemoteDataConnectLibrary\Include" "-I.\..\..\RemoteUtil\RemoteBoxWrapper"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing FHostSPHelper.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-I.\QtServiceClasses" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I$(QTDIR)\mkspecs\win32-msvc2013"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-I.\QtServiceClasses" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtWidgets" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtGui" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtANGLE" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtCore" "-I.\release" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\mkspecs\win32-msvc2013"</Command>
     </CustomBuild>
     <CustomBuild Include="MKSHelper.h">
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing MKSHelper.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DREMOTESERVICE_DEBUG -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I.\3thparty" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\MongoDbWrapper" "-I.\..\RemoteBoxWrapper" "-I.\..\MySQLDbWrapper"</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DDEBUG_WITHOUT_SHUTDOWN -DDEBUG_WITHOUT_LOGOUT -DDEBUG -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DREMOTESERVICE_DEBUG -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\..\RemoteUtil\thirdparty" "-I.\..\..\RemoteUtil\RemoteDataConnectLibrary\Include" "-I.\..\..\RemoteUtil\RemoteBoxWrapper"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing MKSHelper.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-I.\QtServiceClasses" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I$(QTDIR)\mkspecs\win32-msvc2013"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-I.\QtServiceClasses" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtWidgets" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtGui" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtANGLE" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtCore" "-I.\release" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\mkspecs\win32-msvc2013"</Command>
     </CustomBuild>
     <CustomBuild Include="FlashCmdProcessor.h">
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing FlashCmdProcessor.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DREMOTESERVICE_DEBUG -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I.\3thparty" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\MongoDbWrapper" "-I.\..\RemoteBoxWrapper" "-I.\..\MySQLDbWrapper"</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DDEBUG_WITHOUT_SHUTDOWN -DDEBUG_WITHOUT_LOGOUT -DDEBUG -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DREMOTESERVICE_DEBUG -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\..\RemoteUtil\thirdparty" "-I.\..\..\RemoteUtil\RemoteDataConnectLibrary\Include" "-I.\..\..\RemoteUtil\RemoteBoxWrapper"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing FlashCmdProcessor.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-I.\QtServiceClasses" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I$(QTDIR)\mkspecs\win32-msvc2013"</Command>
-    </CustomBuild>
-    <CustomBuild Include="MongoDbSink.h">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Performing Custom Build Tools</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </Outputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </AdditionalInputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Performing Custom Build Tools</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </Outputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-I.\QtServiceClasses" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtWidgets" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtGui" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtANGLE" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtCore" "-I.\release" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\mkspecs\win32-msvc2013"</Command>
     </CustomBuild>
     <CustomBuild Include="PowerStripeDevice.h">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -280,14 +244,14 @@
       </AdditionalInputs>
     </CustomBuild>
     <CustomBuild Include="RemoteBoxDevice.h">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DREMOTESERVICE_DEBUG -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I.\3thparty" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\MongoDbWrapper" "-I.\..\RemoteBoxWrapper" "-I.\..\MySQLDbWrapper"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DDEBUG_WITHOUT_SHUTDOWN -DDEBUG_WITHOUT_LOGOUT -DDEBUG -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DREMOTESERVICE_DEBUG -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\..\RemoteUtil\thirdparty" "-I.\..\..\RemoteUtil\RemoteDataConnectLibrary\Include" "-I.\..\..\RemoteUtil\RemoteBoxWrapper"</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing RemoteBoxDevice.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-I.\QtServiceClasses" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I$(QTDIR)\mkspecs\win32-msvc2013"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-I.\QtServiceClasses" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtWidgets" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtGui" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtANGLE" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtCore" "-I.\release" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\mkspecs\win32-msvc2013"</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing RemoteBoxDevice.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe;%(FullPath)</AdditionalInputs>
     </CustomBuild>
     <CustomBuild Include="UtilProcess.h">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -322,54 +286,54 @@
       </AdditionalInputs>
     </CustomBuild>
     <CustomBuild Include="TCPServer.h">
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing TCPServer.hpp...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DREMOTESERVICE_DEBUG -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I.\3thparty" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\MongoDbWrapper" "-I.\..\RemoteBoxWrapper" "-I.\..\MySQLDbWrapper"</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DDEBUG_WITHOUT_SHUTDOWN -DDEBUG_WITHOUT_LOGOUT -DDEBUG -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DREMOTESERVICE_DEBUG -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\..\RemoteUtil\thirdparty" "-I.\..\..\RemoteUtil\RemoteDataConnectLibrary\Include" "-I.\..\..\RemoteUtil\RemoteBoxWrapper"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing TCPServer.hpp...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-I.\QtServiceClasses" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I$(QTDIR)\mkspecs\win32-msvc2013"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-I.\QtServiceClasses" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtWidgets" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtGui" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtANGLE" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtCore" "-I.\release" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\mkspecs\win32-msvc2013"</Command>
     </CustomBuild>
     <CustomBuild Include="ShutdownHandler.hpp">
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing ShutdownHandler.hpp...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DREMOTESERVICE_DEBUG -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I.\3thparty" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\MongoDbWrapper" "-I.\..\RemoteBoxWrapper" "-I.\..\MySQLDbWrapper"</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DDEBUG_WITHOUT_SHUTDOWN -DDEBUG_WITHOUT_LOGOUT -DDEBUG -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DREMOTESERVICE_DEBUG -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\..\RemoteUtil\thirdparty" "-I.\..\..\RemoteUtil\RemoteDataConnectLibrary\Include" "-I.\..\..\RemoteUtil\RemoteBoxWrapper"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing ShutdownHandler.hpp...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-I.\QtServiceClasses" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I$(QTDIR)\mkspecs\win32-msvc2013"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-I.\QtServiceClasses" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtWidgets" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtGui" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtANGLE" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtCore" "-I.\release" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\mkspecs\win32-msvc2013"</Command>
     </CustomBuild>
     <CustomBuild Include="IPCThread.h">
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing IPCThread.hpp...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DREMOTESERVICE_DEBUG -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I.\3thparty" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\MongoDbWrapper" "-I.\..\RemoteBoxWrapper" "-I.\..\MySQLDbWrapper"</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DDEBUG_WITHOUT_SHUTDOWN -DDEBUG_WITHOUT_LOGOUT -DDEBUG -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DREMOTESERVICE_DEBUG -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\..\RemoteUtil\thirdparty" "-I.\..\..\RemoteUtil\RemoteDataConnectLibrary\Include" "-I.\..\..\RemoteUtil\RemoteBoxWrapper"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing IPCThread.hpp...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-I.\QtServiceClasses" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I$(QTDIR)\mkspecs\win32-msvc2013"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-I.\QtServiceClasses" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtWidgets" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtGui" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtANGLE" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtCore" "-I.\release" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\mkspecs\win32-msvc2013"</Command>
     </CustomBuild>
     <CustomBuild Include="Inactivitywatcher.hpp">
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing Inactivitywatcher.hpp...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DREMOTESERVICE_DEBUG -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I.\3thparty" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\MongoDbWrapper" "-I.\..\RemoteBoxWrapper" "-I.\..\MySQLDbWrapper"</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DDEBUG_WITHOUT_SHUTDOWN -DDEBUG_WITHOUT_LOGOUT -DDEBUG -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DREMOTESERVICE_DEBUG -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\..\RemoteUtil\thirdparty" "-I.\..\..\RemoteUtil\RemoteDataConnectLibrary\Include" "-I.\..\..\RemoteUtil\RemoteBoxWrapper"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing Inactivitywatcher.hpp...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-I.\QtServiceClasses" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I$(QTDIR)\mkspecs\win32-msvc2013"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-I.\QtServiceClasses" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtWidgets" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtGui" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtANGLE" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtCore" "-I.\release" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\mkspecs\win32-msvc2013"</Command>
     </CustomBuild>
     <CustomBuild Include="CommandInterpreter.hpp">
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing CommandInterpreter.hpp...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DREMOTESERVICE_DEBUG -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I.\3thparty" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\MongoDbWrapper" "-I.\..\RemoteBoxWrapper" "-I.\..\MySQLDbWrapper"</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DDEBUG_WITHOUT_SHUTDOWN -DDEBUG_WITHOUT_LOGOUT -DDEBUG -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DREMOTESERVICE_DEBUG -D_UNICODE  "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\..\RemoteUtil\thirdparty" "-I.\..\..\RemoteUtil\RemoteDataConnectLibrary\Include" "-I.\..\..\RemoteUtil\RemoteBoxWrapper"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing CommandInterpreter.hpp...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-I.\QtServiceClasses" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I$(QTDIR)\mkspecs\win32-msvc2013"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-I.\QtServiceClasses" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtWidgets" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtGui" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtANGLE" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtCore" "-I.\release" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\mkspecs\win32-msvc2013"</Command>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
@@ -439,12 +403,6 @@
     <ClCompile Include="GeneratedFiles\Debug\moc_TCPServer.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_WebSocketServer.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_WebSocketThread.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_AbstractCommand.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
@@ -499,12 +457,6 @@
     <ClCompile Include="GeneratedFiles\Release\moc_TCPServer.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_WebSocketServer.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_WebSocketThread.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="Intactivitywatcher.cpp" />
     <ClCompile Include="IPCThread.cpp" />
     <ClCompile Include="JobQueue.cpp" />
@@ -519,8 +471,6 @@
     <ClCompile Include="RemoteBoxDevice.cpp" />
     <ClCompile Include="ShutdownHandler.cpp" />
     <ClCompile Include="TCPServer.cpp" />
-    <ClCompile Include="WebSocketServer.cpp" />
-    <ClCompile Include="WebSocketThread.cpp" />
     <ClCompile Include="WinApiHelper.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -564,14 +514,14 @@
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">RemoteService</TargetName>
     <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</IgnoreImportLibrary>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\build\$(PlatformTarget)\$(Configuration)</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\build\$(PlatformTarget)\$(Configuration)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">RemoteService</TargetName>
     <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</IgnoreImportLibrary>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>.;QtServiceClasses;$(QTDIR)\include;$(QTDIR)\include\QtWidgets;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtCore;release;$(QTDIR)\mkspecs\win32-msvc2013;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;QtServiceClasses;C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include;C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtWidgets;C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtGui;C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtANGLE;C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtCore;release;C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\mkspecs\win32-msvc2013;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zc:strictStrings -w34100 -w34189 -w44996 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>release\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
@@ -591,7 +541,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>Wtsapi32.lib;user32.lib;Qt5Widgets.lib;Qt5Gui.lib;Qt5Core.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(QTDIR)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -613,7 +563,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>.;$(QTDIR)\include;$(QTDIR)\include\QtWidgets;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtCore;debug;$(QTDIR)\mkspecs\win32-msvc2013;3thparty\;$(QTDIR)\include\QtNetwork;C:\Users\Master\Downloads\qt-solutions-master\qtservice\src;..\MongoDbWrapper;..\RemoteBoxWrapper;..\MySQLDbWrapper;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;$(QTDIR)\include;$(QTDIR)\include\QtWidgets;$(QTDIR)\include\QtCore;$(QTDIR)\mkspecs\win32-msvc2013;$(QTDIR)\include\QtNetwork;C:\Users\Master\Downloads\qt-solutions-master\qtservice\src;..\..\RemoteUtil\thirdparty;..\..\RemoteUtil\RemoteDataConnectLibrary\Include;..\..\RemoteUtil\RemoteBoxWrapper;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-w34100 -w34189 -w44996 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>debug\</AssemblerListingLocation>
       <BrowseInformation>true</BrowseInformation>
@@ -621,7 +571,7 @@
       <ExceptionHandling>Sync</ExceptionHandling>
       <ObjectFileName>debug\</ObjectFileName>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_CONSOLE;UNICODE;WIN32;WIN64;QT_WIDGETS_LIB;QT_GUI_LIB;QT_CORE_LIB;REMOTESERVICE_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DEBUG_WITHOUT_SHUTDOWN;DEBUG_WITHOUT_LOGOUT;DEBUG;_CONSOLE;UNICODE;WIN32;WIN64;QT_WIDGETS_LIB;QT_GUI_LIB;QT_CORE_LIB;REMOTESERVICE_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
@@ -630,8 +580,8 @@
       <WarningLevel>Level3</WarningLevel>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>Wtsapi32.lib;user32.lib;Qt5Widgetsd.lib;Qt5Guid.lib;Qt5Cored.lib;Qt5Networkd.lib;QtService.lib;MongoDbWrapper.lib;Qt5WebSocketsd.lib;RemoteBoxWrapper.lib;MySQLDbWrapper.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(QTDIR)\lib;..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Wtsapi32.lib;user32.lib;Qt5Cored.lib;Qt5Networkd.lib;Qt5WebSocketsd.lib;RemoteBoxWrapper.lib;RemoteDataConnectLibraryd.lib;QtService.lib;Qt5Guid.lib;Qt5Widgetsd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\lib;$(QTDIR)\lib;..\..\RemoteUtil\RemoteDataConnectLibrary\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -657,7 +607,7 @@
   <ImportGroup Label="ExtensionTargets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties Qt5Version_x0020_x64="msvc2013_64" />
+      <UserProperties MocDir=".\GeneratedFiles\$(ConfigurationName)" UicDir=".\GeneratedFiles" RccDir=".\GeneratedFiles" lupdateOptions="" lupdateOnBuild="1" lreleaseOptions="" Qt5Version_x0020_x64="msvc2013_64" MocOptions="" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

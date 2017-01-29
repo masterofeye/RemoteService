@@ -64,7 +64,7 @@
 #endif
 
 #include "spdlog\spdlog.h"
-#include "MongoDbSink.h"
+#include "RemoteDataConnectLibrary.h"
 
 typedef SERVICE_STATUS_HANDLE(WINAPI*PRegisterServiceCtrlHandler)(const wchar_t*,LPHANDLER_FUNCTION_EX);
 static PRegisterServiceCtrlHandler pRegisterServiceCtrlHandler = 0;
@@ -544,7 +544,7 @@ QtServiceSysPrivate::QtServiceSysPrivate()
 		if (instance->m_logger == nullptr)
 			QtServiceBase::instance()->logMessage("Logger ist null0");
 
-		m_logger = spdlog::create<spdlog::sinks::MongoDbSink>("file_logger");
+		m_logger = spdlog::create<spdlog::sinks::MySqlSink>("file_logger");
 		if (instance->m_logger == nullptr)
 			QtServiceBase::instance()->logMessage("Logger ist null1");
 

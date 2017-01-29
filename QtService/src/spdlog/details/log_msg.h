@@ -79,7 +79,7 @@ struct log_msg
     size_t thread_id;
     fmt::MemoryWriter raw;
     fmt::MemoryWriter formatted;
-	std::string type;
+	int type;
 };
 }
 }

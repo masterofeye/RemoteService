@@ -17,9 +17,18 @@ namespace RW{
 				PowerStripe,
 				PowerSupply,
 			};
+
+			enum class State
+			{
+				Init,
+				DeInit,
+				Failure,
+
+			};
  
 		private:
 			std::shared_ptr<spdlog::logger> m_logger;
+			State m_State;
 
 			QMap<DeviceType,AbstractDevice*> *m_DeviceList;
 

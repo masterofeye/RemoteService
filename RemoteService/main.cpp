@@ -48,11 +48,9 @@
 #include "spdlog\spdlog.h"
 
 //TestCode
-#include "MongoDbClient.hpp"
-#include "MySqlDbClient.hpp"
+#include "RemoteDataConnectLibrary.h"
 #include "Inactivitywatcher.hpp"
 #include "ShutdownHandler.hpp"
-#include "MongoDbSink.h"
 #include <qt_windows.h>
 #include "CommunicationServer.h"
 #include "JobScheduler.h"
@@ -118,7 +116,7 @@ void RemoteService::start()
 	m_logger = spdlog::get("file_logger");
 	if (m_logger == nullptr)
 	{
-		m_logger = spdlog::create<spdlog::sinks::MongoDbSink>("file_logger");
+		m_logger = spdlog::create<spdlog::sinks::MySqlSink>("file_logger");
 	}
 	m_logger->set_pattern("[%H:%M:%S:%f] [%g] [%l] [thread %t] %v ");
 #ifdef REMOTESERVICE_DEBUG
@@ -126,66 +124,53 @@ void RemoteService::start()
 #else
 	m_logger->set_level(spdlog::level::info);
 #endif 
-    //InactivityWatcher *watch = new InactivityWatcher();
-    //int i  = watch->GetLastInputTime();
-	RW::MYSQL::MySqlDbClient *dbClient = RW::MYSQL::MySqlDbClient::Instance();
-	
+	m_logger->set_type(1);
 
-	//RW::MONGO::MongoDbClient *dbClient = RW::MONGO::MongoDbClient::Instance();
-	if (!dbClient->InitMySQL(m_logger))
-	{
-		//TODO Clients informieren
-	}
+	//InactivityWatcher *watch = new InactivityWatcher();
+	//int i  = watch->GetLastInputTime();
+
+
+	m_Scheduler = new RW::CORE::JobScheduler(m_DeviceMng),
+	m_CommunicationServer = new RW::CORE::CommunicationServer(m_obj);
+
+	m_logger->debug("Device manager initialize");
+	m_DeviceMng->SetLogger(m_logger);
+	if(!m_DeviceMng->Init())
+		m_logger->error("Device manager couldn't initialized correct");
 	else
-	{
-		m_Scheduler = new RW::CORE::JobScheduler(m_DeviceMng),
-		m_CommunicationServer = new RW::CORE::CommunicationServer(m_obj);
+		m_logger->info("Device manager initialized correct");
 
+	//RW::HW::RemoteBoxDevice *wrapper = qobject_cast<RW::HW::RemoteBoxDevice *>(m_DeviceMng->GetDevice(RW::HW::DeviceManager::DeviceType::RemoteBox));
+	//RemoteBoxWrapper::Wrapper* w = wrapper->GetDevice();
+	//bool res = w->SetRelayState(0x02);
 
-		m_logger->debug("Db Connected");
-		m_logger->info("Remote Service started");
+	m_Observer = new RW::CORE::InactivityWatcher("0.1");
+	m_Shutdown = new RW::CORE::ShutdownHandler(m_DeviceMng, "0.1");
 
-		dbClient->CreateDatabase();
+	QObject::connect(m_Observer, &RW::CORE::InactivityWatcher::UserInactive, m_Shutdown, &RW::CORE::ShutdownHandler::StartShutdownTimer);
+	//QObject::connect(m_Scheduler, &RW::CORE::JobScheduler::SendAnswer, m_Observer, &RW::CORE::InactivityWatcher::StopInactivityObservationWithCmd);
+	/*Start Oberservation for user inactivity*/
+	m_Observer->StartInactivityObservation();
 
-		m_DeviceMng->SetLogger(m_logger);
-		m_DeviceMng->Init();
+	//QObject::connect(m_CommunicationServer, &RW::CORE::CommunicationServer::Message, m_Scheduler, &RW::CORE::JobScheduler::AddNewJob);
+	//QObject::connect(m_Scheduler, &RW::CORE::JobScheduler::SendAnswer, m_CommunicationServer, &RW::CORE::CommunicationServer::OnMessage);
 
-		RW::HW::RemoteBoxDevice *wrapper = qobject_cast<RW::HW::RemoteBoxDevice *>( m_DeviceMng->GetDevice(RW::HW::DeviceManager::DeviceType::RemoteBox));
-		RemoteBoxWrapper::Wrapper* w = wrapper->GetDevice();
-		bool res = w->SetRelayState(0x02);
-
-		m_Observer = new RW::CORE::InactivityWatcher("0.1");
-		m_Shutdown = new RW::CORE::ShutdownHandler(m_DeviceMng,"0.1");
-
-		QObject::connect(m_Observer, &RW::CORE::InactivityWatcher::UserInactive, m_Shutdown, &RW::CORE::ShutdownHandler::StartShutdownTimer);
-		QObject::connect(m_Scheduler, &RW::CORE::JobScheduler::SendAnswer, m_Observer, &RW::CORE::InactivityWatcher::StopInactivityObservationWithCmd);
-		/*Start Oberservation for user inactivity*/
-		m_Observer->StartInactivityObservation();
-
-
-
-
-		QObject::connect(m_CommunicationServer, &RW::CORE::CommunicationServer::Message, m_Scheduler, &RW::CORE::JobScheduler::AddNewJob);
-		QObject::connect(m_Scheduler, &RW::CORE::JobScheduler::SendAnswer, m_CommunicationServer, &RW::CORE::CommunicationServer::OnMessage);
-
-		m_Scheduler->start();
-		m_CommunicationServer->Listen(1234);
-	}
+	/*m_Scheduler->start();*/
+	m_CommunicationServer->Listen(42364);
+	m_logger->info("Remote Service started");
+	m_logger->flush();
 }
-
-
-
 
 void RemoteService::stop()
 {
-	try{
-		m_DeviceMng->DeInit();
-	}
-	catch (...)
-	{
+	//try{
+	//	m_DeviceMng->DeInit();
+	//}
+	//catch (...)
+	//{
 
-	}
-	QtServiceBase::instance()->logMessage("Remote Service stopped");
+	//}
+	//QtServiceBase::instance()->logMessage("Remote Service stopped");
 	m_logger->info("Remote Service stopped");
 	m_logger->flush();
 }

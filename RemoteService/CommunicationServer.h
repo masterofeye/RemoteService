@@ -2,6 +2,7 @@
 #include "qobject.h"
 
 #include "BasicServer.h"
+#include <qtcpserver.h>
 
 namespace RW{
 	namespace CORE{
@@ -15,9 +16,8 @@ namespace RW{
 		{
 			Q_OBJECT
 		private:
-			WebSocketServer *m_WebSocketServer;
 			LocalServer		*m_LocalServer;
-			//TCPServer		m_TcpServer;
+			QTcpServer		*m_TcpServer;
 			std::shared_ptr<spdlog::logger> m_logger;
 			QList<QObject*> m_ReceiverList;
 

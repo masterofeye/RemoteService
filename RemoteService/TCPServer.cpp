@@ -21,7 +21,7 @@ namespace RW{
 			}
 			else
 			{
-				m_logger->debug() << "Listening to port " << port << "...";
+				m_logger->debug("Listening to port ");// << port << "...");
 			}
 		}
 
@@ -29,7 +29,7 @@ namespace RW{
 		void TCPServer::incomingConnection(qintptr socketDescriptor)
 		{
 			// We have a new connection
-			m_logger->debug() << socketDescriptor << " Connecting...";
+			m_logger->debug(" Connecting...");
 
 			// Every new connection will be run in a newly created thread
 			IPCThread *thread = new IPCThread(socketDescriptor, this);
