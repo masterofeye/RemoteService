@@ -10,20 +10,8 @@
     <Filter Include="Hardware">
       <UniqueIdentifier>{3102ea2f-9705-4d55-83bd-e545254412e0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Helper\Logger">
-      <UniqueIdentifier>{c3a24e6b-ec99-4fea-a779-d22e6515d77b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Scheduler">
       <UniqueIdentifier>{4fc0a699-4a0e-431f-90d9-b7265d38044b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Helper\CanEasy">
-      <UniqueIdentifier>{6014b4ea-e44a-4e50-a733-3b3e0f28ef43}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Helper\FHostSP">
-      <UniqueIdentifier>{1203a99d-b11e-4b1e-b31b-e0b30c935a68}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Helper\MKS">
-      <UniqueIdentifier>{7b8b4529-4873-4997-bd12-b22bd43b0e27}</UniqueIdentifier>
     </Filter>
     <Filter Include="Helper\Flash">
       <UniqueIdentifier>{d36ce539-b07b-4895-b753-49bb7dd27eeb}</UniqueIdentifier>
@@ -80,15 +68,6 @@
     </CustomBuild>
     <CustomBuild Include="AbstractDevice.h">
       <Filter>Hardware</Filter>
-    </CustomBuild>
-    <CustomBuild Include="CanEasyHelper.h">
-      <Filter>Helper\CanEasy</Filter>
-    </CustomBuild>
-    <CustomBuild Include="FHostSPHelper.h">
-      <Filter>Helper\FHostSP</Filter>
-    </CustomBuild>
-    <CustomBuild Include="MKSHelper.h">
-      <Filter>Helper\MKS</Filter>
     </CustomBuild>
     <CustomBuild Include="FlashCmdProcessor.h">
       <Filter>Helper\Flash</Filter>
@@ -247,33 +226,6 @@
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_AbstractDevice.cpp">
       <Filter>Generierte Dateien\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_CanEasyHelper.cpp">
-      <Filter>Generierte Dateien\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_CanEasyHelper.cpp">
-      <Filter>Generierte Dateien\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="CanEasyHelper.cpp">
-      <Filter>Helper\CanEasy</Filter>
-    </ClCompile>
-    <ClCompile Include="FHostSPHelper.cpp">
-      <Filter>Helper\FHostSP</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_FHostSPHelper.cpp">
-      <Filter>Generierte Dateien\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_FHostSPHelper.cpp">
-      <Filter>Generierte Dateien\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_MKSHelper.cpp">
-      <Filter>Generierte Dateien\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_MKSHelper.cpp">
-      <Filter>Generierte Dateien\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="MKSHelper.cpp">
-      <Filter>Helper\MKS</Filter>
     </ClCompile>
     <ClCompile Include="UtilProcess.cpp">
       <Filter>Helper</Filter>

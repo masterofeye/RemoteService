@@ -1,4 +1,7 @@
 #include "IPCThread.h"
+#include <Lmcons.h>
+
+#include "WinApiHelper.h"
 #include "CommandInterpreter.hpp"
 
 namespace RW{
@@ -10,7 +13,7 @@ namespace RW{
 			m_Command(new CommandInterpreter(this))
 		{
 			this->socketDescriptor = ID;
-			Q_ASSERT_X(m_logger == nullptr, "BasicServer", "m_logger is null");
+			//Q_ASSERT_X(m_logger == nullptr, "BasicServer", "m_logger is null");
 		}
 
 		void IPCThread::run()
@@ -32,7 +35,7 @@ namespace RW{
 			// note - Qt::DirectConnection is used because it's multithreaded
 			//        This makes the slot to be invoked immediately, when the signal is emitted.
 
-			connect(socket, SIGNAL(readyRead()), this, SLOT(readyRead()), Qt::DirectConnection);
+			connect(socket, SIGNAL(readyRead()), this, SLOT(ReadyRead()), Qt::DirectConnection);
 			connect(socket, SIGNAL(disconnected()), this, SLOT(disconnected()));
 
 			// We'll have multiple clients, we want to know which is which
@@ -49,11 +52,35 @@ namespace RW{
 
 		void IPCThread::ReadyRead()
 		{
-			// get the information
-			QByteArray Data = socket->readAll();
+			QByteArray a = socket->readAll();
+		
+			if (QString(a).contains("UserInfo"))
+			{
+				QByteArray answer;
 
-			m_Command->Interpret(&Data);
-			socket->write(Data);
+				QString username;
+				WinApiHelper::ReturnCurrentUser(username);
+				
+				answer.append(username);
+				answer.append(",");
+				answer.append("false");
+				answer.append(",");
+
+				char computername[UNLEN + 1];
+				DWORD computernane_len = UNLEN + 1;
+				GetComputerNameA(computername, &computernane_len);
+
+				answer.append(computername);
+				answer.append(",");
+				answer.append("192.156.244.111");
+				answer.append(",");
+				answer.append("192.156.244.111");
+				answer.append(",");
+				answer.append("");
+				answer.append(",");
+				answer.append("Streamlist{}");
+				socket->write(answer);
+			}
 		}
 
 		void IPCThread::Disconnected()

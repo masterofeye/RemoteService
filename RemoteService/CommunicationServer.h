@@ -10,6 +10,7 @@ namespace RW{
 		class JobScheduler;
 		class WebSocketServer;
 		class LocalServer;
+		class TCPServer;
 
 		class CommunicationServer :
 			public BasicServer
@@ -17,7 +18,7 @@ namespace RW{
 			Q_OBJECT
 		private:
 			LocalServer		*m_LocalServer;
-			QTcpServer		*m_TcpServer;
+			TCPServer		*m_TcpServer;
 			std::shared_ptr<spdlog::logger> m_logger;
 			QList<QObject*> m_ReceiverList;
 

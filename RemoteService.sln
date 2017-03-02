@@ -7,13 +7,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "QtService", "QtService\buil
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RemoteService", "RemoteService\RemoteService.vcxproj", "{E0B42E70-2290-3397-90B1-E090866F4F3E}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{E89D52EF-7ED0-49E4-A025-B1EE026729F3}"
-	ProjectSection(SolutionItems) = preProject
-		Plugins\PluginInterface\PluginInterface.h = Plugins\PluginInterface\PluginInterface.h
-	EndProjectSection
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FlashPlu", "Plugins\FlashPlu\FlashPlu.vcxproj", "{CF1DAA7C-4B2A-4A98-9BFF-8CD916EFDD27}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -44,23 +37,8 @@ Global
 		{E0B42E70-2290-3397-90B1-E090866F4F3E}.Release|Win32.ActiveCfg = Release|x64
 		{E0B42E70-2290-3397-90B1-E090866F4F3E}.Release|x64.ActiveCfg = Release|x64
 		{E0B42E70-2290-3397-90B1-E090866F4F3E}.Release|x64.Build.0 = Release|x64
-		{CF1DAA7C-4B2A-4A98-9BFF-8CD916EFDD27}.Debug|Mixed Platforms.ActiveCfg = Debug|x64
-		{CF1DAA7C-4B2A-4A98-9BFF-8CD916EFDD27}.Debug|Mixed Platforms.Build.0 = Debug|x64
-		{CF1DAA7C-4B2A-4A98-9BFF-8CD916EFDD27}.Debug|Win32.ActiveCfg = Debug|Win32
-		{CF1DAA7C-4B2A-4A98-9BFF-8CD916EFDD27}.Debug|Win32.Build.0 = Debug|Win32
-		{CF1DAA7C-4B2A-4A98-9BFF-8CD916EFDD27}.Debug|x64.ActiveCfg = Debug|x64
-		{CF1DAA7C-4B2A-4A98-9BFF-8CD916EFDD27}.Debug|x64.Build.0 = Debug|x64
-		{CF1DAA7C-4B2A-4A98-9BFF-8CD916EFDD27}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{CF1DAA7C-4B2A-4A98-9BFF-8CD916EFDD27}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{CF1DAA7C-4B2A-4A98-9BFF-8CD916EFDD27}.Release|Win32.ActiveCfg = Release|Win32
-		{CF1DAA7C-4B2A-4A98-9BFF-8CD916EFDD27}.Release|Win32.Build.0 = Release|Win32
-		{CF1DAA7C-4B2A-4A98-9BFF-8CD916EFDD27}.Release|x64.ActiveCfg = Release|x64
-		{CF1DAA7C-4B2A-4A98-9BFF-8CD916EFDD27}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{CF1DAA7C-4B2A-4A98-9BFF-8CD916EFDD27} = {E89D52EF-7ED0-49E4-A025-B1EE026729F3}
 	EndGlobalSection
 EndGlobal

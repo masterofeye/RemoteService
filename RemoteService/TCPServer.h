@@ -15,8 +15,9 @@ namespace RW{
 		public:
 			explicit TCPServer(QObject *parent = 0);
 			void startServer();
+
 		protected:
-			void incomingConnection(qintptr socketDescriptor);
+			void incomingConnection(qintptr socketDescriptor) Q_DECL_OVERRIDE;
 		};
 	}
 }

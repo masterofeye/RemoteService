@@ -4,16 +4,16 @@
 #include "qmetaobject.h"
 #include "LocalServer.h"
 #include "JobScheduler.h"
+#include "TCPServer.h"
 
 
-#include <Lmcons.h>
 
 namespace RW{
 	namespace CORE{
 		CommunicationServer::CommunicationServer(QObject *Parent = nullptr) : BasicServer(Parent),
 			m_logger(spdlog::get("file_logger")), 
 			m_LocalServer(new LocalServer(this)),
-			m_TcpServer(new QTcpServer(this))
+			m_TcpServer(new TCPServer(this))
 		{
 		}
 
@@ -25,37 +25,45 @@ namespace RW{
 
 		void CommunicationServer::PrepareIncomingConnection()
 		{
-			QTcpSocket* socket = m_TcpServer->nextPendingConnection();
-			if (socket != nullptr)
-			{
-				QByteArray command = socket->readAll();
-				if (QString(command).contains("UserInfo"))
-				{
-					socket->write("UserInfo");
+			//QTcpSocket* socket = m_TcpServer->nextPendingConnection();
+			//if (socket != nullptr)
+			//{
+			//	connect(socket, &socket->readyRead,this, 
 
-					char username[UNLEN + 1];
-					DWORD username_len = UNLEN + 1;
-					GetUserNameA(username, &username_len);
+			//	QByteArray command = socket->readAll();
+			//	if (QString(command).contains("UserInfo"))
+			//	{
+			//		socket->write("UserInfo");
 
-					QByteArray answer;
-					answer.append(username + ',');
-					answer.append("false" + ',');
+			//		char username[UNLEN + 1];
+			//		DWORD username_len = UNLEN + 1;
+			//		GetUserNameA(username, &username_len);
 
-					char computername[UNLEN + 1];
-					DWORD username_len = UNLEN + 1;
-					GetComputerNameA(computername, &username_len);
+			//		QByteArray answer;
+			//		answer.append(username + ',');
+			//		answer.append("false" + ',');
 
-					answer.append(computername + ',');
-					answer.append("192.156.244.111" + ',');
-					answer.append("192.156.244.111" + ',');
-					answer.append("" + ',');
-					answer.append("Streamlist{}");
-				}
+			//		char computername[UNLEN + 1];
+			//		DWORD computernane_len = UNLEN + 1;
+			//		GetComputerNameA(computername, &computernane_len);
 
-				
-
-			}
+			//		answer.append(computername + ',');
+			//		answer.append("192.156.244.111" + ',');
+			//		answer.append("192.156.244.111" + ',');
+			//		answer.append("" + ',');
+			//		answer.append("Streamlist{}");
+			//	}
+			//}
 		}
+
+		//void CommunicationServer::ReadCommand()
+		//{
+		//	QDataStream in;
+		//	in.setDevice(tcpSocket);
+		//	in.setVersion(QDataStream::Qt_4_0);
+		//	in.startTransaction();
+		//}
+
 
 		bool CommunicationServer::Listen(quint16 Port)
 		{
@@ -70,8 +78,10 @@ namespace RW{
 				m_logger->error("Tcp Server couldn't list on port: ");
 				return false;
 			}
+			Sleep(100);
+			qApp->processEvents();
 
-			connect(m_TcpServer, &QTcpServer::newConnection, this, &CommunicationServer::PrepareIncomingConnection);
+			//connect(m_TcpServer, &QTcpServer::newConnection, this, &CommunicationServer::PrepareIncomingConnection);
 
 			if (m_LocalServer == nullptr)
 			{

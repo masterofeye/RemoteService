@@ -8,7 +8,7 @@ namespace RW{
 			QTcpServer(parent),
 			m_logger(spdlog::get("file_logger"))
 		{
-			Q_ASSERT_X(m_logger == nullptr, "BasicServer", "m_logger is null");
+			//Q_ASSERT_X(m_logger == nullptr, "BasicServer", "m_logger is null");
 		}
 
 		void TCPServer::startServer()
@@ -40,5 +40,8 @@ namespace RW{
 
 			thread->start();
 		}
+
+
+
 	}
 }
