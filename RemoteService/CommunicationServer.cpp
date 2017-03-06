@@ -81,21 +81,19 @@ namespace RW{
 			Sleep(100);
 			qApp->processEvents();
 
-			//connect(m_TcpServer, &QTcpServer::newConnection, this, &CommunicationServer::PrepareIncomingConnection);
-
 			if (m_LocalServer == nullptr)
 			{
 				m_logger->error("LocalServer isn't created");
 				return false;
 			}
 
-			if(!m_LocalServer->Listen(Port+1))
+			if(!m_LocalServer->Listen("Server"))
 			{
-				m_logger->error("LocalServer couldn't list on port: ");
+				m_logger->error("LocalServer couldn't list on port: {}", Port + 1);
 				return false;
 			}
 
-			m_logger->debug("CommunicationServer listen is finished.");
+			m_logger->debug("CommunicationServer is ready.");
 #ifdef DEBUG
 			m_logger->flush();
 #endif // DEBUG
@@ -107,7 +105,7 @@ namespace RW{
 		{
 			if (Receiver == nullptr)
 			{
-				m_logger->error("Can't register Receicer because he is null for Object "); //<< Receiver->objectName().toStdString();;
+				m_logger->error("Can't register Receicer because he is null for Object {}", Receiver->objectName().toStdString());
 			}
 			else
 			{
@@ -115,7 +113,7 @@ namespace RW{
 				const QMetaObject* metaObject = Receiver->metaObject();
 				if (metaObject == nullptr)
 				{
-					m_logger->error("Meta object is null for Object "); //<< Receiver->objectName().toStdString();
+					m_logger->error("Meta object is null for Object {}", Receiver->objectName().toStdString());
 					return;
 				}
 
@@ -124,7 +122,7 @@ namespace RW{
 				//TODO MagicNumber
 				if (methodIndex == -1)
 				{
-					m_logger->warn("There is no function called OnMessage for Object ");// << Receiver->objectName().toStdString();;
+					m_logger->warn("There is no function called OnMessage for Object {}", Receiver->objectName().toStdString());
 					return;
 				}
 
@@ -134,7 +132,7 @@ namespace RW{
 
 				if (metaObjectFromThis == nullptr)
 				{
-					m_logger->error("Meta object is null for Object ");//<< Receiver->objectName().toStdString();
+					m_logger->error("Meta object is null for Object {}", Receiver->objectName().toStdString());
 					return;
 				}
 
@@ -142,7 +140,7 @@ namespace RW{
 				//TODO MagicNumber
 				if (signalIndex == -1)
 				{
-					m_logger->warn("No Signal found with name NewCommand for Object ");// << Receiver->objectName().toStdString();
+					m_logger->warn("No Signal found with name NewCommand for Object {}", Receiver->objectName().toStdString());
 					return;
 				}
 
@@ -151,11 +149,11 @@ namespace RW{
 				QMetaObject::Connection con = connect(this, signal, Receiver, method);
 				if (((bool)con) == false)
 				{
-					m_logger->error("Connection couldn't established for Object: "); //  << Receiver->objectName().toStdString();
+					m_logger->error("Connection couldn't established for Object:{}", Receiver->objectName().toStdString());
 				}
 				else
 				{
-					m_logger->debug("Receiver was successfully connected to the signal. ");// << Receiver->objectName().toStdString();
+					m_logger->debug("Receiver was successfully connected to the signal. {}", Receiver->objectName().toStdString());
 				}
 			}
 		}

@@ -485,6 +485,14 @@ class QtServiceSysPrivate
 {
 public:
     enum {
+		QTSERVICE_SESSION_LOGON = 128,
+		QTSERVICE_SESSION_LOGOFF = 129,
+		QTSERVICE_SESSION_LOCK = 130,
+		QTSERVICE_SESSION_UNLOCK = 131,
+		QTSERVICE_CONSOLE_CONNECT = 132,
+		QTSERVICE_CONSOLE_DISCONNECT = 133,
+		QTSERVICE_REMOTE_CONNECT = 134,
+		QTSERVICE_REMOTE_DISCONNECT = 135,
         QTSERVICE_STARTUP = 256
     };
     QtServiceSysPrivate();
@@ -610,6 +618,30 @@ void QtServiceSysPrivate::handleCustomEvent(QEvent *e)
     case SERVICE_CONTROL_CONTINUE:
         QtServiceBase::instance()->resume();
         break;
+	case QTSERVICE_SESSION_LOGON:
+		QtServiceBase::instance()->SessionLogOn();
+		break;
+	case QTSERVICE_SESSION_LOGOFF:
+		QtServiceBase::instance()->SessionLogOff();
+		break;
+	case QTSERVICE_SESSION_LOCK:
+		QtServiceBase::instance()->SessionLock();
+		break;
+	case QTSERVICE_SESSION_UNLOCK:
+		QtServiceBase::instance()->SessionUnlock();
+		break;
+	case QTSERVICE_CONSOLE_CONNECT:
+		QtServiceBase::instance()->ConsoleConnect();
+		break;
+	case QTSERVICE_CONSOLE_DISCONNECT:
+		QtServiceBase::instance()->ConsoleDisconnect();
+		break;
+	case QTSERVICE_REMOTE_CONNECT:
+		QtServiceBase::instance()->RemoteConnect();
+		break;
+	case QTSERVICE_REMOTE_DISCONNECT:
+		QtServiceBase::instance()->RemoteDisconnect();
+		break;
     default:
 	if (code >= 128 && code <= 255)
 	    QtServiceBase::instance()->processCommand(code - 128);
@@ -633,7 +665,13 @@ QString QtServiceSysPrivate::Username(DWORD dwEventType)
 		&szUserName,
 		&dwLen);
 
-	return QString::fromWCharArray(szUserName);
+	if (bStatus)
+		return QString::fromWCharArray(szUserName);
+	else
+	{
+		instance->m_logger->error("Username couldn't ascertained", "RemoteService");
+		return "";
+	}
 }
 
 
@@ -643,83 +681,13 @@ DWORD WINAPI QtServiceSysPrivate::handler(DWORD code,
                                           LPVOID   lpEventData,
                                           LPVOID   lpContext)
 {
+	Q_UNUSED(lpEventData)
+	Q_UNUSED(lpContext)
+
     if (!instance)
         return NO_ERROR;
 
     instance->mutex.lock();
-
-
-	if (code == SERVICE_CONTROL_SESSIONCHANGE)
-	{
-		if (instance->m_logger == nullptr)
-			QtServiceBase::instance()->logMessage("Logger ist null");
-
-		//QString username = Username(dwEventType);
-		//QtServiceBase::instance()->logMessage(username, QtServiceBase::MessageType::Information);
-		if (WTS_SESSION_LOGON == dwEventType )
-		{
-			QtServiceBase::instance()->logMessage("WTS_SESSION_LOGON");
-			instance->m_logger->info("WTS_SESSION_LOGON");
-
-		}
-
-		if (WTS_SESSION_LOGOFF == dwEventType)
-		{
-			QtServiceBase::instance()->logMessage("WTS_SESSION_LOGOFF");
-			
-			instance->m_logger->info("WTS_SESSION_LOGOFF");
-
-		}
-
-		if (WTS_SESSION_LOCK == dwEventType)
-		{
-			QtServiceBase::instance()->logMessage("WTS_SESSION_LOCK");
-			instance->m_logger->info("WTS_SESSION_LOCK");
-			
-		}
-
-		if (WTS_CONSOLE_CONNECT == dwEventType)
-		{
-			QtServiceBase::instance()->logMessage("WTS_CONSOLE_CONNECT");
-			instance->m_logger->info("WTS_CONSOLE_CONNECT");
-		}
-
-		if (WTS_CONSOLE_DISCONNECT == dwEventType)
-		{
-			QtServiceBase::instance()->logMessage("WTS_CONSOLE_DISCONNECT");
-			instance->m_logger->info("WTS_CONSOLE_DISCONNECT");
-		}
-
-		if (WTS_REMOTE_CONNECT == dwEventType)
-		{
-			QtServiceBase::instance()->logMessage("WTS_REMOTE_CONNECT");
-			instance->m_logger->info("WTS_REMOTE_CONNECT");
-		}
-
-		if (WTS_REMOTE_DISCONNECT == dwEventType)
-		{
-			QtServiceBase::instance()->logMessage("WTS_REMOTE_DISCONNECT");
-			instance->m_logger->info("WTS_REMOTE_DISCONNECT");
-		}
-
-		if (WTS_SESSION_UNLOCK == dwEventType)
-		{
-			QtServiceBase::instance()->logMessage("WTS_SESSION_UNLOCK");
-			instance->m_logger->info("WTS_SESSION_UNLOCK");
-
-		}
-
-		if (WTS_SESSION_REMOTE_CONTROL == (dwEventType & WTS_SESSION_REMOTE_CONTROL))
-		{
-			QtServiceBase::instance()->logMessage("WTS_SESSION_REMOTE_CONTROL");
-			instance->m_logger->info("WTS_SESSION_REMOTE_CONTROL");
-
-		}
-		instance->m_logger->flush();
-	}
-	else
-	{
-	}
 
     switch (code) {
     case QTSERVICE_STARTUP: // QtService startup (called from WinMain when started)
@@ -758,7 +726,53 @@ DWORD WINAPI QtServiceSysPrivate::handler(DWORD code,
         instance->condition.wait(&instance->mutex);
         // status will be reported as stopped by start() when qapp::exec returns
         break;
+	case SERVICE_CONTROL_SESSIONCHANGE:
+	{
+		if (instance->m_logger == nullptr)
+		{
+			QtServiceBase::instance()->logMessage("Logger ist null");
+			return ERROR_INVALID_HANDLE;
+		}
 
+		switch (dwEventType)
+		{
+		case WTS_SESSION_LOGON:
+			QCoreApplication::postEvent(instance->controllerHandler, new QEvent(QEvent::Type(QEvent::User + QTSERVICE_SESSION_LOGON)));
+			break;
+		case WTS_SESSION_LOGOFF:
+			QCoreApplication::postEvent(instance->controllerHandler, new QEvent(QEvent::Type(QEvent::User + QTSERVICE_SESSION_LOGOFF)));
+			break;
+		case WTS_SESSION_LOCK:
+			QCoreApplication::postEvent(instance->controllerHandler, new QEvent(QEvent::Type(QEvent::User + QTSERVICE_SESSION_LOCK)));
+			break;
+		case WTS_SESSION_UNLOCK:
+			QCoreApplication::postEvent(instance->controllerHandler, new QEvent(QEvent::Type(QEvent::User + QTSERVICE_SESSION_UNLOCK)));
+			break;
+		case WTS_CONSOLE_CONNECT:
+			QCoreApplication::postEvent(instance->controllerHandler, new QEvent(QEvent::Type(QEvent::User + QTSERVICE_CONSOLE_CONNECT)));
+			break;
+		case WTS_CONSOLE_DISCONNECT:
+			QCoreApplication::postEvent(instance->controllerHandler, new QEvent(QEvent::Type(QEvent::User + QTSERVICE_CONSOLE_DISCONNECT)));
+			break;
+		case WTS_REMOTE_CONNECT:
+			QCoreApplication::postEvent(instance->controllerHandler, new QEvent(QEvent::Type(QEvent::User + QTSERVICE_REMOTE_CONNECT)));
+			break;
+		case WTS_REMOTE_DISCONNECT:
+			QCoreApplication::postEvent(instance->controllerHandler, new QEvent(QEvent::Type(QEvent::User + QTSERVICE_REMOTE_DISCONNECT)));
+			break;
+		}
+		instance->condition.wait(&instance->mutex);
+
+		//Todo entfernen 
+		if (WTS_SESSION_REMOTE_CONTROL == (dwEventType & WTS_SESSION_REMOTE_CONTROL))
+		{
+			QtServiceBase::instance()->logMessage("WTS_SESSION_REMOTE_CONTROL");
+			instance->m_logger->info("WTS_SESSION_REMOTE_CONTROL");
+
+		}
+		instance->m_logger->flush();
+	}
+			break;
     default:
         if ( code >= 128 && code <= 255 ) {
             QCoreApplication::postEvent(instance->controllerHandler, new QEvent(QEvent::Type(QEvent::User + code)));
@@ -783,7 +797,6 @@ void QtServiceSysPrivate::setStatus(DWORD state)
     if (!available())
 	return;
     status.dwCurrentState = state;
-	QtServiceBase::instance()->logMessage("Status okay");
 	status.dwControlsAccepted = SERVICE_ACCEPT_STOP | SERVICE_ACCEPT_SESSIONCHANGE;
     pSetServiceStatus(serviceStatus, &status);
 }

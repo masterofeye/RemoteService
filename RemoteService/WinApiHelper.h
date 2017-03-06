@@ -21,8 +21,6 @@ namespace RW
 			~WinApiHelper();
 
 			bool QueryActiveSession(quint64 &SessioNumber);
-			bool LogOff(quint64 SessioNumber);
-			bool Shutdown();
 
 			static bool ReturnCurrentUser(QString &Username);
 		};

@@ -147,10 +147,18 @@ protected:
     virtual void pause();
     virtual void resume();
     virtual void processCommand(int code);
+	virtual void SessionLock();
+	virtual void SessionUnlock();
+	virtual void RemoteConnect();
+	virtual void RemoteDisconnect();
+	virtual void SessionLogOn();
+	virtual void SessionLogOff();
+	virtual void ConsoleConnect();
+	virtual void ConsoleDisconnect();
 
-    virtual void createApplication(int &argc, char **argv) = 0;
+	virtual void createApplication(int &argc, char **argv) = 0;
 
-    virtual int executeApplication() = 0;
+	virtual int executeApplication() = 0;
 
 private:
 

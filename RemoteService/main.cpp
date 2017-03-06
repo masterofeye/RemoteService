@@ -57,6 +57,7 @@
 #include "DeviceManager.h"
 #include "RemoteBoxDevice.h"
 #include "AbstractDevice.h"
+#include "WinApiHelper.h"
 
 
 
@@ -85,7 +86,14 @@ protected:
     void pause();
     void resume();
     void processCommand(int code);
-
+	void SessionLock();
+	void SessionUnlock();
+	void RemoteConnect();
+	void RemoteDisconnect();
+	void SessionLogOn();
+	void SessionLogOff();
+	void ConsoleConnect();
+	void ConsoleDisconnect();
 
 };
 
@@ -190,6 +198,96 @@ void RemoteService::resume()
 void RemoteService::processCommand(int code)
 {
 }
+
+void RemoteService::SessionLock()
+{
+	RW::CORE::WinApiHelper win;
+	QString username;
+	if (win.ReturnCurrentUser(username))
+	{
+		m_logger->info("Session locked by User: {}", username.toStdString());
+	}
+	
+	m_logger->flush();
+}
+
+void RemoteService::SessionUnlock(){
+
+	RW::CORE::WinApiHelper win;
+	QString username;
+	if (win.ReturnCurrentUser(username))
+	{
+		m_logger->info("Session unlocked by User: {}", username.toStdString());
+	}
+	m_logger->flush();
+}
+
+void RemoteService::RemoteConnect()
+{
+	RW::CORE::WinApiHelper win;
+	QString username;
+	if (win.ReturnCurrentUser(username))
+	{
+		m_logger->info("A new remote session starts for user: {}", username.toStdString());
+	}
+	m_logger->flush();
+}
+
+void RemoteService::RemoteDisconnect()
+{
+	RW::CORE::WinApiHelper win;
+	QString username;
+	if (win.ReturnCurrentUser(username))
+	{
+		m_logger->info("The current remote sessions end for user: {}", username.toStdString());
+	}
+	m_logger->flush();
+}
+
+void RemoteService::SessionLogOn()
+{
+	RW::CORE::WinApiHelper win;
+	QString username;
+	if (win.ReturnCurrentUser(username))
+	{
+		m_logger->info("A new session started for user: {}", username.toStdString());
+	}
+	m_logger->flush();
+}
+
+void RemoteService::SessionLogOff()
+{
+	RW::CORE::WinApiHelper win;
+	QString username;
+	if (win.ReturnCurrentUser(username))
+	{
+		m_logger->info("The session ends for user: {}", username.toStdString());
+	}
+	m_logger->flush();
+}
+
+void RemoteService::ConsoleConnect()
+{
+	RW::CORE::WinApiHelper win;
+	QString username;
+	if (win.ReturnCurrentUser(username))
+	{
+		m_logger->info("Console connected by user: {}", username.toStdString());
+	}
+	m_logger->flush();
+}
+
+void RemoteService::ConsoleDisconnect()
+{
+	RW::CORE::WinApiHelper win;
+	QString username;
+	if (win.ReturnCurrentUser(username))
+	{
+		m_logger->info("Console disconnected by user: {}", username.toStdString());
+	}
+	m_logger->flush();
+}
+
 
 int main(int argc, char **argv)
 {

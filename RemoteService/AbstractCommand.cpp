@@ -524,23 +524,23 @@ namespace RW{
 
 		bool LogOutCommand::Execute()
 		{
-			WinApiHelper helper;
+			//WinApiHelper helper;
 			quint64 sessionId = 0;
-			if(!helper.QueryActiveSession(sessionId))
-			{
-				SetResult("No active session on this remotehost");
-				SetSuccess(false);
-				emit finished(this);
-				return false;
-			}
+			//if(!helper.QueryActiveSession(sessionId))
+			//{
+			//	SetResult("No active session on this remotehost");
+			//	SetSuccess(false);
+			//	emit finished(this);
+			//	return false;
+			//}
 
-			if (!helper.LogOff(sessionId))
-			{
-				SetResult("Can't logoff the user.");
-				SetSuccess(false);
-				emit finished(this);
-				return false;
-			}
+			//if (!helper.LogOff(sessionId))
+			//{
+			//	SetResult("Can't logoff the user.");
+			//	SetSuccess(false);
+			//	emit finished(this);
+			//	return false;
+			//}
 
 			m_logger->error("LOGOUT");
 
@@ -590,13 +590,13 @@ namespace RW{
 			}
 
 			//now the pc can be shutdown
-			if (!helper.Shutdown())
-			{
-				SetResult("Can't shutdown the PC.");
-				SetSuccess(false);
-				emit finished(this);
-				return false;
-			}
+			//if (!helper.Shutdown())
+			//{
+			//	SetResult("Can't shutdown the PC.");
+			//	SetSuccess(false);
+			//	emit finished(this);
+			//	return false;
+			//}
 
 			SetSuccess(true);
 			emit finished(this);

@@ -40,10 +40,10 @@ namespace RW{
 			/******************************************************************************************************************
 			@autor Ivo Kunadt
 			@brief Initialisiert den Server
-			@param Port Port auf dem der Server auf eingehende Verbindungen lauschen soll.
+			@param ChannelName
 			@return Gibt zurück ob der Server nun auf den angebenen Port lauscht oder nicht.
 			********************************************************************************************************************/
-			virtual bool Listen(quint16 Port);
+			virtual bool Listen(QString ChannelName);
 #pragma endregion
 #pragma region "Slots"
 		public slots:

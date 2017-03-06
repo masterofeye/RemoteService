@@ -15,7 +15,6 @@ namespace RW{
 			~BasicServer();
 
 			virtual void PrepareIncomingConnection() = 0;
-			virtual bool Listen(quint16 Port) = 0;
 		public slots:
 			virtual void OnDisconnect() = 0;
 			virtual void OnSocketError(quint16 Error) = 0;

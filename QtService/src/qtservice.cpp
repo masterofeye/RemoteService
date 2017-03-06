@@ -960,6 +960,20 @@ void QtServiceBase::processCommand(int /*code*/)
 {
 }
 
+
+void QtServiceBase::SessionLock()
+{
+}
+
+void QtServiceBase::SessionUnlock(){};
+void QtServiceBase::RemoteConnect(){};
+void QtServiceBase::RemoteDisconnect(){};
+void QtServiceBase::SessionLogOn(){};
+void QtServiceBase::SessionLogOff(){};
+void QtServiceBase::ConsoleConnect(){};
+void QtServiceBase::ConsoleDisconnect(){};
+
+
 /*!
     \fn void QtServiceBase::createApplication(int &argc, char **argv)
 

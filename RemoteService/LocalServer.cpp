@@ -15,6 +15,11 @@ namespace RW{
 			m_Server = new QLocalServer(this);
 			m_SocketList = new QMap<QLocalSocket*, QString>();
 
+			//Jeder hat Zugriff auf den Server.
+			m_Server->setSocketOptions(QLocalServer::WorldAccessOption);
+			//Der Server akzeptiert nur eine Verbindung, das ist der RemoteService
+			m_Server->setMaxPendingConnections(1);
+
 			connect(m_Server, &QLocalServer::newConnection, this, &LocalServer::PrepareIncomingConnection);
 		}
 
@@ -39,18 +44,17 @@ namespace RW{
 			}
 		}
 
-		bool LocalServer::Listen(quint16 Port)
+		bool LocalServer::Listen(QString ChannelName)
 		{
-			if (m_Server->listen("remoteservice"))
+			if (m_Server->listen(ChannelName))
 			{
-				m_logger->debug("LocalServer is started");
+				m_logger->debug("LocalServer is started on ChannelName {}", ChannelName.toStdString());
 				return true;
 			}
 			else
 			{
-				m_logger->error("Can't start local server");
+				m_logger->error("Can't start local server on ChannelName {}", ChannelName.toStdString());
 				return false;
-				
 			}
 		}
  
@@ -59,7 +63,7 @@ namespace RW{
 		{
 			QLocalSocket* LocalSocket = (QLocalSocket *)sender();
 			QString clientname = m_SocketList->find(LocalSocket).value();
-			m_logger->debug("Client disonnected from LocalServer: "); //  clientname.toStdString();
+			m_logger->debug("Client disonnected from LocalServer: {}", clientname.toStdString());
 		}
 
 		void LocalServer::OnMessage(AbstractCommand* Command)
@@ -88,37 +92,37 @@ namespace RW{
 			switch (Error)
 			{
 			case QLocalSocket::ConnectionRefusedError:
-				m_logger->error("A LocalServer socket error occoured: "); //<< "ConnectionRefusedError";
+				m_logger->error("A LocalServer socket error occoured: {}", "ConnectionRefusedError");
 				break;
 			case QLocalSocket::PeerClosedError:
-				m_logger->error("A LocalServer socket error occoured: "); //<< "PeerClosedError";
+				m_logger->error("A LocalServer socket error occoured: {}", "PeerClosedError");
 				break;
 			case QLocalSocket::ServerNotFoundError:
-				m_logger->error("A LocalServer socket error occoured: "); //<< "ServerNotFoundError";
+				m_logger->error("A LocalServer socket error occoured: {}", "ServerNotFoundError");
 				break;
 			case QLocalSocket::SocketAccessError:
-				m_logger->error("A LocalServer socket error occoured: "); //<< "SocketAccessError";
+				m_logger->error("A LocalServer socket error occoured: {}", "SocketAccessError");
 				break;
 			case QLocalSocket::SocketResourceError:
-				m_logger->error("A LocalServer socket error occoured: "); //<< "SocketResourceError";
+				m_logger->error("A LocalServer socket error occoured:  {}", "SocketResourceError"); 
 				break;
 			case QLocalSocket::SocketTimeoutError:
-				m_logger->error("A LocalServer socket error occoured: "); //<< "SocketTimeoutError";
+				m_logger->error("A LocalServer socket error occoured:  {}", "SocketTimeoutError");
 				break;
 			case QLocalSocket::DatagramTooLargeError:
-				m_logger->error("A LocalServer socket error occoured: "); //<< "DatagramTooLargeError";
+				m_logger->error("A LocalServer socket error occoured:  {}", "DatagramTooLargeError");
 				break;
 			case QLocalSocket::ConnectionError:
-				m_logger->error("A LocalServer socket error occoured: "); //<< "ConnectionError";
+				m_logger->error("A LocalServer socket error occoured: {}","ConnectionError"); 
 				break;
 			case QLocalSocket::UnsupportedSocketOperationError:
-				m_logger->error("A LocalServer socket error occoured: "); //<< "UnsupportedSocketOperationError";
+				m_logger->error("A LocalServer socket error occoured:  {}", "UnsupportedSocketOperationError");
 				break;
 			case QLocalSocket::UnknownSocketError:
-				m_logger->error("A LocalServer socket error occoured: "); //<< "UnknownSocketError";
+				m_logger->error("A LocalServer socket error occoured:  {}", "UnknownSocketError");
 				break;
 			case QLocalSocket::OperationError:
-				m_logger->error("A LocalServer socket error occoured: "); //<< "OperationError";
+				m_logger->error("A LocalServer socket error occoured:  {}", "OperationError");
 				break;
 			default:
 				break;
