@@ -5,6 +5,7 @@
 #include "WinApiHelper.h"
 #include "AbstractCommand.h"
 
+
 #if defined(DEBUG) && defined(DEBUG_WITHOUT_LOGOUT)
 	#define DEFAULT_TIMEOUT 60*60
 #elif defined(DEBUG)
@@ -49,16 +50,7 @@ namespace RW{
 
 		void InactivityWatcher::StartInactivityObservation()
 		{
-			
-			if (m_TimerLogout == nullptr)
-			{
-				m_TimerLogout = new QTimer(this);
-			}
-			connect(m_TimerLogout, &QTimer::timeout, this, &InactivityWatcher::LogOutUser);
-			//m_TimerLogout->setSingleShot(true);
-			m_TimerLogout->start(5000);
-			Sleep(100);
-			qApp->processEvents();
+            emit NewMessage(Util::Functions::StartInactivityTimer, );
 			m_logger->debug("Inactivitity Timer started.");
 			
 		}
@@ -102,6 +94,7 @@ namespace RW{
 				m_logger->debug("User is logged out now.");
 				m_logger->flush();
 
+
 				emit UserInactive();
 #else
 				WinApiHelper helper;
@@ -131,5 +124,10 @@ namespace RW{
 			m_logger->flush();
 #endif // DEBUG
 		}
+
+        void InactivityWatcher::OnProcessMessage(Util::MessageReceiver Type, Util::Functions Func, QByteArray Report)
+        {
+
+        }
 	}
 }

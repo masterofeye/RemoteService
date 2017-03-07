@@ -3,6 +3,7 @@
 #include <QObject>
 #include <QTimer>
 #include "spdlog\spdlog.h"
+#include "Constants.h"
 
 namespace RW{
 
@@ -22,12 +23,14 @@ namespace RW{
 
 		signals:
 			void UserInactive();
+            void NewMessage(Util::Functions MessageType, QByteArray Message);
 		private slots:
 			void LogOutUser();
 		public slots:
 			void StartInactivityObservation();
 			void StopInactivityObservation();
 			void StopInactivityObservationWithCmd(AbstractCommand* Cmd);
+            void OnProcessMessage(Util::MessageReceiver Type, Util::Functions Func, QByteArray Report);
 		};
 	}
 }
