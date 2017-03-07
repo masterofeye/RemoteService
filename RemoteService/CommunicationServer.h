@@ -3,6 +3,7 @@
 
 #include "BasicServer.h"
 #include <qtcpserver.h>
+#include "Constants.h"
 
 namespace RW{
 	namespace CORE{
@@ -33,6 +34,7 @@ namespace RW{
 			void Unregister(QObject* Receiver);
 			void UnregisterAll();
 
+			static QByteArray Message(Util::Functions Func, QByteArray Message, Util::ErrorID Id);
 			virtual void PrepareIncomingConnection();
 			virtual bool Listen(quint16 Port);
 		public slots:

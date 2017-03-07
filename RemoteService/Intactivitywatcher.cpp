@@ -50,6 +50,9 @@ namespace RW{
 
 		void InactivityWatcher::StartInactivityObservation()
 		{
+			QByteArray arr;
+			QDataStream in(arr);
+			in.wr
             emit NewMessage(Util::Functions::StartInactivityTimer, );
 			m_logger->debug("Inactivitity Timer started.");
 			

@@ -101,59 +101,88 @@ namespace RW{
 			return true;
 		}
 
-		void CommunicationServer::Register(QObject* Receiver)
+		void CommunicationServer::Register(QObject* Client)
 		{
-			if (Receiver == nullptr)
+			if (Client == nullptr)
 			{
-				m_logger->error("Can't register Receicer because he is null for Object {}", Receiver->objectName().toStdString());
+				m_logger->error("Can't register Client because he is null for Object {}", Client->objectName().toStdString());
 			}
 			else
 			{
 				//Wir brauchen das MetaObjekt des Receivers um eine Liste der Methoden zu bekommen
-				const QMetaObject* metaObject = Receiver->metaObject();
-				if (metaObject == nullptr)
+				const QMetaObject* ClientMetaObject = Client->metaObject();
+				if (ClientMetaObject == nullptr)
 				{
-					m_logger->error("Meta object is null for Object {}", Receiver->objectName().toStdString());
+					m_logger->error("Meta object is null for Object {}", Client->objectName().toStdString());
 					return;
 				}
 
 				//Prüfen ob im Receiver Objekt die OnMessage Methode existiert
-				int methodIndex = metaObject->indexOfMethod("OnMessage");
+				int clientMethodIndex = ClientMetaObject->indexOfMethod("OnProcessMessage");
 				//TODO MagicNumber
-				if (methodIndex == -1)
+				if (clientMethodIndex == -1)
 				{
-					m_logger->warn("There is no function called OnMessage for Object {}", Receiver->objectName().toStdString());
+					m_logger->warn("There is no function called OnMessage for Object {}", Client->objectName().toStdString());
 					return;
 				}
 
-				QMetaMethod method = metaObject->method(methodIndex);
+				QMetaMethod clientOnProcessMessageMethod = ClientMetaObject->method(clientMethodIndex);
 
-				const QMetaObject* metaObjectFromThis = this->metaObject();
+				const QMetaObject* ServerMetaObject = this->metaObject();
 
-				if (metaObjectFromThis == nullptr)
+				if (ServerMetaObject == nullptr)
 				{
-					m_logger->error("Meta object is null for Object {}", Receiver->objectName().toStdString());
+					m_logger->error("Meta object is null for Object {}", this->objectName().toStdString());
 					return;
 				}
 
-				int signalIndex = metaObjectFromThis->indexOfSignal("Message");
+				int ServerSignalIndex = ServerMetaObject->indexOfSignal("NewMessage");
 				//TODO MagicNumber
-				if (signalIndex == -1)
+				if (ServerSignalIndex == -1)
 				{
-					m_logger->warn("No Signal found with name NewCommand for Object {}", Receiver->objectName().toStdString());
+					m_logger->warn("No Signal found with name NewCommand for Object {}", this->objectName().toStdString());
 					return;
 				}
 
-				QMetaMethod signal = metaObject->method(signalIndex);
+				QMetaMethod serverSignal = ServerMetaObject->method(ServerSignalIndex);
 
-				QMetaObject::Connection con = connect(this, signal, Receiver, method);
+				QMetaObject::Connection con = connect(this, serverSignal, Client, clientOnProcessMessageMethod);
 				if (((bool)con) == false)
 				{
-					m_logger->error("Connection couldn't established for Object:{}", Receiver->objectName().toStdString());
+					m_logger->error("Connection couldn't established for Object:{}", Client->objectName().toStdString());
 				}
 				else
 				{
-					m_logger->debug("Receiver was successfully connected to the signal. {}", Receiver->objectName().toStdString());
+					m_logger->debug("Receiver was successfully connected to the signal. {}", Client->objectName().toStdString());
+				}
+
+				int serverMethodIndex = ServerMetaObject->indexOfMethod("OnProcessMessage");
+				if (serverMethodIndex == -1)
+				{
+					m_logger->warn("There is no function called OnMessage for Object {}", this->objectName().toStdString());
+					return;
+				}
+
+				QMetaMethod serverOnProcessMessageMethod = ServerMetaObject->method(serverMethodIndex);
+
+				int clientSignalIndex = ServerMetaObject->indexOfSignal("NewMessage");
+				//TODO MagicNumber
+				if (clientSignalIndex == -1)
+				{
+					m_logger->warn("No Signal found with name NewCommand for Object {}", this->objectName().toStdString());
+					return;
+				}
+
+				QMetaMethod clientSignal = ServerMetaObject->method(clientSignalIndex);
+
+				QMetaObject::Connection con = connect(Client, clientSignal, this, serverOnProcessMessageMethod);
+				if (((bool)con) == false)
+				{
+					m_logger->error("Connection couldn't established for Object:{}", this->objectName().toStdString());
+				}
+				else
+				{
+					m_logger->debug("Receiver was successfully connected to the signal. {}", this->objectName().toStdString());
 				}
 			}
 		}
@@ -184,6 +213,42 @@ namespace RW{
 		void CommunicationServer::UnregisterAll()
 		{
 		
+		}
+
+		QDataStream &operator <<(QDataStream &out, const RW::CORE::Message &dataStruct)
+		{
+			out.startTransaction();
+			out << (quint16)dataStruct.MessageType;
+			out << dataStruct.MessageSize;
+			out.writeRawData(dataStruct.Message, dataStruct.MessageSize);
+			out << (quint16)dataStruct.Error;
+			out.commitTransaction();
+			return out;
+		}
+
+		QDataStream &operator >>(QDataStream &in, RW::CORE::Message &dataStruct)
+		{
+			quint16 messageType = 0;
+			quint16 id = 0;
+			in >> messageType;
+			in >> dataStruct.MessageSize;
+			dataStruct.Message.resize(dataStruct.MessageSize);
+			in.readRawData(dataStruct.Message.data(), dataStruct.MessageSize);
+			in >> id;
+
+			dataStruct.MessageType = static_cast<RW::CORE::Util::Functions>(messageType);
+			dataStruct.Error = static_cast<RW::CORE::Util::ErrorID>(id);
+			return in;
+		}
+
+		QByteArray CommunicationServer::Message(Util::Functions Func, QByteArray Message, Util::ErrorID Id)
+		{
+			QByteArray arr;
+			RW::CORE::Message m(Func, Message.size(), Message, Id);
+			QDataStream in(&arr, QIODevice::WriteOnly);
+			in.setVersion(QDataStream::Qt_5_7);
+			in << m;
+			return arr;
 		}
 	}
 }
