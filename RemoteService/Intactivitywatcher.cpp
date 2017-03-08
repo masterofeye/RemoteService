@@ -45,7 +45,7 @@ namespace RW{
             //TODO Zeit aus der Datenbank lesen
             arr.append(5000);
 
-            emit NewMessage(Util::Functions::StartInactivityTimer, arr);
+            emit NewMessage(Util::MessageReceiver::InactivityWatcher, Util::Functions::StartInactivityTimer, arr);
 			m_logger->debug("Inactivitity Timer started.");
 #ifdef DEBUG
             m_logger->flush();
@@ -55,7 +55,7 @@ namespace RW{
 		void InactivityWatcher::StopInactivityObservation()
 		{
             QByteArray arr;
-            emit NewMessage(Util::Functions::StopInactivityTimer, arr);
+			emit NewMessage(Util::MessageReceiver::InactivityWatcher, Util::Functions::StopInactivityTimer, arr);
             m_logger->debug("Inactivitity Timer stopped.");
 #ifdef DEBUG
 			m_logger->flush();

@@ -21,7 +21,7 @@ namespace RW{
 			explicit InactivityWatcher(QString Version, QObject *parent = 0);
 		signals:
 			void UserInactive();
-            void NewMessage(Util::Functions MessageType, QByteArray Message);
+			void NewMessage(Util::MessageReceiver Type, Util::Functions Func, QByteArray Data);
 		public slots:
 			void StartInactivityObservation();
 			void StopInactivityObservation();

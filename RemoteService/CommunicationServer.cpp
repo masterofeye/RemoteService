@@ -115,7 +115,7 @@ namespace RW{
 				}
 
 				//Prüfen ob im Receiver Objekt die OnMessage Methode existiert
-				int clientMethodIndex = ClientMetaObject->indexOfMethod("OnProcessMessage");
+				int clientMethodIndex = ClientMetaObject->indexOfMethod(QMetaObject::normalizedSignature("OnProcessMessage(Util::MessageReceiver, Util::Functions, QByteArray)"));
 				//TODO MagicNumber
 				if (clientMethodIndex == -1)
 				{
@@ -133,7 +133,7 @@ namespace RW{
 					return;
 				}
 
-				int ServerSignalIndex = ServerMetaObject->indexOfSignal("NewMessage");
+				int ServerSignalIndex = ServerMetaObject->indexOfSignal(QMetaObject::normalizedSignature("NewMessage(Util::MessageReceiver, Util::Functions, QByteArray)"));
 				//TODO MagicNumber
 				if (ServerSignalIndex == -1)
 				{
@@ -153,7 +153,7 @@ namespace RW{
 					m_logger->debug("Receiver was successfully connected to the signal. {}", Client->objectName().toStdString());
 				}
 
-				int serverMethodIndex = ServerMetaObject->indexOfMethod("OnProcessMessage");
+				int serverMethodIndex = ServerMetaObject->indexOfMethod(QMetaObject::normalizedSignature("OnProcessMessage(Util::MessageReceiver, Util::Functions, QByteArray)"));
 				if (serverMethodIndex == -1)
 				{
 					m_logger->warn("There is no function called OnMessage for Object {}", this->objectName().toStdString());
@@ -162,7 +162,7 @@ namespace RW{
 
 				QMetaMethod serverOnProcessMessageMethod = ServerMetaObject->method(serverMethodIndex);
 
-				int clientSignalIndex = ServerMetaObject->indexOfSignal("NewMessage");
+				int clientSignalIndex = ServerMetaObject->indexOfSignal(QMetaObject::normalizedSignature("NewMessage(Util::MessageReceiver, Util::Functions, QByteArray)"));
 				//TODO MagicNumber
 				if (clientSignalIndex == -1)
 				{

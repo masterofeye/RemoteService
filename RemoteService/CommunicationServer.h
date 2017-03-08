@@ -58,12 +58,12 @@ namespace RW{
 			@param Command
 			@return void
 			********************************************************************************************************************/
-            virtual void OnProcessedMessage(Util::MessageReceiver Type, Util::Functions Func, QByteArray Data);
+            void OnProcessedMessage(Util::MessageReceiver Type, Util::Functions Func, QByteArray Data);
 
 
 
 		signals: 
-            void NewMessage(Util::Functions MessageType, QByteArray Message);
+			void NewMessage(Util::MessageReceiver Type, Util::Functions Func, QByteArray Data);
 			void ProcessedMessage(AbstractCommand* Command);
 			void SocketError(quint16 Error);
 		};
