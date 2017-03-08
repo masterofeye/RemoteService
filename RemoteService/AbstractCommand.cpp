@@ -41,6 +41,8 @@ namespace RW{
 					m_Parsing = true;
 				}
 			}
+
+            Q_UNUSED(Parent);
 		}
 
 		AbstractCommand::AbstractCommand(quint16 CmdId, QString Source, QString Destination, QString ExecutionVariant, QList<QVariant> Parameter, QObject *Parent) : Next(nullptr),
@@ -63,7 +65,9 @@ namespace RW{
 		}
 
 		void AbstractCommand::SetDevice(QObject* const Device)
-		{}
+        {
+            Q_UNUSED(Device)
+        }
 
 		/****************************************************************************
 		 _____      _              _____                                          _
@@ -520,12 +524,13 @@ namespace RW{
 
 		void LogOutCommand::SetDevice(QObject * const Device)
 		{
+            Q_UNUSED(Device)
 		}
 
 		bool LogOutCommand::Execute()
 		{
 			//WinApiHelper helper;
-			quint64 sessionId = 0;
+			//quint64 sessionId = 0;
 			//if(!helper.QueryActiveSession(sessionId))
 			//{
 			//	SetResult("No active session on this remotehost");

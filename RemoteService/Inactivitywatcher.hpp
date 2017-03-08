@@ -19,13 +19,9 @@ namespace RW{
 			long long m_Timeout;
 		public:
 			explicit InactivityWatcher(QString Version, QObject *parent = 0);
-			uint GetLastInputTime();
-
 		signals:
 			void UserInactive();
             void NewMessage(Util::Functions MessageType, QByteArray Message);
-		private slots:
-			void LogOutUser();
 		public slots:
 			void StartInactivityObservation();
 			void StopInactivityObservation();

@@ -163,6 +163,9 @@ void RemoteService::start()
 	//QObject::connect(m_CommunicationServer, &RW::CORE::CommunicationServer::Message, m_Scheduler, &RW::CORE::JobScheduler::AddNewJob);
 	//QObject::connect(m_Scheduler, &RW::CORE::JobScheduler::SendAnswer, m_CommunicationServer, &RW::CORE::CommunicationServer::OnMessage);
 
+    m_CommunicationServer->Register(m_Observer);
+    m_CommunicationServer->Register(m_Shutdown);
+
 	/*m_Scheduler->start();*/
 	m_CommunicationServer->Listen(42364);
 	m_logger->info("Remote Service started");

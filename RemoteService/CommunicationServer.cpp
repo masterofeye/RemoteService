@@ -6,8 +6,6 @@
 #include "JobScheduler.h"
 #include "TCPServer.h"
 
-
-
 namespace RW{
 	namespace CORE{
 		CommunicationServer::CommunicationServer(QObject *Parent = nullptr) : BasicServer(Parent),
@@ -21,7 +19,6 @@ namespace RW{
 		CommunicationServer::~CommunicationServer()
 		{
 		}
-
 
 		void CommunicationServer::PrepareIncomingConnection()
 		{
@@ -146,8 +143,8 @@ namespace RW{
 
 				QMetaMethod serverSignal = ServerMetaObject->method(ServerSignalIndex);
 
-				QMetaObject::Connection con = connect(this, serverSignal, Client, clientOnProcessMessageMethod);
-				if (((bool)con) == false)
+				QMetaObject::Connection connectionServerClient = connect(this, serverSignal, Client, clientOnProcessMessageMethod);
+                if (((bool)connectionServerClient) == false)
 				{
 					m_logger->error("Connection couldn't established for Object:{}", Client->objectName().toStdString());
 				}
@@ -175,8 +172,8 @@ namespace RW{
 
 				QMetaMethod clientSignal = ServerMetaObject->method(clientSignalIndex);
 
-				QMetaObject::Connection con = connect(Client, clientSignal, this, serverOnProcessMessageMethod);
-				if (((bool)con) == false)
+				QMetaObject::Connection connectionClientServer = connect(Client, clientSignal, this, serverOnProcessMessageMethod);
+                if (((bool)connectionClientServer) == false)
 				{
 					m_logger->error("Connection couldn't established for Object:{}", this->objectName().toStdString());
 				}
@@ -193,62 +190,42 @@ namespace RW{
 		
 		void CommunicationServer::OnSocketError(quint16 Error)
 		{
+            Q_UNUSED(Error);
 		}
 
-		void CommunicationServer::OnMessage(AbstractCommand* Command)
+
+        void CommunicationServer::OnProcessedMessage(Util::MessageReceiver Type, Util::Functions Func, QByteArray Data)
 		{
-
-		}
-
-		void CommunicationServer::OnProcessedMessage(AbstractCommand* Command)
-		{
-
+            switch (Type)
+            {
+            case RW::CORE::Util::MessageReceiver::CommunicationServer:
+            case RW::CORE::Util::MessageReceiver::ProcessManager:
+            case RW::CORE::Util::MessageReceiver::CanEasyWrapper:
+            case RW::CORE::Util::MessageReceiver::BasicWrapper:
+            case RW::CORE::Util::MessageReceiver::PortalInfo:
+            case RW::CORE::Util::MessageReceiver::FHostSPWrapper:
+            case RW::CORE::Util::MessageReceiver::MKSWrapper:
+            case RW::CORE::Util::MessageReceiver::FileUtil:
+            case RW::CORE::Util::MessageReceiver::UsbHidLoader:
+            case RW::CORE::Util::MessageReceiver::ShutdownHandler:
+            case RW::CORE::Util::MessageReceiver::InactivityWatcher:
+                m_LocalServer->OnProcessedMessage(Type, Func, Data);
+                break;
+            default:
+                break;
+            }
 		}
 
 		void CommunicationServer::Unregister(QObject* Receiver)
 		{
-			
+            disconnect(Receiver);
 		}
 
 		void CommunicationServer::UnregisterAll()
 		{
-		
+		   
 		}
 
-		QDataStream &operator <<(QDataStream &out, const RW::CORE::Message &dataStruct)
-		{
-			out.startTransaction();
-			out << (quint16)dataStruct.MessageType;
-			out << dataStruct.MessageSize;
-			out.writeRawData(dataStruct.Message, dataStruct.MessageSize);
-			out << (quint16)dataStruct.Error;
-			out.commitTransaction();
-			return out;
-		}
 
-		QDataStream &operator >>(QDataStream &in, RW::CORE::Message &dataStruct)
-		{
-			quint16 messageType = 0;
-			quint16 id = 0;
-			in >> messageType;
-			in >> dataStruct.MessageSize;
-			dataStruct.Message.resize(dataStruct.MessageSize);
-			in.readRawData(dataStruct.Message.data(), dataStruct.MessageSize);
-			in >> id;
-
-			dataStruct.MessageType = static_cast<RW::CORE::Util::Functions>(messageType);
-			dataStruct.Error = static_cast<RW::CORE::Util::ErrorID>(id);
-			return in;
-		}
-
-		QByteArray CommunicationServer::Message(Util::Functions Func, QByteArray Message, Util::ErrorID Id)
-		{
-			QByteArray arr;
-			RW::CORE::Message m(Func, Message.size(), Message, Id);
-			QDataStream in(&arr, QIODevice::WriteOnly);
-			in.setVersion(QDataStream::Qt_5_7);
-			in << m;
-			return arr;
-		}
 	}
 }

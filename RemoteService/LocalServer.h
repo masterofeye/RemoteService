@@ -9,6 +9,8 @@ class QLocalServer;
 QT_END_NAMESPACE
 
 namespace RW{
+
+
 	namespace CORE{
 		class LocalServer : public BasicServer
 		{
@@ -24,6 +26,8 @@ namespace RW{
 #pragma endregion
 #pragma region "Private Methods"
 		private:
+            static QByteArray Message(Util::Functions Func, QByteArray Message, Util::ErrorID Id);
+            static QByteArray Message(Util::Functions Func, QByteArray Message);
 #pragma endregion
 #pragma region "Public Methods"
 		public:
@@ -71,12 +75,6 @@ namespace RW{
 			********************************************************************************************************************/
 			void OnSocketErrorNative(QLocalSocket::LocalSocketError Error);
 
-			/*******************************************************************************************************************
-			@autor Ivo Kunadt
-			@brief OnMessage wird jedes mal aufgerufen sobald einer der Clients ein Kommando abgesetzt hat. 
-			Dieses wird dann in das AbstractCommand geparst. 
-			*******************************************************************************************************************/
-			virtual void OnMessage(AbstractCommand* Command);
 
 			/******************************************************************************************************************
 			@autor Ivo Kunadt
@@ -84,7 +82,7 @@ namespace RW{
 			@param Command Enthält alle Informationen über das verarbeitete Kommando.
 			@return void 
 			********************************************************************************************************************/
-			virtual void OnProcessedMessage(AbstractCommand* Command);
+            virtual void OnProcessedMessage(Util::MessageReceiver Type, Util::Functions Func, QByteArray Data);
 #pragma endregion
 #pragma region "Signals"
 		signals:
@@ -95,7 +93,7 @@ namespace RW{
 			@param Command Kommando mit allen Information die nötig sind um die Verarbeitung zu starten.
 			@return void
 			********************************************************************************************************************/
-			void Message(AbstractCommand* Command);
+            void NewMessage(Util::Functions MessageType, QByteArray Message);
 
 			/******************************************************************************************************************
 			@autor Ivo Kunadt

@@ -6,6 +6,7 @@
 #include "AbstractCommand.h"
 
 
+
 #if defined(DEBUG) && defined(DEBUG_WITHOUT_LOGOUT)
 	#define DEFAULT_TIMEOUT 60*60
 #elif defined(DEBUG)
@@ -37,34 +38,25 @@ namespace RW{
 			}
 		}
 
-		uint InactivityWatcher::GetLastInputTime()
-		{
-			LASTINPUTINFO li;
-			li.cbSize = sizeof(LASTINPUTINFO);
-			::GetLastInputInfo(&li);
-
-			DWORD te = ::GetTickCount();
-			float elapsed = (te - li.dwTime) / 100.0;
-			return elapsed;
-		}
 
 		void InactivityWatcher::StartInactivityObservation()
 		{
-			QByteArray arr;
-			QDataStream in(arr);
-			in.wr
-            emit NewMessage(Util::Functions::StartInactivityTimer, );
+            QByteArray arr;
+            //TODO Zeit aus der Datenbank lesen
+            arr.append(5000);
+
+            emit NewMessage(Util::Functions::StartInactivityTimer, arr);
 			m_logger->debug("Inactivitity Timer started.");
-			
+#ifdef DEBUG
+            m_logger->flush();
+#endif // DEBUG
 		}
 
 		void InactivityWatcher::StopInactivityObservation()
 		{
-			if (m_TimerLogout != nullptr && m_TimerLogout->isActive())
-			{
-				m_TimerLogout->stop();
-				m_logger->debug("Inactivitity Timer stopped.");
-			}
+            QByteArray arr;
+            emit NewMessage(Util::Functions::StopInactivityTimer, arr);
+            m_logger->debug("Inactivitity Timer stopped.");
 #ifdef DEBUG
 			m_logger->flush();
 #endif // DEBUG
@@ -86,49 +78,7 @@ namespace RW{
 #endif // DEBUG
 		}
 
-
-		void InactivityWatcher::LogOutUser()
-		{
-			m_logger->debug("LogoutUser was called.");
-			if (GetLastInputTime() >= m_Timeout)
-			{
-#ifdef DEBUG_WITHOUT_LOGOUT
-				m_TimerLogout->stop();
-				m_logger->debug("User is logged out now.");
-				m_logger->flush();
-
-
-				emit UserInactive();
-#else
-				WinApiHelper helper;
-				quint64 sessionId = 0;
-				if (!helper.QueryActiveSession(sessionId))
-				{
-					m_logger->error("Log-off of user failed.");
-
-				}
-				else
-				{
-					if (helper.LogOff(sessionId))
-					{
-						m_TimerLogout->stop();
-						m_logger->info("User is logged out now.");
-						m_logger->flush();
-						emit UserInactive();
-					}
-					else
-					{
-						m_logger->error("Log-off of user failed.");
-					}
-				}
-#endif // DEBUG
-			}
-#ifdef DEBUG
-			m_logger->flush();
-#endif // DEBUG
-		}
-
-        void InactivityWatcher::OnProcessMessage(Util::MessageReceiver Type, Util::Functions Func, QByteArray Report)
+        void InactivityWatcher::OnProcessMessage(Util::MessageReceiver Type, Util::Functions Func, QByteArray Data)
         {
 
         }

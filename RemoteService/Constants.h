@@ -156,10 +156,11 @@ namespace RW{
 
             _Message()
             {
-				Util::Functions MessageType = Util::Functions::Amount;
-                quint16 MessageSize = 0;
-                QByteArray Message = QByteArray();
+			    MessageType = Util::Functions::Amount;
+                MessageSize = 0;
+                Message = QByteArray();
 				Error = Util::ErrorID::Success;
+                
             }
 			_Message(Util::Functions MessageType, quint16 MessageSize, QByteArray Message, Util::ErrorID Error)
             {

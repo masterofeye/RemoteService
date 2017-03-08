@@ -1,10 +1,14 @@
 #pragma once
 #include <QtCore>
 
+#include "Constants.h"
 #include "AbstractCommand.h"
+
 
 namespace RW{
 	namespace CORE{
+
+
 		class BasicServer : public QObject
 		{
 			Q_OBJECT
@@ -18,13 +22,12 @@ namespace RW{
 		public slots:
 			virtual void OnDisconnect() = 0;
 			virtual void OnSocketError(quint16 Error) = 0;
-			virtual void OnMessage(AbstractCommand* Command) = 0;
-			virtual void OnProcessedMessage(AbstractCommand* Command) = 0;
+            virtual void OnProcessedMessage(Util::MessageReceiver Type, Util::Functions Func, QByteArray Data) = 0;
 		signals:
 			/*
 			* @brief Will be emited after every incomming message that includes a command.
 			*/
-			void Message(AbstractCommand* Command);
+            void NewMessage(Util::Functions MessageType, QByteArray Message);
 			void ProcessedMessage(AbstractCommand* Command);
 			void SocketError(quint16 Error);
 		};
