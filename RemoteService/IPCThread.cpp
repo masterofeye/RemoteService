@@ -70,7 +70,7 @@ namespace RW{
 				answer.append("false");
 				answer.append(",");
 
-                QString path = "C:\Program Files (x86)\Schleissheimer\RemoteSoftware\RemoteAPP2\config.xml";
+                QString path = "C:\\Program Files (x86)\\Schleissheimer\\RemoteSoftware\\RemoteAPP2\\config.xml";
 
                 if (QFileInfo(path).exists())
                 {

@@ -9,6 +9,7 @@ namespace RW{
 			m_ReceiveSocket(new QUdpSocket(this))
 		{
 			m_Sockets = new Device_Socket[8];
+			m_IpAddress.setAddress("192.168.0.24");
 		}
 
 		AnelHome::~AnelHome()

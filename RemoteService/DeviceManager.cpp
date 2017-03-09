@@ -23,9 +23,10 @@ namespace RW{
 		bool DeviceManager::Init()
 		{
 			//TODO dies muss durch config gesetzt werden
-			m_DeviceList->insert(RW::HW::DeviceManager::DeviceType::PowerSupply, new VoltCraft(this));
-			m_DeviceList->insert(RW::HW::DeviceManager::DeviceType::RemoteBox, new RemoteBoxDevice(this));
 			m_DeviceList->insert(RW::HW::DeviceManager::DeviceType::PowerStripe, new AnelHome(this));
+			//m_DeviceList->insert(RW::HW::DeviceManager::DeviceType::PowerSupply, new VoltCraft(this));
+			//m_DeviceList->insert(RW::HW::DeviceManager::DeviceType::RemoteBox, new RemoteBoxDevice(this));
+
 
 			QMapIterator<DeviceType, AbstractDevice*> i(*m_DeviceList);
 			while (i.hasNext()) {

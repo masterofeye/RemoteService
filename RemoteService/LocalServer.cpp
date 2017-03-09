@@ -8,7 +8,7 @@
 namespace RW{
 	namespace CORE{
 
-		LocalServer::LocalServer(QObject *Parent = nullptr) : BasicServer(Parent),
+		LocalServer::LocalServer(QObject *Parent = nullptr) : QObject(Parent),
 			m_logger(spdlog::get("file_logger"))
 		{
 			m_Server = new QLocalServer(this);
@@ -17,7 +17,7 @@ namespace RW{
 			//Jeder hat Zugriff auf den Server.
 			m_Server->setSocketOptions(QLocalServer::WorldAccessOption);
 			//Der Server akzeptiert nur eine Verbindung, das ist der RemoteService
-			m_Server->setMaxPendingConnections(1);
+			m_Server->setMaxPendingConnections(2);
 
 			connect(m_Server, &QLocalServer::newConnection, this, &LocalServer::PrepareIncomingConnection);
 		}
@@ -106,9 +106,16 @@ namespace RW{
 
 		void LocalServer::OnDisconnect()
 		{
-			//QLocalSocket* LocalSocket = (QLocalSocket *)sender();
-			//QString clientname = m_SocketList->find(LocalSocket).value();
-			//m_logger->debug("Client disonnected from LocalServer: {}", clientname.toStdString());
+			QLocalSocket* LocalSocket = (QLocalSocket *)sender();
+			
+			for (auto i = m_SocketList->begin(); i != m_SocketList->end(); ++i)
+			{
+				if (LocalSocket == i.value())
+				{
+					m_logger->debug("Client disonnected from LocalServer: {}", i.key().toStdString());
+					m_SocketList->erase(i);
+				}
+			}
 		}
 
         void LocalServer::OnProcessMessage(Util::MessageReceiver Type, Util::Functions Func, QByteArray Data)

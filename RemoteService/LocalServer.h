@@ -12,7 +12,7 @@ namespace RW{
 
 
 	namespace CORE{
-		class LocalServer : public BasicServer
+		class LocalServer : public QObject
 		{
 			Q_OBJECT
 #pragma region "Private Attributes"

@@ -114,9 +114,6 @@
     <CustomBuild Include="CommandBuilder.h">
       <Filter>Scheduler</Filter>
     </CustomBuild>
-    <CustomBuild Include="BasicServer.h">
-      <Filter>Communication</Filter>
-    </CustomBuild>
     <CustomBuild Include="CommunicationServer.h">
       <Filter>Communication</Filter>
     </CustomBuild>
@@ -266,19 +263,10 @@
     <ClCompile Include="LocalServer.cpp">
       <Filter>Communication\LocalSocket</Filter>
     </ClCompile>
-    <ClCompile Include="BasicServer.cpp">
-      <Filter>Communication</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_CommunicationServer.cpp">
       <Filter>Generierte Dateien\Debug</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_CommunicationServer.cpp">
-      <Filter>Generierte Dateien\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_BasicServer.cpp">
-      <Filter>Generierte Dateien\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_BasicServer.cpp">
       <Filter>Generierte Dateien\Release</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_RemoteBoxDevice.cpp">

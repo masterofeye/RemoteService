@@ -13,7 +13,7 @@ namespace RW{
 		class TCPServer;
 
 		class CommunicationServer :
-			public BasicServer
+			public QObject
 		{
 			Q_OBJECT
 		private:
@@ -33,7 +33,6 @@ namespace RW{
 			void Unregister(QObject* Receiver);
 			void UnregisterAll();
 
-			virtual void PrepareIncomingConnection();
 			virtual bool Listen(quint16 Port);
 		public slots:
 			/******************************************************************************************************************

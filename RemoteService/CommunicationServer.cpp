@@ -8,7 +8,7 @@
 
 namespace RW{
 	namespace CORE{
-		CommunicationServer::CommunicationServer(QObject *Parent = nullptr) : BasicServer(Parent),
+		CommunicationServer::CommunicationServer(QObject *Parent = nullptr) : QObject(Parent),
 			m_logger(spdlog::get("file_logger")), 
 			m_LocalServer(new LocalServer(this)),
 			m_TcpServer(new TCPServer(this))
@@ -21,48 +21,6 @@ namespace RW{
 		CommunicationServer::~CommunicationServer()
 		{
 		}
-
-		void CommunicationServer::PrepareIncomingConnection()
-		{
-			//QTcpSocket* socket = m_TcpServer->nextPendingConnection();
-			//if (socket != nullptr)
-			//{
-			//	connect(socket, &socket->readyRead,this, 
-
-			//	QByteArray command = socket->readAll();
-			//	if (QString(command).contains("UserInfo"))
-			//	{
-			//		socket->write("UserInfo");
-
-			//		char username[UNLEN + 1];
-			//		DWORD username_len = UNLEN + 1;
-			//		GetUserNameA(username, &username_len);
-
-			//		QByteArray answer;
-			//		answer.append(username + ',');
-			//		answer.append("false" + ',');
-
-			//		char computername[UNLEN + 1];
-			//		DWORD computernane_len = UNLEN + 1;
-			//		GetComputerNameA(computername, &computernane_len);
-
-			//		answer.append(computername + ',');
-			//		answer.append("192.156.244.111" + ',');
-			//		answer.append("192.156.244.111" + ',');
-			//		answer.append("" + ',');
-			//		answer.append("Streamlist{}");
-			//	}
-			//}
-		}
-
-		//void CommunicationServer::ReadCommand()
-		//{
-		//	QDataStream in;
-		//	in.setDevice(tcpSocket);
-		//	in.setVersion(QDataStream::Qt_4_0);
-		//	in.startTransaction();
-		//}
-
 
 		bool CommunicationServer::Listen(quint16 Port)
 		{
@@ -182,6 +140,8 @@ namespace RW{
 				{
 					m_logger->debug("Receiver was successfully connected to the signal. {}", this->objectName().toStdString());
 				}
+
+				m_ReceiverList.append(Client);
 			}
 		}
 
