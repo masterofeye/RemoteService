@@ -4,6 +4,10 @@
 #include "WinApiHelper.h"
 #include "CommandInterpreter.hpp"
 
+#include "qfile.h"
+#include "qfileinfo.h"
+#include <QtXml>
+
 namespace RW{
 	namespace CORE
 	{
@@ -57,7 +61,7 @@ namespace RW{
 			if (QString(a).contains("UserInfo"))
 			{
 				QByteArray answer;
-
+                QString AC = "", GC = "";
 				QString username;
 				WinApiHelper::ReturnCurrentUser(username);
 				
@@ -65,6 +69,35 @@ namespace RW{
 				answer.append(",");
 				answer.append("false");
 				answer.append(",");
+
+                QString path = "C:\Program Files (x86)\Schleissheimer\RemoteSoftware\RemoteAPP2\config.xml";
+
+                if (QFileInfo(path).exists())
+                {
+                    QFile file("path");
+
+                    file.open(QFile::ReadOnly | QFile::Text);
+                    QDomDocument doc("mydocument");
+
+                    if (!doc.setContent(&file)) {
+                        file.close();
+                        return;
+                    }
+                    file.close();
+                   
+                    QDomNodeList nodes = doc.elementsByTagName("ACStand");
+                    if (nodes.count() == 1 && nodes.at(0).isText())
+                    {
+                        AC = nodes.at(0).nodeValue();
+                    }
+                    nodes = doc.elementsByTagName("GCStand");
+                    if (nodes.count() == 1)
+                    {
+                        GC = nodes.at(0).nodeValue();
+                    }
+                }
+
+
 
 				char computername[UNLEN + 1];
 				DWORD computernane_len = UNLEN + 1;
@@ -79,6 +112,7 @@ namespace RW{
 				answer.append("");
 				answer.append(",");
 				answer.append("Streamlist{}");
+                answer.append(AC + "\r\n" + GC);
 				socket->write(answer);
 			}
 		}
