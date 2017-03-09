@@ -42,8 +42,10 @@ namespace RW{
 		void InactivityWatcher::StartInactivityObservation()
 		{
             QByteArray arr;
+            QDataStream stream(&arr, QIODevice::WriteOnly);
+            quint64 time = 1000;
+            stream << time;
             //TODO Zeit aus der Datenbank lesen
-            arr.append(5000);
 
             emit NewMessage(Util::MessageReceiver::InactivityWatcher, Util::Functions::StartInactivityTimer, arr);
 			m_logger->debug("Inactivitity Timer started.");
@@ -80,7 +82,10 @@ namespace RW{
 
         void InactivityWatcher::OnProcessMessage(Util::MessageReceiver Type, Util::Functions Func, QByteArray Data)
         {
+            if (Type == Util::MessageReceiver::InactivityWatcher)
+            {
 
+            }
         }
 	}
 }

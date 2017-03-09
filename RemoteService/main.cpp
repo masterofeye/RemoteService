@@ -156,9 +156,9 @@ void RemoteService::start()
 	m_Shutdown = new RW::CORE::ShutdownHandler(m_DeviceMng, "0.1");
 
 	QObject::connect(m_Observer, &RW::CORE::InactivityWatcher::UserInactive, m_Shutdown, &RW::CORE::ShutdownHandler::StartShutdownTimer);
+    QObject::connect(m_CommunicationServer, &RW::CORE::CommunicationServer::RemoteHiddenHelperConnected, m_Observer, &RW::CORE::InactivityWatcher::StartInactivityObservation);
 	//QObject::connect(m_Scheduler, &RW::CORE::JobScheduler::SendAnswer, m_Observer, &RW::CORE::InactivityWatcher::StopInactivityObservationWithCmd);
 	/*Start Oberservation for user inactivity*/
-	m_Observer->StartInactivityObservation();
 
 	//QObject::connect(m_CommunicationServer, &RW::CORE::CommunicationServer::Message, m_Scheduler, &RW::CORE::JobScheduler::AddNewJob);
 	//QObject::connect(m_Scheduler, &RW::CORE::JobScheduler::SendAnswer, m_CommunicationServer, &RW::CORE::CommunicationServer::OnMessage);
@@ -168,6 +168,7 @@ void RemoteService::start()
 
 	/*m_Scheduler->start();*/
 	m_CommunicationServer->Listen(42364);
+
 	m_logger->info("Remote Service started");
 	m_logger->flush();
 }

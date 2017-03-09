@@ -58,14 +58,21 @@ namespace RW{
 			@param Command
 			@return void
 			********************************************************************************************************************/
-            void OnProcessedMessage(Util::MessageReceiver Type, Util::Functions Func, QByteArray Data);
+            void OnProcessMessage(Util::MessageReceiver Type, Util::Functions Func, QByteArray Data);
 
-
+            /******************************************************************************************************************
+            @autor Ivo Kunadt
+            @brief
+            @param Command
+            @return void
+            ********************************************************************************************************************/
+            void OnRemoteHiddenHelperConnected();
 
 		signals: 
 			void NewMessage(Util::MessageReceiver Type, Util::Functions Func, QByteArray Data);
 			void ProcessedMessage(AbstractCommand* Command);
 			void SocketError(quint16 Error);
+            void RemoteHiddenHelperConnected();
 		};
 	}
 }

@@ -3,17 +3,16 @@
 #include <qlocalserver.h>
 #include <qlocalsocket.h>
 #include <qdatastream.h>
+#include "Constants.h"
 
 namespace RW{
 	namespace CORE{
-
-
 
 		LocalServer::LocalServer(QObject *Parent = nullptr) : BasicServer(Parent),
 			m_logger(spdlog::get("file_logger"))
 		{
 			m_Server = new QLocalServer(this);
-			m_SocketList = new QMap<QLocalSocket*, QString>();
+            m_SocketList = new QMap<QString, QLocalSocket*>();
 
 			//Jeder hat Zugriff auf den Server.
 			m_Server->setSocketOptions(QLocalServer::WorldAccessOption);
@@ -32,7 +31,7 @@ namespace RW{
         QDataStream &operator <<(QDataStream &out, const RW::CORE::Message &dataStruct)
         {
             out.startTransaction();
-            out << (quint16)dataStruct.MessageType;
+            out << (quint16)dataStruct.MessageFunc;
             out << dataStruct.MessageSize;
             out.writeRawData(dataStruct.Message, dataStruct.MessageSize);
             out << (quint16)dataStruct.Error;
@@ -50,7 +49,7 @@ namespace RW{
             in.readRawData(dataStruct.Message.data(), dataStruct.MessageSize);
             in >> id;
 
-            dataStruct.MessageType = static_cast<RW::CORE::Util::Functions>(messageType);
+            dataStruct.MessageFunc = static_cast<RW::CORE::Util::Functions>(messageType);
             dataStruct.Error = static_cast<RW::CORE::Util::ErrorID>(id);
             return in;
         }
@@ -77,16 +76,16 @@ namespace RW{
 
 		void LocalServer::PrepareIncomingConnection()
 		{
-			QLocalSocket* socket = m_Server->nextPendingConnection();
+            m_Socket = m_Server->nextPendingConnection();
 
-			if (socket->isValid())
+            if (m_Socket->isValid())
 			{
 				m_logger->debug("New Client is connected to the RemoteService");
-				m_SocketList->insert(socket, "");
+                //m_SocketList->insert(m_Socket, "RemoteHiddenHelper");
 
-				connect(socket, SIGNAL(disconnected()), m_Server, SLOT(OnSocketDisconnected()));
-				connect(socket, SIGNAL(readyRead()), m_Server, SLOT(OnMessage()));
-				connect(socket, SIGNAL(error(QLocalSocket::LocalSocketError)), m_Server, SLOT(OnSocketErrorNative(QLocalSocket::LocalSocketError)));
+                connect(m_Socket, SIGNAL(disconnected()), this, SLOT(OnSocketDisconnected()));
+                connect(m_Socket, SIGNAL(readyRead()), this, SLOT(OnExternalMessage()));
+                connect(m_Socket, SIGNAL(error(QLocalSocket::LocalSocketError)), this, SLOT(OnSocketErrorNative(QLocalSocket::LocalSocketError)));
 			}
 		}
 
@@ -107,23 +106,130 @@ namespace RW{
 
 		void LocalServer::OnDisconnect()
 		{
-			QLocalSocket* LocalSocket = (QLocalSocket *)sender();
-			QString clientname = m_SocketList->find(LocalSocket).value();
-			m_logger->debug("Client disonnected from LocalServer: {}", clientname.toStdString());
+			//QLocalSocket* LocalSocket = (QLocalSocket *)sender();
+			//QString clientname = m_SocketList->find(LocalSocket).value();
+			//m_logger->debug("Client disonnected from LocalServer: {}", clientname.toStdString());
 		}
 
-        void LocalServer::OnProcessedMessage(Util::MessageReceiver Type, Util::Functions Func, QByteArray Data)
+        void LocalServer::OnProcessMessage(Util::MessageReceiver Type, Util::Functions Func, QByteArray Data)
 		{
-            //QLocalSocket* LocalSocket = (QLocalSocket *)sender();
-            //QString clientname = m_SocketList->find(LocalSocket).value();
-            //m_logger->debug("Cmd recieved from: "); // clientname.toStdString();
+            Q_UNUSED(Type);
 
-            //QDataStream in(LocalSocket);
-            //in.setVersion(QDataStream::Qt_5_7);
-            //LocalSocket->readAll();
+            switch (Func)
+            {
+            case RW::CORE::Util::Functions::CanEasyStartApplication:
+                break;
+            case RW::CORE::Util::Functions::CanEasyLoadWorkspace:
+                break;
+            case RW::CORE::Util::Functions::CanEasyCloseApplication:
+                break;
+            case RW::CORE::Util::Functions::CanEasyStartSimulation:
+                break;
+            case RW::CORE::Util::Functions::CanEasyStopSimulation:
+                break;
+            case RW::CORE::Util::Functions::MKSLogin:
+                break;
+            case RW::CORE::Util::Functions::MKSStartDownload:
+                break;
+            case RW::CORE::Util::Functions::MKSCreateSandBox:
+                break;
+            case RW::CORE::Util::Functions::MKSDropSandbox:
+                break;
+            case RW::CORE::Util::Functions::MKSClose:
+                break;
+            case RW::CORE::Util::Functions::FHostSPStartFHost:
+                break;
+            case RW::CORE::Util::Functions::FHostSPLoadFlashFile:
+                break;
+            case RW::CORE::Util::Functions::FHostSPCloseFHost:
+                break;
+            case RW::CORE::Util::Functions::FHostSPGetState:
+                break;
+            case RW::CORE::Util::Functions::FHostSPAbortSequence:
+                break;
+            case RW::CORE::Util::Functions::FHostSPCloseSequence:
+                break;
+            case RW::CORE::Util::Functions::FHostSPStartFlash:
+                break;
+            case RW::CORE::Util::Functions::FHostSPGetProgress:
+                break;
+            case RW::CORE::Util::Functions::PortalInfoFittingAC:
+                break;
+            case RW::CORE::Util::Functions::PortalInfoAcByIcom:
+                break;
+            case RW::CORE::Util::Functions::PortalInfoReleases:
+                break;
+            case RW::CORE::Util::Functions::PortalInfoSoftwareById:
+                break;
+            case RW::CORE::Util::Functions::PortalInfoShowDialog:
+                break;
+            case RW::CORE::Util::Functions::PortalInfoCloseDialog:
+                break;
+            case RW::CORE::Util::Functions::FileUtilUnZip:
+                break;
+            case RW::CORE::Util::Functions::FileUtilDelete:
+                break;
+            case RW::CORE::Util::Functions::UsbHidLoaderFlashFile:
+                break;
+            case RW::CORE::Util::Functions::PrintDebugInformation:
+                break;
+            case RW::CORE::Util::Functions::ToggleCl30Fast:
+                break;
+            case RW::CORE::Util::Functions::ToggleCl30Slow:
+                break;
+            case RW::CORE::Util::Functions::StartShutdownTimer:
+                break;
+            case RW::CORE::Util::Functions::StopShutdownTimer:
+                break;
+            case RW::CORE::Util::Functions::StartInactivityTimer:
+                break;
+            case RW::CORE::Util::Functions::StopInactivityTimer:
+                break;
+            case RW::CORE::Util::Functions::Amount:
+                break;
+            default:
+                break;
+            }
 
             QByteArray message = Message(Func, Data);
+            m_Socket->write(message);
+            m_Socket->flush();
 		}
+
+        void LocalServer::OnExternalMessage()
+        {
+            QLocalSocket* socket = qobject_cast<QLocalSocket*>(QObject::sender());
+
+            quint64 bytes = socket->bytesAvailable();
+            if (bytes > 0)
+            {
+                QByteArray message = socket->readAll();
+
+                //Jeder Client muss sich in der ersten Nachricht identifizieren. Somit ist sichergestellt, das Nachrichten später 
+                //an den richtigen Client geschickt werden können.
+                if (QString(message).contains("identifier"))
+                {
+                    QString identifier = QString(message).section("=", 1, 1);
+                    //Es ist nicht nötif zu überprüfen, ob Clients schon vorhanden sind, da sie in der "OnDisconnect" Methode
+                    //aus der Liste der Sockets gelöscht werden
+                    m_SocketList->insert(identifier, socket);
+                    //Handelt es sich um den RemoteHiddenHelper muss das System darüber informiert werden, um z.b. die Userüberwachung zu aktivieren
+                    if (identifier.contains("remotehiddenhelper"))
+                    {
+                        emit RemoteHiddenHelperConnected();
+                        m_logger->debug("RemoteHiddenHelper is connected");
+                    }
+                }
+                else
+                {
+                    RW::CORE::Message m;
+                    QDataStream dataStream(socket);
+                    dataStream >> m;
+                    emit NewMessage(m.MessageFunc, m.Message);
+                }
+            }
+        }
+
 
 		void LocalServer::OnSocketError(quint16 Error)
 		{

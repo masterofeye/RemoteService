@@ -149,22 +149,22 @@ namespace RW{
 
         typedef struct _Message
         {
-            Util::Functions MessageType;
+            Util::Functions MessageFunc;
             quint16 MessageSize;
             QByteArray Message;
 			Util::ErrorID Error;
 
             _Message()
             {
-			    MessageType = Util::Functions::Amount;
+                MessageFunc = Util::Functions::Amount;
                 MessageSize = 0;
                 Message = QByteArray();
 				Error = Util::ErrorID::Success;
                 
             }
-			_Message(Util::Functions MessageType, quint16 MessageSize, QByteArray Message, Util::ErrorID Error)
+            _Message(Util::Functions MessageFunc, quint16 MessageSize, QByteArray Message, Util::ErrorID Error)
             {
-                this->MessageType = MessageType;
+                this->MessageFunc = MessageFunc;
                 this->MessageSize = MessageSize;
                 this->Message = Message;
                 this->Error = Error;

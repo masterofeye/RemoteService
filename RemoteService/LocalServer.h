@@ -19,7 +19,8 @@ namespace RW{
 		private:
 			QLocalServer *m_Server;
 			std::shared_ptr<spdlog::logger> m_logger;
-			QMap<QLocalSocket*, QString>* m_SocketList;
+            QMap<QString, QLocalSocket*>* m_SocketList;
+            QLocalSocket* m_Socket;
 #pragma endregion
 #pragma region "Public Attributes"
 		public:
@@ -75,14 +76,15 @@ namespace RW{
 			********************************************************************************************************************/
 			void OnSocketErrorNative(QLocalSocket::LocalSocketError Error);
 
-
 			/******************************************************************************************************************
 			@autor Ivo Kunadt
 			@brief Diese Funktion wird vom Framework aufgerufen sobald ein Kommando erfolgreich abgearbeitet wurde.
 			@param Command Enthält alle Informationen über das verarbeitete Kommando.
 			@return void 
 			********************************************************************************************************************/
-            virtual void OnProcessedMessage(Util::MessageReceiver Type, Util::Functions Func, QByteArray Data);
+            virtual void OnProcessMessage(Util::MessageReceiver Type, Util::Functions Func, QByteArray Data);
+
+            void OnExternalMessage();
 #pragma endregion
 #pragma region "Signals"
 		signals:
@@ -111,6 +113,14 @@ namespace RW{
 			@return void
 			********************************************************************************************************************/
 			void SocketError(quint16 Error);
+
+            /******************************************************************************************************************
+            @autor Ivo Kunadt
+            @brief Diese Signal wird ausgelöst, sobald der RemoteHiddenHelper eine Verbindung mit dem RemoteService hergestellt hat.
+            @return void
+            ********************************************************************************************************************/
+            void RemoteHiddenHelperConnected();
+
 #pragma endregion			
 			
 		};

@@ -13,6 +13,8 @@ namespace RW{
 			m_LocalServer(new LocalServer(this)),
 			m_TcpServer(new TCPServer(this))
 		{
+            //Weiterleitung der Information an den Communicationserver
+            connect(m_LocalServer, &LocalServer::RemoteHiddenHelperConnected, this, &CommunicationServer::OnRemoteHiddenHelperConnected);
 		}
 
 
@@ -115,18 +117,17 @@ namespace RW{
 				}
 
 				//Prüfen ob im Receiver Objekt die OnMessage Methode existiert
-				int clientMethodIndex = ClientMetaObject->indexOfMethod(QMetaObject::normalizedSignature("OnProcessMessage(Util::MessageReceiver, Util::Functions, QByteArray)"));
+                int clientMethodIndex = ClientMetaObject->indexOfSlot(QMetaObject::normalizedSignature("OnProcessMessage(Util::MessageReceiver, Util::Functions, QByteArray)"));
 				//TODO MagicNumber
 				if (clientMethodIndex == -1)
 				{
-					m_logger->warn("There is no function called OnMessage for Object {}", Client->objectName().toStdString());
+					m_logger->warn("There is no function called OnProcessMessage for Object {}", Client->objectName().toStdString());
 					return;
 				}
 
 				QMetaMethod clientOnProcessMessageMethod = ClientMetaObject->method(clientMethodIndex);
 
 				const QMetaObject* ServerMetaObject = this->metaObject();
-
 				if (ServerMetaObject == nullptr)
 				{
 					m_logger->error("Meta object is null for Object {}", this->objectName().toStdString());
@@ -153,16 +154,16 @@ namespace RW{
 					m_logger->debug("Receiver was successfully connected to the signal. {}", Client->objectName().toStdString());
 				}
 
-				int serverMethodIndex = ServerMetaObject->indexOfMethod(QMetaObject::normalizedSignature("OnProcessMessage(Util::MessageReceiver, Util::Functions, QByteArray)"));
+                int serverMethodIndex = ServerMetaObject->indexOfSlot(QMetaObject::normalizedSignature("OnProcessMessage(Util::MessageReceiver, Util::Functions, QByteArray)"));
 				if (serverMethodIndex == -1)
 				{
-					m_logger->warn("There is no function called OnMessage for Object {}", this->objectName().toStdString());
+					m_logger->warn("There is no function called OnProcessMessage for Object {}", this->objectName().toStdString());
 					return;
 				}
 
 				QMetaMethod serverOnProcessMessageMethod = ServerMetaObject->method(serverMethodIndex);
 
-				int clientSignalIndex = ServerMetaObject->indexOfSignal(QMetaObject::normalizedSignature("NewMessage(Util::MessageReceiver, Util::Functions, QByteArray)"));
+                int clientSignalIndex = ClientMetaObject->indexOfSignal(QMetaObject::normalizedSignature("NewMessage(Util::MessageReceiver, Util::Functions, QByteArray)"));
 				//TODO MagicNumber
 				if (clientSignalIndex == -1)
 				{
@@ -170,7 +171,7 @@ namespace RW{
 					return;
 				}
 
-				QMetaMethod clientSignal = ServerMetaObject->method(clientSignalIndex);
+                QMetaMethod clientSignal = ClientMetaObject->method(clientSignalIndex);
 
 				QMetaObject::Connection connectionClientServer = connect(Client, clientSignal, this, serverOnProcessMessageMethod);
                 if (((bool)connectionClientServer) == false)
@@ -194,7 +195,7 @@ namespace RW{
 		}
 
 
-        void CommunicationServer::OnProcessedMessage(Util::MessageReceiver Type, Util::Functions Func, QByteArray Data)
+        void CommunicationServer::OnProcessMessage(Util::MessageReceiver Type, Util::Functions Func, QByteArray Data)
 		{
             switch (Type)
             {
@@ -209,7 +210,7 @@ namespace RW{
             case RW::CORE::Util::MessageReceiver::UsbHidLoader:
             case RW::CORE::Util::MessageReceiver::ShutdownHandler:
             case RW::CORE::Util::MessageReceiver::InactivityWatcher:
-                m_LocalServer->OnProcessedMessage(Type, Func, Data);
+                m_LocalServer->OnProcessMessage(Type, Func, Data);
                 break;
             default:
                 break;
@@ -226,6 +227,10 @@ namespace RW{
 		   
 		}
 
+        void CommunicationServer::OnRemoteHiddenHelperConnected()
+        {
+            emit RemoteHiddenHelperConnected();
+        }
 
 	}
 }

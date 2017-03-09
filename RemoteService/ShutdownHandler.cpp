@@ -97,8 +97,5 @@ namespace RW{
 #endif // DEBUG
 		}
 
-		void ShutdownHandler::OnProcessMessage(Util::MessageReceiver Type, Util::Functions Func, QByteArray Report)
-		{}
-
 	}
 }

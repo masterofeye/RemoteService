@@ -22,7 +22,7 @@ namespace RW{
 		public slots:
 			virtual void OnDisconnect() = 0;
 			virtual void OnSocketError(quint16 Error) = 0;
-            virtual void OnProcessedMessage(Util::MessageReceiver Type, Util::Functions Func, QByteArray Data) = 0;
+            virtual void OnProcessMessage(Util::MessageReceiver Type, Util::Functions Func, QByteArray Data) = 0;
 		signals:
 			/*
 			* @brief Will be emited after every incomming message that includes a command.
