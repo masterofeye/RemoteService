@@ -6,7 +6,8 @@ namespace RW{
 
 		AnelHome::AnelHome(QObject *parent) : PowerStripeDevice(parent),
 			m_SendSocket(new QUdpSocket(this)),
-			m_ReceiveSocket(new QUdpSocket(this))
+			m_ReceiveSocket(new QUdpSocket(this)),
+			m_logger(spdlog::get("file_logger"))
 		{
 			m_Sockets = new Device_Socket[8];
 			m_IpAddress.setAddress("192.168.0.24");
@@ -19,32 +20,28 @@ namespace RW{
 
 		bool AnelHome::Initialize()
 		{
-			if (m_ReceiveSocket->bind(m_IpAddress, PORT_RECEIVE))
+			if (m_ReceiveSocket->bind(PORT_RECEIVE))
 			{
 				connect(m_ReceiveSocket, SIGNAL(readyRead()), this, SLOT(ReceiveAsk()));
 				if (m_ReceiveSocket->open(QIODevice::OpenModeFlag::ReadOnly))
 				{
-					if (m_SendSocket->bind(m_IpAddress, PORT_SEND))
-					{
-
-					}
-					else
-					{
-						return false;
-					}
+					m_SendSocket->connectToHost(m_IpAddress, PORT_SEND);
 				}
 				else
 				{
+					m_logger->error("Can't open ReceiveSocket for AnelHome device","RemoteService");
 					return false;
 				}
 
 			}
 			else
 			{
+				m_logger->error("Can't bind to port {} on localhost", PORT_RECEIVE, "RemoteService");
 				return false;
 			}
-
+			//qApp->processEvents();
 			SendAsk(PORT_SEND, "wer da?");
+			//qApp->processEvents();
 			return true;
 		}
 
@@ -115,8 +112,16 @@ namespace RW{
 
 		void AnelHome::ReceiveAsk()
 		{
-			QByteArray answer = m_ReceiveSocket->readAll();
-			Parse(answer);
+			while (m_ReceiveSocket->hasPendingDatagrams()) {
+				QByteArray datagram;
+				datagram.resize(m_ReceiveSocket->pendingDatagramSize());
+				QHostAddress sender;
+				quint16 senderPort;
+
+				m_ReceiveSocket->readDatagram(datagram.data(), datagram.size(),
+					&sender, &senderPort);
+				Parse(datagram);
+			}
 		}
 
 		/*

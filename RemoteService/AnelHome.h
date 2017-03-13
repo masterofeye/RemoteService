@@ -1,6 +1,7 @@
 #pragma once
 #include "PowerStripeDevice.h"
 #include <QUdpSocket>
+#include "spdlog\spdlog.h"
 
 namespace RW{
 	namespace HW{
@@ -45,6 +46,7 @@ const int PORT_RECEIVE = 77;
 class AnelHome :
 	public PowerStripeDevice
 {
+	Q_OBJECT
 private:
 	QHostAddress m_IpAddress;
 	QString m_Password;
@@ -55,6 +57,7 @@ private:
 
 	Device m_Dev;
 	Device_Socket* m_Sockets;
+	std::shared_ptr<spdlog::logger> m_logger;
 public:
 	AnelHome(QObject *parent = 0);
 	~AnelHome();
@@ -71,6 +74,7 @@ private:
 	void SwitchAll(State Command, int Sockets);
 	void Parse(QByteArray Message);
 	void SendAsk(int SenderPort, QString Command);
+private slots:
 	void ReceiveAsk();
 private: 
 	QString AnelHome::MapState(State Command);

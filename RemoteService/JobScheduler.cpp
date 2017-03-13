@@ -34,7 +34,7 @@ namespace RW{
 
 				if (cmd == nullptr)
 				{
-					m_logger->error("Command is null!");
+					m_logger->error("Command is null!","RemoteService");
 					continue;
 				}
 
@@ -46,7 +46,7 @@ namespace RW{
 
 				if (!cmd->Execute())
 				{
-					m_logger->error("Command ");// << cmd->CommandID() << " execution failed.";
+					m_logger->error("Command {} execution failed",cmd->CommandID() );
 				}
 				
 			}
