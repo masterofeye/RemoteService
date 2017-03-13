@@ -19,15 +19,6 @@
     <Filter Include="Helper\WindowsApI">
       <UniqueIdentifier>{a802ea99-9b03-43bf-858d-784d5259ff6a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Communication">
-      <UniqueIdentifier>{00defb77-320f-4b79-aac3-90bb12cea005}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Communication\LocalSocket">
-      <UniqueIdentifier>{e561f9d9-a2b1-44fd-8c50-610c5ef839c1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Communication\TcpSocket">
-      <UniqueIdentifier>{81cd12ae-d4c2-474e-a868-e547d08e287b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Generierte Dateien">
       <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
       <Extensions>cpp;c;cxx;moc;h;def;odl;idl;res;</Extensions>
@@ -72,18 +63,6 @@
     <CustomBuild Include="FlashCmdProcessor.h">
       <Filter>Helper\Flash</Filter>
     </CustomBuild>
-    <CustomBuild Include="CommandInterpreter.hpp">
-      <Filter>Communication\TcpSocket</Filter>
-    </CustomBuild>
-    <CustomBuild Include="LocalServer.h">
-      <Filter>Communication\LocalSocket</Filter>
-    </CustomBuild>
-    <CustomBuild Include="TCPServer.h">
-      <Filter>Communication\TcpSocket</Filter>
-    </CustomBuild>
-    <CustomBuild Include="IPCThread.h">
-      <Filter>Communication\TcpSocket</Filter>
-    </CustomBuild>
     <CustomBuild Include="EnumDefinitions.h">
       <Filter>Source Dateien</Filter>
     </CustomBuild>
@@ -114,42 +93,21 @@
     <CustomBuild Include="CommandBuilder.h">
       <Filter>Scheduler</Filter>
     </CustomBuild>
-    <CustomBuild Include="CommunicationServer.h">
-      <Filter>Communication</Filter>
-    </CustomBuild>
     <CustomBuild Include="Constants.h">
       <Filter>Helper</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GeneratedFiles\Debug\moc_CommandInterpreter.cpp">
-      <Filter>Generierte Dateien\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_CommandInterpreter.cpp">
-      <Filter>Generierte Dateien\Release</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_Inactivitywatcher.cpp">
       <Filter>Generierte Dateien\Debug</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_Inactivitywatcher.cpp">
       <Filter>Generierte Dateien\Release</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_IPCThread.cpp">
-      <Filter>Generierte Dateien\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_IPCThread.cpp">
-      <Filter>Generierte Dateien\Release</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_ShutdownHandler.cpp">
       <Filter>Generierte Dateien\Debug</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_ShutdownHandler.cpp">
-      <Filter>Generierte Dateien\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_TCPServer.cpp">
-      <Filter>Generierte Dateien\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_TCPServer.cpp">
       <Filter>Generierte Dateien\Release</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
@@ -242,33 +200,6 @@
     <ClCompile Include="WinApiHelper.cpp">
       <Filter>Helper\WindowsApI</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_LocalServer.cpp">
-      <Filter>Generierte Dateien\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_LocalServer.cpp">
-      <Filter>Generierte Dateien\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="CommunicationServer.cpp">
-      <Filter>Communication</Filter>
-    </ClCompile>
-    <ClCompile Include="CommandInterpreter.cpp">
-      <Filter>Communication\TcpSocket</Filter>
-    </ClCompile>
-    <ClCompile Include="IPCThread.cpp">
-      <Filter>Communication\TcpSocket</Filter>
-    </ClCompile>
-    <ClCompile Include="TCPServer.cpp">
-      <Filter>Communication\TcpSocket</Filter>
-    </ClCompile>
-    <ClCompile Include="LocalServer.cpp">
-      <Filter>Communication\LocalSocket</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_CommunicationServer.cpp">
-      <Filter>Generierte Dateien\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_CommunicationServer.cpp">
-      <Filter>Generierte Dateien\Release</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_RemoteBoxDevice.cpp">
       <Filter>Generierte Dateien\Debug</Filter>
     </ClCompile>
@@ -279,6 +210,12 @@
       <Filter>Generierte Dateien\Debug</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_Constants.cpp">
+      <Filter>Generierte Dateien\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_AnelHome.cpp">
+      <Filter>Generierte Dateien\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_AnelHome.cpp">
       <Filter>Generierte Dateien\Release</Filter>
     </ClCompile>
   </ItemGroup>

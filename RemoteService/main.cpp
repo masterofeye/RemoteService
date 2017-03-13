@@ -49,15 +49,16 @@
 
 //TestCode
 #include "RemoteDataConnectLibrary.h"
+#include "RemoteCommunicationLibrary.h"
 #include "Inactivitywatcher.hpp"
 #include "ShutdownHandler.hpp"
 #include <qt_windows.h>
-#include "CommunicationServer.h"
 #include "JobScheduler.h"
 #include "DeviceManager.h"
 #include "RemoteBoxDevice.h"
 #include "AbstractDevice.h"
 #include "WinApiHelper.h"
+
 
 
 
@@ -74,7 +75,7 @@ private:
 	RW::CORE::InactivityWatcher *m_Observer;
 	RW::CORE::ShutdownHandler *m_Shutdown;
 	RW::CORE::JobScheduler *m_Scheduler;
-	RW::CORE::CommunicationServer *m_CommunicationServer;
+	RW::COM::CommunicatonServer *m_CommunicationServer;
 	RW::HW::DeviceManager *m_DeviceMng;
 public:
 	RemoteService(int argc, char **argv);
@@ -112,6 +113,7 @@ RemoteService::RemoteService(int argc, char **argv)
 
 RemoteService::~RemoteService()
 {
+	delete m_obj;
 	if (!m_Observer) delete m_Observer;
 	if (!m_Shutdown) delete m_Shutdown;
 }
@@ -119,6 +121,8 @@ RemoteService::~RemoteService()
 void RemoteService::start()
 {
 	Sleep(10000);
+
+
 	m_logger = spdlog::get("file_logger");
 	if (m_logger == nullptr)
 	{
@@ -132,8 +136,8 @@ void RemoteService::start()
 #endif 
 	m_logger->set_type(1);
 
-	m_Scheduler = new RW::CORE::JobScheduler(m_DeviceMng),
-	m_CommunicationServer = new RW::CORE::CommunicationServer(m_obj);
+	m_Scheduler = new RW::CORE::JobScheduler(m_DeviceMng);
+	m_CommunicationServer = new RW::COM::CommunicatonServer("Server", 1234, m_logger, m_obj);
 
 	m_logger->debug("Device manager initialize");
 	m_DeviceMng->SetLogger(m_logger);
@@ -150,7 +154,7 @@ void RemoteService::start()
 	m_Shutdown = new RW::CORE::ShutdownHandler(m_DeviceMng, "0.1");
 
 	QObject::connect(m_Observer, &RW::CORE::InactivityWatcher::UserInactive, m_Shutdown, &RW::CORE::ShutdownHandler::StartShutdownTimer);
-    QObject::connect(m_CommunicationServer, &RW::CORE::CommunicationServer::RemoteHiddenHelperConnected, m_Observer, &RW::CORE::InactivityWatcher::StartInactivityObservation);
+    //QObject::connect(m_CommunicationServer, &RW::COM::CommunicationServer::RemoteHiddenHelperConnected, m_Observer, &RW::CORE::InactivityWatcher::StartInactivityObservation);
 	//QObject::connect(m_Scheduler, &RW::CORE::JobScheduler::SendAnswer, m_Observer, &RW::CORE::InactivityWatcher::StopInactivityObservationWithCmd);
 	/*Start Oberservation for user inactivity*/
 
@@ -161,7 +165,7 @@ void RemoteService::start()
     m_CommunicationServer->Register(m_Shutdown);
 
 	/*m_Scheduler->start();*/
-	m_CommunicationServer->Listen(42364);
+	m_CommunicationServer->Listen();
 
 	m_logger->info("Remote Service started");
 	m_logger->flush();

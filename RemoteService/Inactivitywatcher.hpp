@@ -3,6 +3,7 @@
 #include <QObject>
 #include <QTimer>
 #include "spdlog\spdlog.h"
+#include "RemoteCommunicationLibrary.h"
 #include "Constants.h"
 
 namespace RW{
@@ -21,12 +22,12 @@ namespace RW{
 			explicit InactivityWatcher(QString Version, QObject *parent = 0);
 		signals:
 			void UserInactive();
-			void NewMessage(Util::MessageReceiver Type, Util::Functions Func, QByteArray Data);
+			void NewMessage(COM::Message Msg);
 		public slots:
 			void StartInactivityObservation();
 			void StopInactivityObservation();
 			void StopInactivityObservationWithCmd(AbstractCommand* Cmd);
-            void OnProcessMessage(Util::MessageReceiver Type, Util::Functions Func, QByteArray Report);
+            void OnProcessMessage(COM::Message Msg);
 		};
 	}
 }

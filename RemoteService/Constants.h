@@ -30,48 +30,48 @@ namespace RW{
                 MKSWrapper,
                 FileUtil,
                 UsbHidLoader,
-				ShutdownHandler,
-				InactivityWatcher
+				InactivityWatcher,
+				Amount
             };
 #ifdef QT
             Q_ENUM(MessageReceiver)
 #endif
             enum class Functions
             {
-                CanEasyStartApplication,
-                CanEasyLoadWorkspace,
-                CanEasyCloseApplication,
-                CanEasyStartSimulation,
-                CanEasyStopSimulation,
-                MKSLogin,
-                MKSStartDownload,
-                MKSCreateSandBox,
-                MKSDropSandbox,
-                MKSClose,
-                FHostSPStartFHost,
-                FHostSPLoadFlashFile,
-                FHostSPCloseFHost,
-                FHostSPGetState,
-                FHostSPAbortSequence,
-                FHostSPCloseSequence,
-                FHostSPStartFlash,
-                FHostSPGetProgress,
-                PortalInfoFittingAC,
-                PortalInfoAcByIcom,
-                PortalInfoReleases,
-                PortalInfoSoftwareById,
-                PortalInfoShowDialog,
-                PortalInfoCloseDialog,
-                FileUtilUnZip,
-                FileUtilDelete,
-                UsbHidLoaderFlashFile,
-                PrintDebugInformation,
-				ToggleCl30Fast,
-				ToggleCl30Slow,
-				StartShutdownTimer,
-				StopShutdownTimer,
-				StartInactivityTimer,
-				StopInactivityTimer,
+                EX_CanEasyStartApplication,
+				EX_CanEasyLoadWorkspace,
+				EX_CanEasyCloseApplication,
+				EX_CanEasyStartSimulation,
+				EX_CanEasyStopSimulation,
+				EX_MKSLogin,
+				EX_MKSStartDownload,
+                EX_MKSCreateSandBox,
+                EX_MKSDropSandbox,
+                EX_MKSClose,
+                EX_FHostSPStartFHost,
+                EX_FHostSPLoadFlashFile,
+                EX_FHostSPCloseFHost,
+                EX_FHostSPGetState,
+                EX_FHostSPAbortSequence,
+                EX_FHostSPCloseSequence,
+                EX_FHostSPStartFlash,
+                EX_FHostSPGetProgress,
+                EX_PortalInfoFittingAC,
+                EX_PortalInfoAcByIcom,
+                EX_PortalInfoReleases,
+                EX_PortalInfoSoftwareById,
+                EX_PortalInfoShowDialog,
+                EX_PortalInfoCloseDialog,
+                EX_FileUtilUnZip,
+                EX_FileUtilDelete,
+                EX_UsbHidLoaderFlashFile,
+                EX_PrintDebugInformation,
+				IN_ToggleCl30Fast,
+				IN_ToggleCl30Slow,
+				EX_StartInactivityTimer,
+				EX_StopInactivityTimer,
+				IN_PowerSupply,
+				IN_PowerStripe,
                 Amount
             };
 #ifdef QT
@@ -125,6 +125,7 @@ namespace RW{
                 ErrorFileUsbHidLoaderTimeOut,
                 ErrorFileUsbHidLoaderChecksum,
                 ErrorFileUsbHidLiaderUnknownError,
+				Amount
             };
 #ifdef QT
             Q_ENUM(ErrorID)
@@ -147,29 +148,6 @@ namespace RW{
         };
 #endif
 
-        typedef struct _Message
-        {
-            Util::Functions MessageFunc;
-            quint16 MessageSize;
-            QByteArray Message;
-			Util::ErrorID Error;
-
-            _Message()
-            {
-                MessageFunc = Util::Functions::Amount;
-                MessageSize = 0;
-                Message = QByteArray();
-				Error = Util::ErrorID::Success;
-                
-            }
-            _Message(Util::Functions MessageFunc, quint16 MessageSize, QByteArray Message, Util::ErrorID Error)
-            {
-                this->MessageFunc = MessageFunc;
-                this->MessageSize = MessageSize;
-                this->Message = Message;
-                this->Error = Error;
-            }
-        } Message;
 
 
         typedef struct _FlashInfo

@@ -4,6 +4,7 @@
 
 #include "WinApiHelper.h"
 #include "AbstractCommand.h"
+#include "RemoteCommunicationLibrary.h"
 
 
 
@@ -41,13 +42,14 @@ namespace RW{
 
 		void InactivityWatcher::StartInactivityObservation()
 		{
-            QByteArray arr;
-            QDataStream stream(&arr, QIODevice::WriteOnly);
-            quint64 time = 1000;
-            stream << time;
-            //TODO Zeit aus der Datenbank lesen
+			COM::Message msg;
+			msg.SetMessageID(COM::MessageDescription::EX_StartInactivityTimer);
+			msg.SetIsExternal(true);
+			QList<QVariant> paramList;
+			paramList.append(m_Timeout);
+			msg.SetParameterList(paramList);
 
-            emit NewMessage(Util::MessageReceiver::InactivityWatcher, Util::Functions::StartInactivityTimer, arr);
+			emit NewMessage(msg);
 			m_logger->debug("Inactivitity Timer started.");
 #ifdef DEBUG
             m_logger->flush();
@@ -56,8 +58,14 @@ namespace RW{
 
 		void InactivityWatcher::StopInactivityObservation()
 		{
-            QByteArray arr;
-			emit NewMessage(Util::MessageReceiver::InactivityWatcher, Util::Functions::StopInactivityTimer, arr);
+			COM::Message msg;
+			msg.SetMessageID(COM::MessageDescription::EX_StopInactivityTimer);
+			msg.SetIsExternal(true);
+			QList<QVariant> paramList;
+			paramList.append(m_Timeout);
+			msg.SetParameterList(paramList);
+
+			emit NewMessage(msg);
             m_logger->debug("Inactivitity Timer stopped.");
 #ifdef DEBUG
 			m_logger->flush();
@@ -80,12 +88,17 @@ namespace RW{
 #endif // DEBUG
 		}
 
-        void InactivityWatcher::OnProcessMessage(Util::MessageReceiver Type, Util::Functions Func, QByteArray Data)
-        {
-            if (Type == Util::MessageReceiver::InactivityWatcher)
-            {
-
-            }
+		void InactivityWatcher::OnProcessMessage(COM::Message Msg)
+		{
+			switch (Msg.MessageID())
+			{
+			case COM::MessageDescription::EX_StartInactivityTimer:
+				break;
+			case COM::MessageDescription::EX_StopInactivityTimer:
+				break;
+			default:
+					break;
+			}
         }
 	}
 }
