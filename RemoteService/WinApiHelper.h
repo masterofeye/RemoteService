@@ -23,6 +23,8 @@ namespace RW
 			bool QueryActiveSession(quint64 &SessioNumber);
 
 			static bool ReturnCurrentUser(QString &Username);
+
+            bool QueryActiveHW();
 		};
 	}
 }

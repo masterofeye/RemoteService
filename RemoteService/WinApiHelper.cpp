@@ -4,9 +4,11 @@
 #include <userenv.h>
 #include <windows.h> 
 #include <lm.h>
+#include <SetupAPI.h>
 
 #pragma comment(lib, "wtsapi32.lib")
 #pragma comment(lib, "userenv.lib")
+#pragma comment(lib, "SetupAPI.lib")
 #pragma comment(lib, "netapi32.lib")
 
 namespace RW
@@ -138,5 +140,64 @@ namespace RW
 			logger->trace("Total of {0:d} entries enumerated", dwTotalCount);
 			return true;
 		}
+
+        bool WinApiHelper::QueryActiveHW()
+        {
+            HDEVINFO DeviceInfoSet;
+            SP_DEVINFO_DATA DeviceInfoData;
+            DeviceInfoSet = SetupDiGetClassDevs(
+                NULL,
+                NULL,
+                NULL,
+                DIGCF_ALLCLASSES | DIGCF_PRESENT);
+
+            if (DeviceInfoSet == INVALID_HANDLE_VALUE)
+            {
+                m_logger->error("Unable to create device information set {}", GetLastError());
+                return false;
+            }
+
+
+
+
+            ZeroMemory(&DeviceInfoData, sizeof(SP_DEVINFO_DATA));
+            DeviceInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
+            quint16 DeviceIndex = 0;
+
+
+
+
+            while (SetupDiEnumDeviceInfo(
+                DeviceInfoSet,
+                DeviceIndex,
+                &DeviceInfoData)) {
+                DeviceIndex++;
+
+                //if (!SetupDiGetDeviceProperty(
+                //    DeviceInfoSet,
+                //    &DeviceInfoData,
+                //    &DEVPKEY_Device_Class,
+                //    &PropType,
+                //    (PBYTE)&DevGuid,
+                //    sizeof(GUID),
+                //    &Size,
+                //    0) || PropType != DEVPROP_TYPE_GUID) {
+
+                //    Error = GetLastError();
+
+                //    if (Error == ERROR_NOT_FOUND) {
+                //        \\
+                //            \\ This device has an unknown device setup class.
+                //            \\
+                //    }
+                //}
+            }
+
+            if (DeviceInfoSet) {
+                SetupDiDestroyDeviceInfoList(DeviceInfoSet);
+            }
+
+
+        }
 	}
 }
