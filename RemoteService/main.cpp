@@ -123,6 +123,7 @@ void RemoteService::start()
 	Sleep(10000);
 
 
+
 	m_logger = spdlog::get("file_logger");
 	if (m_logger == nullptr)
 	{
@@ -135,6 +136,10 @@ void RemoteService::start()
 	m_logger->set_level(spdlog::level::info);
 #endif 
 	m_logger->set_type(1);
+
+	RW::CORE::WinApiHelper h;
+	h.QueryActiveHW();
+	m_logger->flush();
 
 	m_Scheduler = new RW::CORE::JobScheduler(m_DeviceMng);
 	m_CommunicationServer = new RW::COM::CommunicatonServer("Server", 1234, m_logger, m_obj);

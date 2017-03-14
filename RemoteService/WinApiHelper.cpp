@@ -5,11 +5,16 @@
 #include <windows.h> 
 #include <lm.h>
 #include <SetupAPI.h>
+#include <devpkey.h>
+#include <devguid.h>
 
 #pragma comment(lib, "wtsapi32.lib")
 #pragma comment(lib, "userenv.lib")
 #pragma comment(lib, "SetupAPI.lib")
 #pragma comment(lib, "netapi32.lib")
+
+
+
 
 namespace RW
 {
@@ -145,11 +150,11 @@ namespace RW
         {
             HDEVINFO DeviceInfoSet;
             SP_DEVINFO_DATA DeviceInfoData;
-            DeviceInfoSet = SetupDiGetClassDevs(
-                NULL,
-                NULL,
-                NULL,
-                DIGCF_ALLCLASSES | DIGCF_PRESENT);
+			DEVPROPTYPE devicePropertyType;
+			DWORD error, dwPropertyRegDataType, dwSize;
+			TCHAR szDesc[1024], szHardwareIDs[4096];
+			GUID *guidDev = (GUID*)&GUID_DEVCLASS_USB;
+			DeviceInfoSet = SetupDiGetClassDevs(guidDev, NULL, NULL, DIGCF_PRESENT);
 
             if (DeviceInfoSet == INVALID_HANDLE_VALUE)
             {
@@ -157,40 +162,82 @@ namespace RW
                 return false;
             }
 
-
-
-
             ZeroMemory(&DeviceInfoData, sizeof(SP_DEVINFO_DATA));
             DeviceInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
             quint16 DeviceIndex = 0;
 
+            while (SetupDiEnumDeviceInfo(DeviceInfoSet, DeviceIndex, &DeviceInfoData))
+			{
+				DeviceIndex++;
+
+				if (SetupDiGetDeviceRegistryProperty(DeviceInfoSet, &DeviceInfoData, SPDRP_DEVICEDESC,
+					&dwPropertyRegDataType, (BYTE*)szDesc,
+					sizeof(szDesc),   // The size, in bytes
+					&dwSize))
+				{
+
+					QString testsssss = QString::fromWCharArray(szDesc);
+					m_logger->debug(testsssss.toStdString());
+				}
+
+				if (SetupDiGetDeviceRegistryProperty(DeviceInfoSet, &DeviceInfoData, SPDRP_HARDWAREID,
+					&dwPropertyRegDataType, (BYTE*)szHardwareIDs,
+					sizeof(szHardwareIDs),    // The size, in bytes
+					&dwSize)) 
+					m_logger->debug(QString::fromWCharArray(szHardwareIDs).toStdString());
 
 
+                /*if (!SetupDiGetDeviceProperty( DeviceInfoSet, &DeviceInfoData, &DEVPKEY_Device_Class, &devicePropertyType,
+                    (PBYTE)&DevGuid,
+                    sizeof(GUID),
+                    &Size,
+					0) || devicePropertyType != DEVPROP_TYPE_GUID) {
 
-            while (SetupDiEnumDeviceInfo(
-                DeviceInfoSet,
-                DeviceIndex,
-                &DeviceInfoData)) {
-                DeviceIndex++;
+                    error = GetLastError();
 
-                //if (!SetupDiGetDeviceProperty(
-                //    DeviceInfoSet,
-                //    &DeviceInfoData,
-                //    &DEVPKEY_Device_Class,
-                //    &PropType,
-                //    (PBYTE)&DevGuid,
-                //    sizeof(GUID),
-                //    &Size,
-                //    0) || PropType != DEVPROP_TYPE_GUID) {
+					switch (error)
+					{
+					case ERROR_INVALID_FLAGS:
+						m_logger->error("The value of Flags is not zero.");
+						break;
+					case ERROR_INVALID_HANDLE:
+						m_logger->error("The device information set that is specified by DevInfoSet is not valid.");
+						break;
+					case ERROR_INVALID_PARAMETER:
+						m_logger->error("A supplied parameter is not valid.One possibility is that the device information element is not valid.");
+						break;
+					case ERROR_INVALID_REG_PROPERTY:
+						m_logger->error("The property key that is supplied by PropertyKey is not valid.");
+						break;
+					case ERROR_INVALID_DATA:
+						m_logger->error("An unspecified internal data value was not valid.");
+						break;
+					case ERROR_INVALID_USER_BUFFER:
+						m_logger->error("A user buffer is not valid. One possibility is that PropertyBuffer is NULL and PropertBufferSize is not zero.");
+						break;
+					case ERROR_NO_SUCH_DEVINST:
+						m_logger->error("The device instance that is specified by DevInfoData does not exist.");
+						break;
+					case ERROR_INSUFFICIENT_BUFFER:
+						m_logger->error("The PropertyBuffer buffer is too small to hold the requested property value, or an internal data buffer that was passed to a system call was too small.");
+						break;
+					case ERROR_NOT_ENOUGH_MEMORY:
+						m_logger->error("There was not enough system memory available to complete the operation.");
+						break;
+					case ERROR_NOT_FOUND:
+						m_logger->error("The requested device property does not exist.");
+						break;
+					case ERROR_ACCESS_DENIED:
+						m_logger->error("The caller does not have Administrator privileges.");
+						break;
+					default:
+						break;
+					}
 
-                //    Error = GetLastError();
 
-                //    if (Error == ERROR_NOT_FOUND) {
-                //        \\
-                //            \\ This device has an unknown device setup class.
-                //            \\
-                //    }
-                //}
+                    if (Error == ERROR_NOT_FOUND) {
+                    }
+                }*/
             }
 
             if (DeviceInfoSet) {
