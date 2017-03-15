@@ -152,9 +152,9 @@ namespace RW
             SP_DEVINFO_DATA DeviceInfoData;
 			DEVPROPTYPE devicePropertyType;
 			DWORD error, dwPropertyRegDataType, dwSize;
-			TCHAR szDesc[1024], szHardwareIDs[4096];
+			TCHAR szDesc[4096], szHardwareIDs[4096];
 			GUID *guidDev = (GUID*)&GUID_DEVCLASS_USB;
-			DeviceInfoSet = SetupDiGetClassDevs(guidDev, NULL, NULL, DIGCF_PRESENT);
+            DeviceInfoSet = SetupDiGetClassDevs(NULL, 0, 0, DIGCF_PRESENT | DIGCF_ALLCLASSES);
 
             if (DeviceInfoSet == INVALID_HANDLE_VALUE)
             {
@@ -170,7 +170,7 @@ namespace RW
 			{
 				DeviceIndex++;
 
-				if (SetupDiGetDeviceRegistryProperty(DeviceInfoSet, &DeviceInfoData, SPDRP_DEVICEDESC,
+                if (SetupDiGetDeviceRegistryProperty(DeviceInfoSet, &DeviceInfoData, SPDRP_DEVICEDESC,
 					&dwPropertyRegDataType, (BYTE*)szDesc,
 					sizeof(szDesc),   // The size, in bytes
 					&dwSize))
