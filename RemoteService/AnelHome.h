@@ -49,8 +49,8 @@ class AnelHome :
 	Q_OBJECT
 private:
 	QHostAddress m_IpAddress;
-	QString m_Password;
-	QString m_User;
+	QString m_Password = "anel";
+	QString m_User = "admin";
 
 	QUdpSocket *m_SendSocket;
 	QUdpSocket *m_ReceiveSocket;
@@ -66,18 +66,18 @@ public:
 	bool Reset();
 	bool Shutdown();
 
-	virtual bool SwitchPort(quint8 Port, State St);
-	virtual bool SwitchAll(State St);
-	virtual bool GetPortState(quint8 Port, State &St);
+	virtual bool SwitchPort(quint8 Port, PortState St);
+	virtual bool SwitchAll(PortState St);
+	virtual bool GetPortState(quint8 Port, PortState &St);
 private:
-	void Switch(State Command, int Socket);
-	void SwitchAll(State Command, int Sockets);
+	void Switch(PortState Command, int Socket);
+	void SwitchAll(PortState Command, int Sockets);
 	void Parse(QByteArray Message);
-	void SendAsk(int SenderPort, QString Command);
+	void SendAsk(QString Command);
 private slots:
 	void ReceiveAsk();
 private: 
-	QString AnelHome::MapState(State Command);
+	QString AnelHome::MapState(PortState Command);
 
 };
 

@@ -59,6 +59,8 @@
 #include "AbstractDevice.h"
 #include "WinApiHelper.h"
 
+#include "AnelHome.h"
+
 
 
 
@@ -142,7 +144,7 @@ void RemoteService::start()
 	m_logger->flush();
 
 	m_Scheduler = new RW::CORE::JobScheduler(m_DeviceMng);
-	m_CommunicationServer = new RW::COM::CommunicatonServer("Server", 1234, m_logger, m_obj);
+	m_CommunicationServer = new RW::COM::CommunicatonServer(true,"Server", 1234, m_logger, m_obj);
 
 	m_logger->debug("Device manager initialize");
 	m_DeviceMng->SetLogger(m_logger);
@@ -150,6 +152,9 @@ void RemoteService::start()
 		m_logger->error("Device manager couldn't initialized correct");
 	else
 		m_logger->info("Device manager initialized correct");
+
+	RW::HW::AnelHome* dev = (RW::HW::AnelHome*) m_DeviceMng->GetDevice(RW::HW::DeviceManager::DeviceType::PowerStripe);
+	dev->SwitchPort(1, RW::HW::PortState::ON);
 
 	//RW::HW::RemoteBoxDevice *wrapper = qobject_cast<RW::HW::RemoteBoxDevice *>(m_DeviceMng->GetDevice(RW::HW::DeviceManager::DeviceType::RemoteBox));
 	//RemoteBoxWrapper::Wrapper* w = wrapper->GetDevice();

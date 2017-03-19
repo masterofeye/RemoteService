@@ -4,10 +4,11 @@
 namespace RW{
 	namespace HW{
 
-		enum class State
+		enum class PortState
 		{
 			ON,
-			OFF
+			OFF,
+			SNA
 		};
 
 

@@ -383,14 +383,14 @@ namespace RW{
 				if (m_ExecutionVariant == ExecutionVariantType::SET)
 				{
 					bool state = m_ParameterList[1].toUInt();
-					HW::State hwState = (state == true) ? HW::State::ON : HW::State::OFF;
+					HW::PortState hwState = (state == true) ? HW::PortState::ON : HW::PortState::OFF;
 					this->m_Success = m_Device->SwitchPort(port, hwState);
 				}
 				else if (m_ExecutionVariant == ExecutionVariantType::GET)
 				{
-					HW::State hwState;
+					HW::PortState hwState;
 					this->m_Success = m_Device->GetPortState(port, hwState);
-					this->m_Result = (hwState == HW::State::ON) ? true: false;
+					this->m_Result = (hwState == HW::PortState::ON) ? true : false;
 				}
 				else
 				{

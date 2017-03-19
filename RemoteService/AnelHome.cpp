@@ -40,34 +40,43 @@ namespace RW{
 				return false;
 			}
 			//qApp->processEvents();
-			SendAsk(PORT_SEND, "wer da?");
+			SendAsk("wer da?");
 			//qApp->processEvents();
 			return true;
 		}
 
 
-		QString AnelHome::MapState(State Command)
+		QString AnelHome::MapState(PortState Command)
 		{
-			if (Command == State::ON)
+			if (Command == PortState::ON)
 				return "Sw_on";
-			else if (Command == State::OFF)
+			else if (Command == PortState::OFF)
 				return "Sw_off";
 			else
 				return  "";
 		}
 
-		void AnelHome::Switch(State Command, int Socket)
+		void AnelHome::Switch(PortState Command, int Socket)
 		{
+			if (!m_SendSocket->isOpen())
+			{
+				m_SendSocket->connectToHost(m_IpAddress, PORT_SEND);
+				m_SendSocket->open(QIODevice::OpenModeFlag::WriteOnly);
+			}
 			m_SendSocket->open(QIODevice::OpenModeFlag::WriteOnly);
-			QString cmd = MapState(Command) + QString(Socket) + m_User + m_Password;
+			QString cmd = MapState(Command) + QString::number(Socket) + m_User + m_Password;
 			m_SendSocket->write(QByteArray(cmd.toUtf8()));
 			m_SendSocket->close();
 		}
 
-		void AnelHome::SwitchAll(State Command, int Sockets)
+		void AnelHome::SwitchAll(PortState Command, int Sockets)
 		{
-			m_SendSocket->open(QIODevice::OpenModeFlag::WriteOnly);
-			QString cmd = MapState(Command) + QString(Sockets) + m_User + m_Password;
+			if (!m_SendSocket->isOpen())
+			{
+				m_SendSocket->connectToHost(m_IpAddress, PORT_SEND);
+				m_SendSocket->open(QIODevice::OpenModeFlag::WriteOnly);
+			}
+			QString cmd = MapState(Command) + QString::number(Sockets) + m_User + m_Password;
 			m_SendSocket->write(QByteArray(cmd.toUtf8()));
 			m_SendSocket->close();
 		}
@@ -103,7 +112,7 @@ namespace RW{
 			m_Dev.Temperatur = -127;
 		}
 
-		void AnelHome::SendAsk(int SenderPort, QString Command)
+		void AnelHome::SendAsk(QString Command)
 		{
 			m_SendSocket->open(QIODevice::OpenModeFlag::WriteOnly);
 			m_SendSocket->write(QByteArray(Command.toUtf8()));
@@ -112,8 +121,10 @@ namespace RW{
 
 		void AnelHome::ReceiveAsk()
 		{
-			while (m_ReceiveSocket->hasPendingDatagrams()) {
-				QByteArray datagram;
+			QByteArray datagram;
+			while (m_ReceiveSocket->hasPendingDatagrams()) 
+			{
+				
 				datagram.resize(m_ReceiveSocket->pendingDatagramSize());
 				QHostAddress sender;
 				quint16 senderPort;
@@ -122,6 +133,7 @@ namespace RW{
 					&sender, &senderPort);
 				Parse(datagram);
 			}
+			Parse(datagram);
 		}
 
 		/*
@@ -140,23 +152,23 @@ namespace RW{
 			return true;
 		}
 
-		bool AnelHome::SwitchPort(quint8 Port, State St)
+		bool AnelHome::SwitchPort(quint8 Port, PortState St)
 		{
 			Switch(St, Port);
-			//TODO Auswertung fehlt
+			QThread::msleep(100);
 			return true;
 		}
 
-		bool AnelHome::SwitchAll(State St)
+		bool AnelHome::SwitchAll(PortState St)
 		{
 			SwitchAll(St,3);
-			//TODO Auswertung fehlt
+			QThread::msleep(100);
 			return true;
 		}
 
-		bool AnelHome::GetPortState(quint8 Port, State &St)
+		bool AnelHome::GetPortState(quint8 Port, PortState &St)
 		{
-			St = m_Sockets[Port].Socket_State == true ? State::ON : State::OFF;
+			St = m_Sockets[Port].Socket_State == true ? PortState::ON : PortState::OFF;
 			return true;
 		}
 
