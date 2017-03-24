@@ -168,8 +168,8 @@ void RemoteService::start()
 	//QObject::connect(m_Scheduler, &RW::CORE::JobScheduler::SendAnswer, m_Observer, &RW::CORE::InactivityWatcher::StopInactivityObservationWithCmd);
 	/*Start Oberservation for user inactivity*/
 
-	//QObject::connect(m_CommunicationServer, &RW::CORE::CommunicationServer::Message, m_Scheduler, &RW::CORE::JobScheduler::AddNewJob);
-	//QObject::connect(m_Scheduler, &RW::CORE::JobScheduler::SendAnswer, m_CommunicationServer, &RW::CORE::CommunicationServer::OnMessage);
+    QObject::connect(m_CommunicationServer, &RW::COM::CommunicatonServer::NewMessage, m_Scheduler, &RW::CORE::JobScheduler::AddNewJob);
+    QObject::connect(m_Scheduler, &RW::CORE::JobScheduler::SendAnswer, m_CommunicationServer, &RW::COM::CommunicatonServer::OnProcessMessage);
 
     m_CommunicationServer->Register(m_Observer);
     m_CommunicationServer->Register(m_Shutdown);

@@ -2,11 +2,14 @@
 #include "JobQueue.h"
 #include "DeviceManager.h"
 
+#include <RemoteCommunicationLibrary.h>
+
 namespace RW{
 	namespace CORE
 	{
 		JobScheduler::JobScheduler(HW::DeviceManager* Manager) : m_Queue(new JobQueue(this)),
-			m_DeviceManager(Manager)
+			m_DeviceManager(Manager),
+            m_Builder(new CommandBuilder(this))
 		{
 		}
 
@@ -46,21 +49,18 @@ namespace RW{
 
 				if (!cmd->Execute())
 				{
-					m_logger->error("Command {} execution failed",cmd->CommandID() );
+                    //Todo hier sollte auch der Name ausgegeben werden, des Kommandos
+					m_logger->error("Command {} execution failed", (int)cmd->CommandID() );
 				}
 				
 			}
 		}
 
-		void JobScheduler::AddNewJob(AbstractCommand* Command)
+		void JobScheduler::AddNewJob(COM::Message Msg)
 		{
-			if (Command == nullptr)
-			{
-				m_logger->error("Command is null!");
-				return;
-			}
-
-			m_Queue->push(Command);
+            AbstractCommand *cmd = m_Builder->CreateCommand((RW::CORE::CommandIds) Msg.ParameterList()[0].toInt(), Msg);
+            if (cmd->IsParsed())
+                m_Queue->push(cmd);
 		}
 	}
 }

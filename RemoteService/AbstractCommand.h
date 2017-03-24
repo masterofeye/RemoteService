@@ -1,4 +1,5 @@
 #pragma once
+#include <RemoteCommunicationLibrary.h>
 #include <QtCore>
 #include "spdlog\spdlog.h"
 
@@ -53,25 +54,18 @@ namespace RW{
 			};
 			Q_ENUM(SourceAndDestination);
 
-			enum class ExecutionVariantType
-			{
-				GET,
-				SET,
-				ON,
-				OFF
-			};
 			
 			AbstractCommand *Next;
 		protected:
 			std::shared_ptr<spdlog::logger> m_logger;
 			/*@brief Eindeutige ID des Kommandos*/
-			quint16 m_CommandID;
+			COM::MessageDescription m_CommandID;
 			/*@brief Quelle des Kommandos*/
 			QString m_Src;
 			/*@brief Ziel des Kommandos*/
 			QString m_Dst;
 			/*@brief Variante des Kommandos*/
-			ExecutionVariantType m_ExecutionVariant;
+            COM::Message::ExecutionVariant m_ExecutionVariant;
 			/*@brief Liste an Parametern die vom Sender kommt*/
 			QList<QVariant> m_ParameterList;
 			/*@brief Rückgabewerte an den Sender*/
@@ -81,8 +75,8 @@ namespace RW{
 			/*@brief Gibt an ob das Parsen des JSON Anweisung erfolgreich verlaufen ist.*/
 			bool m_Parsing;
 		public:
-			explicit AbstractCommand(QJsonObject* Obj, QObject *Parent = nullptr);
-			AbstractCommand(quint16 CmdId, QString Source, QString Destination, QString ExecutionVariant, QList<QVariant> Parameter, QObject *Parent = nullptr);
+            explicit AbstractCommand(const COM::Message Obj, QObject *Parent = nullptr);
+            AbstractCommand(COM::MessageDescription CmdId, QString Source, QString Destination, COM::Message::ExecutionVariant ExecutionVariant, QList<QVariant> Parameter, QObject *Parent = nullptr);
 			virtual ~AbstractCommand() {};
 
 			virtual bool Execute(){ m_logger->debug("Command executed"); return true; }
@@ -90,21 +84,30 @@ namespace RW{
 			inline void SetSuccess(bool Success){ m_Success = Success; }
 			inline void SetResult(QVariant Result){ m_Result = Result; }
 
-			inline quint16 CommandID(){ return m_CommandID; }
+            inline COM::MessageDescription CommandID(){ return m_CommandID; }
 			inline QString Source(){ return m_Src; }
 			inline QString Destionation(){ return m_Dst; }
 			inline QList<QVariant> ParameterListe(){ return m_ParameterList; }
-			inline ExecutionVariantType ExecutionVariant(){ return m_ExecutionVariant; }
+            inline COM::Message::ExecutionVariant ExecutionVariant(){ return m_ExecutionVariant; }
 			inline QVariant Result(){ return m_Result; }
 			inline bool Success(){ return m_Success; }
 			inline bool IsParsed(){ return m_Parsing; }
 
 			virtual void SetDevice(QObject* const Device = nullptr);
 
+            inline COM::Message toMessage(){
+                COM::Message m;
+                m.SetMessageID(m_CommandID);
+                m.SetParameterList(m_ParameterList);
+                m.SetResult(m_Result);
+                m.SetSuccess(m_Success);
+                return m;
+            }
+
 		public slots: 
-			void TransmitFinish(AbstractCommand* Cmd);
+            void TransmitFinish(COM::Message Cmd);
 		signals:
-			void finished(AbstractCommand* Cmd);
+			void finished(COM::Message Cmd);
 		};
 
 		class RelayCommand : public AbstractCommand
@@ -112,7 +115,7 @@ namespace RW{
 		private:
 			RemoteBoxWrapper::Wrapper* m_RemoteBoxWrapper;
 		public:
-			explicit RelayCommand(QJsonObject* Obj);
+            explicit RelayCommand(const COM::Message Obj);
 			virtual void SetDevice(QObject* const Device);
 			virtual ~RelayCommand() {};
 			virtual bool Execute();
@@ -123,7 +126,7 @@ namespace RW{
 		private:
 			RemoteBoxWrapper::Wrapper* m_RemoteBoxWrapper;
 		public:
-			explicit IOCommand(QJsonObject* Obj);
+			explicit IOCommand(const COM::Message Obj);
 			virtual void SetDevice(QObject* const Device);
 			virtual ~IOCommand() {};
 			virtual bool Execute();
@@ -134,7 +137,7 @@ namespace RW{
 		private:
 			RemoteBoxWrapper::Wrapper* m_RemoteBoxWrapper;
 		public:
-			explicit USBCommand(QJsonObject* Obj);
+			explicit USBCommand(const COM::Message Obj);
 			virtual void SetDevice(QObject* const Device);
 			virtual ~USBCommand() {};
 			virtual bool Execute();
@@ -145,7 +148,7 @@ namespace RW{
 		private:
 			RemoteBoxWrapper::Wrapper* m_RemoteBoxWrapper;
 		public:
-			explicit ADCCommand(QJsonObject* Obj);
+			explicit ADCCommand(const COM::Message Obj);
 			virtual void SetDevice(QObject* const Device);
 			virtual ~ADCCommand() {};
 			virtual bool Execute();
@@ -156,7 +159,7 @@ namespace RW{
 		private:
 			RemoteBoxWrapper::Wrapper* m_RemoteBoxWrapper;
 		public:
-			explicit DACCommand(QJsonObject* Obj);
+			explicit DACCommand(const COM::Message Obj);
 			virtual void SetDevice(QObject* const Device);
 			virtual ~DACCommand() {};
 			virtual bool Execute();
@@ -167,7 +170,7 @@ namespace RW{
 		private:
 			HW::PowerStripeDevice* m_Device;
 		public:
-			explicit PowerStripeCommand(QJsonObject* Obj);
+			explicit PowerStripeCommand(const COM::Message Obj);
 			virtual void SetDevice(QObject* const Device);
 			virtual ~PowerStripeCommand() {};
 			virtual bool Execute();
@@ -178,7 +181,7 @@ namespace RW{
 		private:
 			HW::PowerSupplyDevice* m_Device;
 		public:
-			explicit PowerSupplyCommand(QJsonObject* Obj);
+			explicit PowerSupplyCommand(const COM::Message Obj);
 			virtual void SetDevice(QObject* const  Device);
 			virtual ~PowerSupplyCommand() {};
 			virtual bool Execute();
@@ -187,7 +190,7 @@ namespace RW{
 		class LogOutCommand : public AbstractCommand
 		{
 		public:
-			explicit LogOutCommand(QJsonObject* Obj);
+			explicit LogOutCommand(const COM::Message Obj);
 			virtual void SetDevice(QObject* const Device);
 			virtual ~LogOutCommand() {};
 			virtual bool Execute();
@@ -198,7 +201,7 @@ namespace RW{
 		private: 
 			HW::DeviceManager* m_Manager;
 		public:
-			explicit ShutdownCommand(QJsonObject* Obj);
+			explicit ShutdownCommand(const COM::Message Obj);
 			virtual void SetDevice(QObject* const Device);
 			virtual ~ShutdownCommand() {};
 			virtual bool Execute();
@@ -209,7 +212,7 @@ namespace RW{
 			Q_OBJECT
 			QThread m_workerThread;
 		public:
-			explicit FlashCommand(QJsonObject* Obj);
+			explicit FlashCommand(const COM::Message Obj);
 			virtual void SetDevice(QObject* const Device);
 			virtual ~FlashCommand() {};
 			virtual bool Execute();

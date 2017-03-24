@@ -20,10 +20,10 @@ namespace RW{
 			std::shared_ptr<spdlog::logger> m_logger;
 
 		public:
-			CommandBuilder(AbstractCommandBuilder *Parent = nullptr);
+			CommandBuilder(QObject *Parent = nullptr);
 			~CommandBuilder();
 
-			AbstractCommand* CreateCommand(CommandIds Cmd, QJsonObject* Obj);
+            AbstractCommand* CreateCommand(CommandIds Cmd, COM::Message Obj);
 		};
 	}
 }

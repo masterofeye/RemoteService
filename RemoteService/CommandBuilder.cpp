@@ -4,7 +4,7 @@
 namespace RW{
 	namespace CORE
 	{
-		CommandBuilder::CommandBuilder(AbstractCommandBuilder *Parent) : AbstractCommandBuilder(Parent),
+        CommandBuilder::CommandBuilder(QObject *Parent) : AbstractCommandBuilder(Parent),
 			m_logger(spdlog::get("file_logger"))
 		{
 			Q_ASSERT_X(m_logger == nullptr, "CommandBuilder", "m_logger is null");
@@ -15,7 +15,7 @@ namespace RW{
 		{
 		}
 
-		AbstractCommand* CommandBuilder::CreateCommand(CommandIds Cmd, QJsonObject* Obj)
+        AbstractCommand* CommandBuilder::CreateCommand(CommandIds Cmd, COM::Message Obj)
 		{
 			switch (Cmd)
 			{

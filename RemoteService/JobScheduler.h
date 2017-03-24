@@ -1,4 +1,6 @@
 #pragma once
+#include "CommandBuilder.h"
+#include <RemoteCommunicationLibrary.h>
 #include <QtCore>
 #include "spdlog\spdlog.h"
 
@@ -18,6 +20,7 @@ namespace RW{
 			Q_OBJECT
 		private: 
 			std::shared_ptr<spdlog::logger> m_logger;
+            CommandBuilder* m_Builder;
 			HW::DeviceManager* m_DeviceManager;
 			JobQueue* m_Queue;
 			bool m_Process;
@@ -36,11 +39,11 @@ namespace RW{
 			void ProcessJobs();
 
 		public slots:
-			void AddNewJob(AbstractCommand* Command);
-			void SendAnswerToClient(AbstractCommand* Command){ emit SendAnswer(Command); }
+        void AddNewJob(COM::Message Msg);
+        void SendAnswerToClient(COM::Message Msg){ emit SendAnswer(Msg); }
 		signals:
 			void Finished();
-			void SendAnswer(AbstractCommand* Command);
+            void SendAnswer(COM::Message Msg);
 		};
 
 	}

@@ -74,7 +74,7 @@ namespace RW{
 
 		void InactivityWatcher::StopInactivityObservationWithCmd(AbstractCommand* Cmd)
 		{
-			if (Cmd->CommandID() == (quint16) RW::CORE::CommandIds::LOGOUT && Cmd->Success())
+			if (Cmd->CommandID() == RW::COM::MessageDescription::EX_StopInactivityTimer && Cmd->Success())
 			{
 				if (m_TimerLogout != nullptr && m_TimerLogout->isActive())
 				{
