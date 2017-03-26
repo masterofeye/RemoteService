@@ -1,5 +1,7 @@
 #pragma once
 #include <QtCore>
+#include <spdlog\spdlog.h>
+
 
 namespace RW{
 	namespace HW{
@@ -17,8 +19,11 @@ namespace RW{
 			Q_OBJECT
 		private:
 			QString m_DeviceName;
+		protected:
+			std::shared_ptr<spdlog::logger> m_Logger;
 		public:
 			AbstractDevice(QObject *parent = 0);
+			AbstractDevice(std::shared_ptr<spdlog::logger> Logger, QObject *parent = 0);
 			~AbstractDevice();
 
 			inline QString DeviceName(){ return m_DeviceName; }

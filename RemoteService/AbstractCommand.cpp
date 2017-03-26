@@ -77,6 +77,7 @@ namespace RW{
 
 		bool RelayCommand::Execute()
 		{
+			std::string ret = "";
 			ushort val = 0;
 
 			if (m_ParameterList.count() != 1)
@@ -87,13 +88,20 @@ namespace RW{
 
 			if (m_ExecutionVariant == COM::Message::ExecutionVariant::SET)
 			{
-
 				val = m_ParameterList.at(0).toUInt();
-				this->m_Success = m_RemoteBoxWrapper->SetRelayState(val);
+				this->m_Success = m_RemoteBoxWrapper->SetRelayState(val, ret);
+				if (!this->m_Success)
+				{
+					m_logger->error("SetRelayState failed with error: {}", ret);
+				}
 			}
             else if (m_ExecutionVariant == COM::Message::ExecutionVariant::GET)
 			{
-				this->m_Success = m_RemoteBoxWrapper->GetRelayState(val);
+				this->m_Success = m_RemoteBoxWrapper->GetRelayState(val,ret);
+				if (!this->m_Success)
+				{
+					m_logger->error("GetRelayState failed with error: {}", ret);
+				}
 				this->m_Result = val;
 			}
 			else
@@ -129,6 +137,7 @@ namespace RW{
 		bool IOCommand::Execute()
 		{
 			bool val = false;
+			std::string ret = "";
 			
             if (m_ExecutionVariant == COM::Message::ExecutionVariant::SET)
 			{
@@ -136,7 +145,11 @@ namespace RW{
 				{
 					quint16 id = m_ParameterList[0].toUInt();
 					val = m_ParameterList[1].toUInt();
-					this->m_Success = m_RemoteBoxWrapper->SetDIOPinState(id, val);
+					this->m_Success = m_RemoteBoxWrapper->SetDIOPinState(id, val,ret);
+					if (!this->m_Success)
+					{
+						m_logger->error("SetDIOPinState failed with error: {}", ret);
+					}
 				}
 				else
 				{
@@ -150,7 +163,11 @@ namespace RW{
 				if (m_ParameterList.count() == 1)
 				{
 					quint16 id = m_ParameterList[0].toUInt();
-					this->m_Success = m_RemoteBoxWrapper->GetDIOPinState(id, val);
+					this->m_Success = m_RemoteBoxWrapper->GetDIOPinState(id, val,ret);
+					if (!this->m_Success)
+					{
+						m_logger->error("GetDIOPinState failed with error: {}", ret);
+					}
 					this->m_Result = val;
 				}
 				else
@@ -192,6 +209,7 @@ namespace RW{
 
 		bool USBCommand::Execute()
 		{
+			std::string ret = "";
 			quint8 state = 0;
 
             if (m_ExecutionVariant == COM::Message::ExecutionVariant::SET)
@@ -200,7 +218,11 @@ namespace RW{
 				{
 					quint16 hub = m_ParameterList[0].toUInt();
 					state = m_ParameterList[1].toUInt();
-					this->m_Success = m_RemoteBoxWrapper->SetUsbState(hub, state);
+					this->m_Success = m_RemoteBoxWrapper->SetUsbState(hub, state, ret);
+					if (!this->m_Success)
+					{
+						m_logger->error("SetUsbState failed with error: {}", ret);
+					}
 				}
 				else
 				{
@@ -213,7 +235,11 @@ namespace RW{
 				if (m_ParameterList.count() == 1)
 				{
 					quint16 hub = m_ParameterList[0].toUInt();
-					this->m_Success = m_RemoteBoxWrapper->GetUsbState(hub, state);
+					this->m_Success = m_RemoteBoxWrapper->GetUsbState(hub, state, ret);
+					if (!this->m_Success)
+					{
+						m_logger->error("GetUsbState failed with error: {}", ret);
+					}
 					this->m_Result = state;
 				}
 				else
@@ -255,6 +281,7 @@ namespace RW{
 
 		bool ADCCommand::Execute()
 		{
+			std::string ret = "";
 			short value = 0;
 
 			if (m_ParameterList.count() != 1)
@@ -268,7 +295,11 @@ namespace RW{
 
                 if (m_ExecutionVariant == COM::Message::ExecutionVariant::GET)
 				{
-					this->m_Success = m_RemoteBoxWrapper->GetAdcValue(adcId, value);
+					this->m_Success = m_RemoteBoxWrapper->GetAdcValue(adcId, value, ret);
+					if (!this->m_Success)
+					{
+						m_logger->error("GetAdcValue failed with error: {}", ret);
+					}
 					this->m_Result = value;
 				}
 				else
@@ -305,6 +336,7 @@ namespace RW{
 
 		bool DACCommand::Execute()
 		{
+			std::string ret = "";
 			if (m_ParameterList.count() != 2)
 			{
 				m_logger->error("Wrong parameter amount in DACCommand");
@@ -318,7 +350,11 @@ namespace RW{
 
                 if (m_ExecutionVariant == COM::Message::ExecutionVariant::SET)
 				{
-					this->m_Success = m_RemoteBoxWrapper->SetDacValue(adcId, value);
+					this->m_Success = m_RemoteBoxWrapper->SetDacValue(adcId, value, ret);
+					if (!this->m_Success)
+					{
+						m_logger->error("GetAdcValue failed with error: {}", ret);
+					}
 				}
 				else
 				{
@@ -354,7 +390,7 @@ namespace RW{
 
 
 		bool PowerStripeCommand::Execute()
-		{
+		{;
 			if (m_ParameterList.count() != 2)
 			{
 				m_logger->error("Wrong parameter amount in PowerStripeCommand");

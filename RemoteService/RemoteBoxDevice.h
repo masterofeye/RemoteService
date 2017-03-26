@@ -19,9 +19,9 @@ namespace RW{
 			RemoteBoxDevice(QObject *parent = 0);
 			virtual ~RemoteBoxDevice();
 
-			bool Initialize(){ return m_Wrapper->Init(); }
-			bool Reset(){ m_Wrapper->DeInit(); return m_Wrapper->Init(); }
-			bool Shutdown(){ m_Wrapper->DeInit(); return true; }
+			bool Initialize();
+			bool Reset();
+			bool Shutdown();
 
 			RemoteBoxWrapper::Wrapper* GetDevice();
 		};

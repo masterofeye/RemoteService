@@ -2,7 +2,7 @@
 #define INTACTIVITYWATCHER_H
 #include <QObject>
 #include <QTimer>
-#include "spdlog\spdlog.h"
+#include <spdlog\spdlog.h>
 #include "RemoteCommunicationLibrary.h"
 #include "Constants.h"
 
