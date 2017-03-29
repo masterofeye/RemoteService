@@ -36,10 +36,24 @@ namespace RW{
 			}
 		}
 
-
 		ShutdownHandler::~ShutdownHandler()
 		{
 		}
+
+        void ShutdownHandler::OnProcessMessage(COM::Message Msg)
+        {
+            switch (Msg.MessageID())
+            {
+            case COM::MessageDescription::IN_StartShutdownHandler:
+                StartShutdownTimer();
+                break;
+            case COM::MessageDescription::IN_StopShutdownHandler:
+                StopShutdownTimer();
+                break;
+            default:
+                break;
+            }
+        }
 
 		void ShutdownHandler::StartShutdownTimer()
 		{

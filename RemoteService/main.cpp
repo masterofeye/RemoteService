@@ -139,9 +139,9 @@ void RemoteService::start()
 #endif 
 	m_logger->set_type(1);
 
-	RW::CORE::WinApiHelper h;
-	h.QueryActiveHW();
-	m_logger->flush();
+	//RW::CORE::WinApiHelper h;
+	//h.QueryActiveHW();
+	//m_logger->flush();
 
 	m_Scheduler = new RW::CORE::JobScheduler(m_DeviceMng);
 	m_CommunicationServer = new RW::COM::CommunicatonServer(true,"Server", 1234, m_logger, m_obj);
@@ -153,8 +153,8 @@ void RemoteService::start()
 	else
 		m_logger->info("Device manager initialized correct");
 
-	RW::HW::AnelHome* dev = (RW::HW::AnelHome*) m_DeviceMng->GetDevice(RW::HW::DeviceManager::DeviceType::PowerStripe);
-	dev->SwitchPort(1, RW::HW::PortState::ON);
+	//RW::HW::AnelHome* dev = (RW::HW::AnelHome*) m_DeviceMng->GetDevice(RW::HW::DeviceManager::DeviceType::PowerStripe);
+	//dev->SwitchPort(1, RW::HW::PortState::ON);
 
 	//RW::HW::RemoteBoxDevice *wrapper = qobject_cast<RW::HW::RemoteBoxDevice *>(m_DeviceMng->GetDevice(RW::HW::DeviceManager::DeviceType::RemoteBox));
 	//RemoteBoxWrapper::Wrapper* w = wrapper->GetDevice();
@@ -174,7 +174,7 @@ void RemoteService::start()
     m_CommunicationServer->Register(m_Observer);
     m_CommunicationServer->Register(m_Shutdown);
 
-	/*m_Scheduler->start();*/
+	m_Scheduler->start();
 	m_CommunicationServer->Listen();
 
 	m_logger->info("Remote Service started");

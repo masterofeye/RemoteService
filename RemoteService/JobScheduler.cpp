@@ -19,7 +19,7 @@ namespace RW{
 			if (m_logger == nullptr)
 				m_logger = spdlog::get("file_logger");
 
-			Q_ASSERT_X(m_logger == nullptr, "ProcessJobs", "m_logger is null");
+			//Q_ASSERT_X(m_logger == nullptr, "ProcessJobs", "m_logger is null");
 
 			while (m_Process)
 			{

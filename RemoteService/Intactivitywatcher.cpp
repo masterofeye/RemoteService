@@ -39,6 +39,39 @@ namespace RW{
 			}
 		}
 
+        void InactivityWatcher::OnProcessMessage(COM::Message Msg)
+        {
+            switch (Msg.MessageID())
+            {
+            case COM::MessageDescription::IN_StartInactivityObserver:
+                StartInactivityObservation();
+            case COM::MessageDescription::IN_StopInactivityObserver:
+                StopInactivityObservation();
+            case COM::MessageDescription::EX_StartInactivityTimer:
+                if (Msg.Success() == false)
+                {
+                    m_logger->critical("Couldn't start inactivity timer: {}", Msg.Result().toString().toStdString());
+                }
+                else
+                {
+                    m_logger->debug("Inactivitity Timer started.");
+                }
+                break;
+            case COM::MessageDescription::EX_StopInactivityTimer:
+                if (Msg.Success() == false)
+                {
+                    m_logger->critical("Couldn't stop inactivity timer: {}", Msg.Result().toString().toStdString());
+                }
+                else
+                {
+                    m_logger->debug("Inactivitity Timer stopped.");
+                }
+                break;
+            default:
+                break;
+            }
+        }
+
 
 		void InactivityWatcher::StartInactivityObservation()
 		{
@@ -50,7 +83,7 @@ namespace RW{
 			msg.SetParameterList(paramList);
 
 			emit NewMessage(msg);
-			m_logger->debug("Inactivitity Timer started.");
+			
 #ifdef DEBUG
             m_logger->flush();
 #endif // DEBUG
@@ -66,7 +99,6 @@ namespace RW{
 			msg.SetParameterList(paramList);
 
 			emit NewMessage(msg);
-            m_logger->debug("Inactivitity Timer stopped.");
 #ifdef DEBUG
 			m_logger->flush();
 #endif // DEBUG
@@ -88,17 +120,5 @@ namespace RW{
 #endif // DEBUG
 		}
 
-		void InactivityWatcher::OnProcessMessage(COM::Message Msg)
-		{
-			switch (Msg.MessageID())
-			{
-			case COM::MessageDescription::EX_StartInactivityTimer:
-				break;
-			case COM::MessageDescription::EX_StopInactivityTimer:
-				break;
-			default:
-					break;
-			}
-        }
 	}
 }
