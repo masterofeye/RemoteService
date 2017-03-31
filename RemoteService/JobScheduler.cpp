@@ -58,9 +58,12 @@ namespace RW{
 
 		void JobScheduler::AddNewJob(COM::Message Msg)
 		{
-            AbstractCommand *cmd = m_Builder->CreateCommand((RW::CORE::CommandIds) Msg.ParameterList()[0].toInt(), Msg);
-            if (cmd->IsParsed())
-                m_Queue->push(cmd);
+            if (Msg.MessageID() >= RW::COM::MessageDescription::IN_HARDWARE_START && Msg.MessageID() <= RW::COM::MessageDescription::IN_HARDWARE_STOP)
+            {
+                AbstractCommand *cmd = m_Builder->CreateCommand((RW::CORE::CommandIds) Msg.ParameterList()[0].toInt(), Msg);
+                if (cmd->IsParsed())
+                    m_Queue->push(cmd);
+            }
 		}
 	}
 }

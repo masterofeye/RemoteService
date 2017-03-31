@@ -19,14 +19,16 @@ namespace RW{
 			std::shared_ptr<spdlog::logger> m_logger;
 			QTimer *m_ShutdownTimer;
 			long long m_Timeout;
+            bool isRunning = false;
 
 			RW::HW::DeviceManager* m_DeviceManager;
 
 		public:
 			ShutdownHandler(RW::HW::DeviceManager* Manager, QString Version, QObject *Parent = 0);
 			~ShutdownHandler();
-			void OnProcessMessage(COM::Message Msg);
+
 		public slots:
+            void OnProcessMessage(COM::Message Msg);
 			void Shutdown();
 		signals:
 			void ShutdownEvt();	

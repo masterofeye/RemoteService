@@ -318,6 +318,7 @@
     <ClCompile Include="JobQueue.cpp" />
     <ClCompile Include="JobScheduler.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ProcessObserver.cpp" />
     <ClCompile Include="UtilProcess.cpp" />
     <ClCompile Include="VoltCraft.cpp" />
     <ClCompile Include="PowerStripeDevice.cpp" />
@@ -337,6 +338,9 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-I.\QtServiceClasses" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtWidgets" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtGui" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtANGLE" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtCore" "-I.\release" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\mkspecs\win32-msvc2013" "-I.\..\..\RemoteUtil\thirdparty" "-IC:\Program Files (x86)\Visual Leak Detector\include"</Command>
     </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ProcessObserver.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E0B42E70-2290-3397-90B1-E090866F4F3E}</ProjectGuid>
@@ -448,7 +452,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>Wtsapi32.lib;user32.lib;Qt5Cored.lib;Qt5Networkd.lib;Qt5WebSocketsd.lib;RemoteBoxWrapper.lib;RemoteDataConnectLibraryd.lib;RemoteCommunicationLibraryd.lib;QtService.lib;Qt5Guid.lib;Qt5Widgetsd.lib;Qt5XMLd.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\lib;$(QTDIR)\lib;..\..\RemoteUtil\RemoteDataConnectLibrary\Lib;..\..\RemoteUtil\RemoteCommunicationLibrary\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\lib;$(QTDIR)\lib;..\..\RemoteUtil\RemoteDataConnectLibrary\Lib;..\..\RemoteUtil\RemoteCommunicationLibrary\Lib;..\..\RemoteUtil\RemoteBoxWrapper\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>true</GenerateDebugInformation>

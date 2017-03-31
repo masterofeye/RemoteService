@@ -18,6 +18,7 @@ namespace RW{
 			std::shared_ptr<spdlog::logger> m_logger;
 			QTimer *m_TimerLogout;
 			long long m_Timeout;
+            bool m_isRunning = false;
 		public:
 			explicit InactivityWatcher(QString Version, QObject *parent = 0);
 		signals:
@@ -28,6 +29,11 @@ namespace RW{
 			void StopInactivityObservation();
 			void StopInactivityObservationWithCmd(AbstractCommand* Cmd);
             void OnProcessMessage(COM::Message Msg);
+
+        private slots:
+            void OnTimeoutStop();
+            void OnTimeoutStart();
+
 		};
 	}
 }

@@ -21,9 +21,9 @@ namespace RW
 			~WinApiHelper();
 
 			bool QueryActiveSession(quint64 &SessioNumber);
-
+            HANDLE WinApiHelper::GetCurrentUserToken();
+            bool WinApiHelper::CreateProcessAsCurrentUser(QString Programm, QString Arguments);
 			static bool ReturnCurrentUser(QString &Username);
-
             bool QueryActiveHW();
 		};
 	}

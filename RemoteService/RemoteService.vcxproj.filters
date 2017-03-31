@@ -218,5 +218,13 @@
     <ClCompile Include="GeneratedFiles\Release\moc_AnelHome.cpp">
       <Filter>Generierte Dateien\Release</Filter>
     </ClCompile>
+    <ClCompile Include="ProcessObserver.cpp">
+      <Filter>Helper</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ProcessObserver.h">
+      <Filter>Helper</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

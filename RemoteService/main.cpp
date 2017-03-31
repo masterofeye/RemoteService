@@ -58,7 +58,7 @@
 #include "RemoteBoxDevice.h"
 #include "AbstractDevice.h"
 #include "WinApiHelper.h"
-
+#include "ProcessObserver.h"
 #include "AnelHome.h"
 
 
@@ -74,11 +74,12 @@ class RemoteService : public QtService<QApplication>
 private: 
 	QObject *m_obj;
 	std::shared_ptr<spdlog::logger> m_logger;
-	RW::CORE::InactivityWatcher *m_Observer;
-	RW::CORE::ShutdownHandler *m_Shutdown;
-	RW::CORE::JobScheduler *m_Scheduler;
-	RW::COM::CommunicatonServer *m_CommunicationServer;
-	RW::HW::DeviceManager *m_DeviceMng;
+    RW::CORE::InactivityWatcher *m_Observer = nullptr;
+    RW::CORE::ShutdownHandler *m_Shutdown = nullptr;
+    RW::CORE::JobScheduler *m_Scheduler = nullptr;
+    RW::COM::CommunicatonServer *m_CommunicationServer = nullptr;
+    RW::HW::DeviceManager *m_DeviceMng = nullptr;
+    ProcessObserver* m_ProcObserver = nullptr;
 public:
 	RemoteService(int argc, char **argv);
 	~RemoteService();
@@ -98,16 +99,17 @@ protected:
 	void ConsoleConnect();
 	void ConsoleDisconnect();
 
+    void HiddenHelperCrashed(QProcess::ProcessError error);
 };
 
 RemoteService::RemoteService(int argc, char **argv)
     : QtService<QApplication>(argc, argv, "RemoteService2"),
-	m_obj(new QObject()),
-	m_Observer(nullptr),
-	m_Shutdown(nullptr),
-	m_DeviceMng(new RW::HW::DeviceManager())
+    m_obj(new QObject()),
+    m_Observer(nullptr),
+    m_Shutdown(nullptr),
+    m_DeviceMng(new RW::HW::DeviceManager())
 {
-
+    
     setServiceDescription("The RemoteWorkstation Service.");
     setServiceFlags(QtServiceBase::CanBeSuspended);
 
@@ -177,6 +179,11 @@ void RemoteService::start()
 	m_Scheduler->start();
 	m_CommunicationServer->Listen();
 
+    m_Observer->StartInactivityObservation();
+    RW::CORE::WinApiHelper win;
+    win.CreateProcessAsCurrentUser("C:\\Projekte\\RemoteWorkstation\\RemoteService\\build\\x64\\Debug\\RemoteHiddenHelper.exe", "");
+    
+
 	m_logger->info("Remote Service started");
 	m_logger->flush();
 }
@@ -191,24 +198,31 @@ void RemoteService::stop()
 
 	//}
 	//QtServiceBase::instance()->logMessage("Remote Service stopped");
+    m_Observer->StopInactivityObservation();
+    m_Shutdown->StopShutdownTimer();
+
 	m_logger->info("Remote Service stopped");
 	m_logger->flush();
 }
 
 void RemoteService::pause()
 {
+    m_Observer->StopInactivityObservation();
+    m_Shutdown->StopShutdownTimer();
 	m_logger->info("Remote Service paused");
 	m_logger->flush();
 }
 
 void RemoteService::resume()
 {
+    m_Observer->StartInactivityObservation();
 	m_logger->info("Remote Service resumed");
 	m_logger->flush();
 }
 
 void RemoteService::processCommand(int code)
 {
+    Q_UNUSED(code);
 }
 
 void RemoteService::SessionLock()
@@ -312,4 +326,5 @@ int main(int argc, char **argv)
 	RemoteService service(argc, argv);
     return service.exec();
 }
+
 

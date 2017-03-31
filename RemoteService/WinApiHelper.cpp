@@ -18,51 +18,144 @@
 
 namespace RW
 {
-	namespace CORE
-	{
-		WinApiHelper::WinApiHelper() :m_logger(spdlog::get("file_logger"))
-		{
-		}
+    namespace CORE
+    {
+        WinApiHelper::WinApiHelper() :m_logger(spdlog::get("file_logger"))
+        {
+        }
 
 
-		WinApiHelper::~WinApiHelper()
-		{
-		}
+        WinApiHelper::~WinApiHelper()
+        {
+        }
 
-		/*
-		*@brief Returns the session number, that is currently in state active.
-		*@return True if a session was in the active state
-		*/
-		bool WinApiHelper::QueryActiveSession(quint64 &SessioNumber)
-		{
-			SessioNumber = 0;
-			PWTS_SESSION_INFO  pSessionsBuffer = NULL;
-			DWORD dwSessionCount = 0;
-			WTS_SESSION_INFO  wts;
+        /*
+        *@brief Returns the session number, that is currently in state active.
+        *@return True if a session was in the active state
+        */
+        bool WinApiHelper::QueryActiveSession(quint64 &SessioNumber)
+        {
+            SessioNumber = 0;
+            PWTS_SESSION_INFO  pSessionsBuffer = NULL;
+            DWORD dwSessionCount = 0;
+            WTS_SESSION_INFO  wts;
 
-			if (WTSEnumerateSessions(WTS_CURRENT_SERVER_HANDLE, 0, 1, &pSessionsBuffer, &dwSessionCount))
-			{
-				//Loop through all Sessions
-				for (quint8 i = 0; i < dwSessionCount; i++)
-				{
-					wts = pSessionsBuffer[i];
-					//Nur aktive Sessions weden berücksichtigt
-					if (wts.State == WTSActive)
-					{
-						SessioNumber = wts.SessionId;
-						m_logger->debug("SessionNumber is: ");// << SessioNumber;
-					}
-				}
-				return true;
-			}
-			else
-			{
-				DWORD err = GetLastError();
-				m_logger->error("WTSEnumerateSessions failed. GetLastError: ");// << err;
-				return false;
-			}
-		}
+            if (WTSEnumerateSessions(WTS_CURRENT_SERVER_HANDLE, 0, 1, &pSessionsBuffer, &dwSessionCount))
+            {
+                //Loop through all Sessions
+                for (quint8 i = 0; i < dwSessionCount; i++)
+                {
+                    wts = pSessionsBuffer[i];
+                    //Nur aktive Sessions weden berücksichtigt
+                    if (wts.State == WTSActive)
+                    {
+                        SessioNumber = wts.SessionId;
+                        m_logger->debug("SessionNumber is: ");// << SessioNumber;
+                    }
+                }
+                WTSFreeMemory(pSessionsBuffer);
+                return true;
+            }
+            else
+            {
+                WTSFreeMemory(pSessionsBuffer);
+                DWORD err = GetLastError();
+                m_logger->error("WTSEnumerateSessions failed. GetLastError: ");// << err;
+                return false;
+            }
+        }
 
+        /**
+        @brief The user need to destroy the returned handle with CloseHandle.
+        **/
+        HANDLE WinApiHelper::GetCurrentUserToken()
+        {
+            HANDLE  currentToken = 0;
+            HANDLE primaryToken = 0;
+            quint64 SessioNumber = 0;
+
+            if (!QueryActiveSession(SessioNumber))
+                return 0;
+
+            BOOL bRet = WTSQueryUserToken(SessioNumber,&currentToken);
+            if (!bRet)
+            {
+                long nError = GetLastError();
+                m_logger->error("Couldn't query user token: {}", nError);
+                return 0;
+            }
+
+            bRet = DuplicateTokenEx(currentToken, TOKEN_ASSIGN_PRIMARY | TOKEN_ALL_ACCESS, 0, SecurityImpersonation, TokenPrimary, &primaryToken);
+            if (!bRet)
+            {
+                long nError = GetLastError();
+                m_logger->error("Couldn't duplicate user token: {}", nError);
+                return 0;
+            }
+            return primaryToken;
+        }
+
+        bool WinApiHelper::CreateProcessAsCurrentUser(QString Programm, QString Arguments)
+        {
+            HANDLE primaryToken = GetCurrentUserToken();
+            if (primaryToken == 0)
+            {
+                return FALSE;
+            }
+
+            STARTUPINFO StartupInfo;
+            PROCESS_INFORMATION processInfo;
+            StartupInfo.cb = sizeof(STARTUPINFO);
+            SECURITY_ATTRIBUTES Security1;
+            SECURITY_ATTRIBUTES Security2;
+
+            ZeroMemory(&processInfo, sizeof(PROCESS_INFORMATION));
+            ZeroMemory(&StartupInfo, sizeof(STARTUPINFO));
+
+            void* lpEnvironment = NULL;
+            BOOL res = CreateEnvironmentBlock(&lpEnvironment,primaryToken, FALSE);
+
+            QString desctop = "winsta0\\default";
+            LPWSTR lpdesctop = (LPWSTR)desctop.utf16();
+            StartupInfo.lpDesktop = lpdesctop;
+            StartupInfo.cb = sizeof(StartupInfo);
+
+            if (!res)
+            {
+                long nError = GetLastError();
+                m_logger->error("Couldn't query enviroment from current user: {}", nError);
+                CloseHandle(primaryToken);
+                return false;
+            }
+
+            LPWSTR path = (LPWSTR)Programm.utf16();
+
+            BOOL result = CreateProcessAsUser(primaryToken,path,0,0,0,false,
+                NORMAL_PRIORITY_CLASS |
+                CREATE_UNICODE_ENVIRONMENT,lpEnvironment,0,
+                &StartupInfo, &processInfo);
+            if (!result)
+            {
+                long nError = GetLastError();
+                m_logger->error("Couldn't start process as current user: {}", nError);
+                DestroyEnvironmentBlock(lpEnvironment);
+                CloseHandle(primaryToken);
+                return false;
+            }
+            DWORD theExitCode = 0;
+            res = GetExitCodeProcess(processInfo.hProcess, &theExitCode);
+            if (!res)
+            {
+                long nError = GetLastError();
+                m_logger->error("Couldn't query enviroment from current user: {}", nError);
+                CloseHandle(primaryToken);
+                return false;
+            }
+
+            DestroyEnvironmentBlock(lpEnvironment);
+            CloseHandle(primaryToken);
+            return true;
+        }
 
 
 
@@ -118,14 +211,16 @@ namespace RW
 							//
 							
 							logger->trace(QString::fromStdWString(pTmpBuf->wkui0_username).toStdString());
-							Username = Username.fromStdWString(pTmpBuf->wkui0_username);
+							QString user = QString::fromStdWString(pTmpBuf->wkui0_username);
+                            if (!user.contains("$"))
+                                Username = user;
 
 							pTmpBuf++;
 							dwTotalCount++;
 						}
 					}
 				}
-				else
+                else
 					logger->error("A system error has occurred : {0:d}", nStatus);
 				//
 				// Free the allocated memory.

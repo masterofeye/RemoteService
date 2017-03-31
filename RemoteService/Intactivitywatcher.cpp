@@ -26,7 +26,7 @@ namespace RW{
 		*/
 		InactivityWatcher::InactivityWatcher(QString Version, QObject *parent) : QObject(parent),
 			m_logger(spdlog::get("file_logger")),
-			m_TimerLogout(nullptr)
+            m_TimerLogout(new QTimer(this))
 		{
 			if (true)
 			{
@@ -44,28 +44,54 @@ namespace RW{
             switch (Msg.MessageID())
             {
             case COM::MessageDescription::IN_StartInactivityObserver:
-                StartInactivityObservation();
+            {
+                if (!m_isRunning)
+                    StartInactivityObservation();
+            }
+                break;
             case COM::MessageDescription::IN_StopInactivityObserver:
-                StopInactivityObservation();
+            {
+                if (m_isRunning)
+                    StopInactivityObservation();
+            }
+                break;
             case COM::MessageDescription::EX_StartInactivityTimer:
-                if (Msg.Success() == false)
+                if (Msg.IsProcessed())
                 {
-                    m_logger->critical("Couldn't start inactivity timer: {}", Msg.Result().toString().toStdString());
+                    m_TimerLogout->disconnect();
+                    if (Msg.Success() == false)
+                    {
+                        m_isRunning = false;
+                        m_logger->critical("Couldn't start inactivity timer: {}", Msg.Result().toString().toStdString());
+                    }
+                    else
+                    {
+                        m_isRunning = true;
+                        m_logger->debug("Inactivitity Timer started.");
+                    }
                 }
-                else
-                {
-                    m_logger->debug("Inactivitity Timer started.");
-                }
+#ifdef DEBUG
+                m_logger->flush();
+#endif // DEBUG
                 break;
             case COM::MessageDescription::EX_StopInactivityTimer:
-                if (Msg.Success() == false)
+                if (Msg.IsProcessed())
                 {
-                    m_logger->critical("Couldn't stop inactivity timer: {}", Msg.Result().toString().toStdString());
+                    m_TimerLogout->disconnect();
+                    if (Msg.Success() == false)
+                    {
+                        m_isRunning = false;
+                        m_logger->critical("Couldn't stop inactivity timer: {}", Msg.Result().toString().toStdString());
+                    }
+                    else
+                    {
+                        m_isRunning = true;
+                        m_logger->debug("Inactivitity Timer stopped.");
+                    }
                 }
-                else
-                {
-                    m_logger->debug("Inactivitity Timer stopped.");
-                }
+#ifdef DEBUG
+                m_logger->flush();
+#endif // DEBUG
                 break;
             default:
                 break;
@@ -81,12 +107,11 @@ namespace RW{
 			QList<QVariant> paramList;
 			paramList.append(m_Timeout);
 			msg.SetParameterList(paramList);
-
+            connect(m_TimerLogout, &QTimer::timeout, this, &InactivityWatcher::OnTimeoutStart);
+            m_TimerLogout->setSingleShot(true);
+            m_TimerLogout->start(5000);
 			emit NewMessage(msg);
-			
-#ifdef DEBUG
-            m_logger->flush();
-#endif // DEBUG
+	
 		}
 
 		void InactivityWatcher::StopInactivityObservation()
@@ -97,12 +122,25 @@ namespace RW{
 			QList<QVariant> paramList;
 			paramList.append(m_Timeout);
 			msg.SetParameterList(paramList);
+            connect(m_TimerLogout, &QTimer::timeout, this, &InactivityWatcher::OnTimeoutStop);
+            m_TimerLogout->setSingleShot(true);
+            m_TimerLogout->start(5000);
 
 			emit NewMessage(msg);
-#ifdef DEBUG
-			m_logger->flush();
-#endif // DEBUG
+
 		}
+
+        void InactivityWatcher::OnTimeoutStart()
+        {
+            m_logger->critical("Couldn't start inactivity timer: {}", "Timeout");
+        }
+
+        void InactivityWatcher::OnTimeoutStop()
+        {
+            m_logger->critical("Couldn't stop inactivity timer: {}", "Timeout");
+        }
+
+
 
 		void InactivityWatcher::StopInactivityObservationWithCmd(AbstractCommand* Cmd)
 		{

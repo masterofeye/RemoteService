@@ -16,10 +16,6 @@
 namespace RW{
 	namespace CORE{
 
-			namespace HW{
-	
-	}
-
 		ShutdownHandler::ShutdownHandler(RW::HW::DeviceManager* Manager, QString Version ,QObject *Parent) : QObject(Parent),
 			m_DeviceManager(Manager),
 			m_logger(spdlog::get("file_logger")),
@@ -45,10 +41,12 @@ namespace RW{
             switch (Msg.MessageID())
             {
             case COM::MessageDescription::IN_StartShutdownHandler:
-                StartShutdownTimer();
+                if(!isRunning)
+                    StartShutdownTimer();
                 break;
             case COM::MessageDescription::IN_StopShutdownHandler:
-                StopShutdownTimer();
+                if(isRunning)
+                    StopShutdownTimer();
                 break;
             default:
                 break;
@@ -61,6 +59,7 @@ namespace RW{
 			{
 				m_ShutdownTimer = new QTimer(this);
 			}
+            isRunning = true;
 			connect(m_ShutdownTimer, &QTimer::timeout, this, &ShutdownHandler::Shutdown);
 			m_ShutdownTimer->start(DEFAULT_SHUTDOWN_TIMEOUT);
 			m_logger->debug("Shutdown timger started");
