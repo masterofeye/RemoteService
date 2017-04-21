@@ -275,6 +275,9 @@
     <ClCompile Include="GeneratedFiles\Debug\moc_JobScheduler.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_NotifierHandler.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_RemoteBoxDevice.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
@@ -308,6 +311,9 @@
     <ClCompile Include="GeneratedFiles\Release\moc_JobScheduler.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_NotifierHandler.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_RemoteBoxDevice.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
@@ -318,6 +324,7 @@
     <ClCompile Include="JobQueue.cpp" />
     <ClCompile Include="JobScheduler.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="NotifierHandler.cpp" />
     <ClCompile Include="ProcessObserver.cpp" />
     <ClCompile Include="UtilProcess.cpp" />
     <ClCompile Include="VoltCraft.cpp" />
@@ -340,6 +347,16 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <CustomBuild Include="NotifierHandler.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing NotifierHandler.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DQT -DDEBUG_WITHOUT_SHUTDOWN -DDEBUG_WITHOUT_LOGOUT -DDEBUG -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DREMOTESERVICE_DEBUG -D_UNICODE "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtXML" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I$(QTDIR)\include\QtQml" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\..\RemoteUtil\thirdparty" "-I.\..\..\RemoteUtil\RemoteDataConnectLibrary\Include" "-I.\..\..\RemoteUtil\RemoteBoxWrapper" "-I.\..\..\RemoteUtil\RemoteCommunicationLibrary\Include" "-I.\..\..\RemoteUtil\thirdparty" "-IC:\Program Files (x86)\Visual Leak Detector\include"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing NotifierHandler.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-I.\QtServiceClasses" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtWidgets" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtGui" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtANGLE" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtCore" "-I.\release" "-IC:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\mkspecs\win32-msvc2013" "-I.\..\..\RemoteUtil\thirdparty" "-IC:\Program Files (x86)\Visual Leak Detector\include"</Command>
+    </CustomBuild>
     <ClInclude Include="ProcessObserver.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

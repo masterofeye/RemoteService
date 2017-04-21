@@ -60,6 +60,7 @@
 #include "WinApiHelper.h"
 #include "ProcessObserver.h"
 #include "AnelHome.h"
+#include "NotifierHandler.h"
 
 
 
@@ -80,6 +81,7 @@ private:
     RW::COM::CommunicatonServer *m_CommunicationServer = nullptr;
     RW::HW::DeviceManager *m_DeviceMng = nullptr;
     ProcessObserver* m_ProcObserver = nullptr;
+    RW::CORE::NotifierHandler *m_NotifierHandler = nullptr;
 public:
 	RemoteService(int argc, char **argv);
 	~RemoteService();
@@ -107,7 +109,8 @@ RemoteService::RemoteService(int argc, char **argv)
     m_obj(new QObject()),
     m_Observer(nullptr),
     m_Shutdown(nullptr),
-    m_DeviceMng(new RW::HW::DeviceManager())
+    m_DeviceMng(nullptr),
+    m_NotifierHandler(nullptr)
 {
     
     setServiceDescription("The RemoteWorkstation Service.");
@@ -120,13 +123,12 @@ RemoteService::~RemoteService()
 	delete m_obj;
 	if (!m_Observer) delete m_Observer;
 	if (!m_Shutdown) delete m_Shutdown;
+    if (!m_Scheduler) delete m_Scheduler;
 }
 
 void RemoteService::start()
 {
 	Sleep(10000);
-
-
 
 	m_logger = spdlog::get("file_logger");
 	if (m_logger == nullptr)
@@ -145,8 +147,10 @@ void RemoteService::start()
 	//h.QueryActiveHW();
 	//m_logger->flush();
 
+    m_NotifierHandler = new RW::CORE::NotifierHandler(m_obj);
+    m_DeviceMng = new RW::HW::DeviceManager(m_obj);
 	m_Scheduler = new RW::CORE::JobScheduler(m_DeviceMng);
-	m_CommunicationServer = new RW::COM::CommunicatonServer(true,"Server", 1234, m_logger, m_obj);
+    m_CommunicationServer = new RW::COM::CommunicatonServer(true, RW::COM::CommunicatonServer::TypeofServer::RemoteService,"Server", 1234, m_logger, m_obj);
 
 	m_logger->debug("Device manager initialize");
 	m_DeviceMng->SetLogger(m_logger);
@@ -175,13 +179,14 @@ void RemoteService::start()
 
     m_CommunicationServer->Register(m_Observer);
     m_CommunicationServer->Register(m_Shutdown);
+    m_CommunicationServer->Register(m_NotifierHandler);
 
 	m_Scheduler->start();
 	m_CommunicationServer->Listen();
 
     m_Observer->StartInactivityObservation();
     RW::CORE::WinApiHelper win;
-    win.CreateProcessAsCurrentUser("C:\\Projekte\\RemoteWorkstation\\RemoteService\\build\\x64\\Debug\\RemoteHiddenHelper.exe", "");
+    win.CreateProcessAsCurrentUser("RemoteHiddenHelper.exe", "");
     
 
 	m_logger->info("Remote Service started");
@@ -206,7 +211,7 @@ void RemoteService::stop()
 }
 
 void RemoteService::pause()
-{
+{  
     m_Observer->StopInactivityObservation();
     m_Shutdown->StopShutdownTimer();
 	m_logger->info("Remote Service paused");

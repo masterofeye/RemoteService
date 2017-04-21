@@ -7,6 +7,7 @@
 #include <SetupAPI.h>
 #include <devpkey.h>
 #include <devguid.h>
+#include <QApplication.h>
 
 #pragma comment(lib, "wtsapi32.lib")
 #pragma comment(lib, "userenv.lib")
@@ -97,6 +98,10 @@ namespace RW
 
         bool WinApiHelper::CreateProcessAsCurrentUser(QString Programm, QString Arguments)
         {
+            QString programmDir = QApplication::applicationDirPath();
+            Programm = programmDir + "\\" + Programm;
+            m_logger->debug("Process path is " + Programm.toStdString());
+
             HANDLE primaryToken = GetCurrentUserToken();
             if (primaryToken == 0)
             {
