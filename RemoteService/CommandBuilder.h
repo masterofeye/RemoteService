@@ -23,7 +23,7 @@ namespace RW{
 			CommandBuilder(QObject *Parent = nullptr);
 			~CommandBuilder();
 
-            AbstractCommand* CreateCommand(CommandIds Cmd, COM::Message Obj);
+            AbstractCommand* CreateCommand(COM::Message Obj);
 		};
 	}
 }

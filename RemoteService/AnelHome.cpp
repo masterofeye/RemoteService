@@ -156,7 +156,14 @@ namespace RW{
 		{
 			Switch(St, Port);
 			QThread::msleep(100);
-			return true;
+
+            PortState check = PortState::SNA;
+            GetPortState(Port, check);
+            if (check == St)
+                return true;
+            else
+                return false;
+
 		}
 
 		bool AnelHome::SwitchAll(PortState St)

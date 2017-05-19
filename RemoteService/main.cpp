@@ -80,8 +80,9 @@ private:
     RW::CORE::JobScheduler *m_Scheduler = nullptr;
     RW::COM::CommunicatonServer *m_CommunicationServer = nullptr;
     RW::HW::DeviceManager *m_DeviceMng = nullptr;
-    ProcessObserver* m_ProcObserver = nullptr;
     RW::CORE::NotifierHandler *m_NotifierHandler = nullptr;
+    RW::CORE::ProcessObserver *m_ProcessObserver = nullptr;
+    RW::CORE::ConfigurationManager *m_Config = nullptr;
 public:
 	RemoteService(int argc, char **argv);
 	~RemoteService();
@@ -110,7 +111,8 @@ RemoteService::RemoteService(int argc, char **argv)
     m_Observer(nullptr),
     m_Shutdown(nullptr),
     m_DeviceMng(nullptr),
-    m_NotifierHandler(nullptr)
+    m_NotifierHandler(nullptr),
+    m_Config(nullptr)
 {
     
     setServiceDescription("The RemoteWorkstation Service.");
@@ -147,10 +149,25 @@ void RemoteService::start()
 	//h.QueryActiveHW();
 	//m_logger->flush();
 
+    m_Config = new RW::CORE::ConfigurationManager(m_logger,m_obj);
     m_NotifierHandler = new RW::CORE::NotifierHandler(m_obj);
     m_DeviceMng = new RW::HW::DeviceManager(m_obj);
 	m_Scheduler = new RW::CORE::JobScheduler(m_DeviceMng);
-    m_CommunicationServer = new RW::COM::CommunicatonServer(true, RW::COM::CommunicatonServer::TypeofServer::RemoteService,"Server", 1234, m_logger, m_obj);
+    m_CommunicationServer = new RW::COM::CommunicatonServer(true, RW::COM::TypeofServer::RemoteService,"Server", 1234, m_logger, m_obj);
+
+    
+    m_Config->Load();
+    QString username;
+    RW::CORE::WinApiHelper win;
+    if (win.ReturnCurrentUser(username))
+    {
+        m_Config->InsertConfigValue(RW::CORE::ConfigurationName::UserName, username);
+    }
+    else
+    {
+        m_Config->InsertConfigValue(RW::CORE::ConfigurationName::UserName, "Free");
+    }
+    
 
 	m_logger->debug("Device manager initialize");
 	m_DeviceMng->SetLogger(m_logger);
@@ -159,15 +176,8 @@ void RemoteService::start()
 	else
 		m_logger->info("Device manager initialized correct");
 
-	//RW::HW::AnelHome* dev = (RW::HW::AnelHome*) m_DeviceMng->GetDevice(RW::HW::DeviceManager::DeviceType::PowerStripe);
-	//dev->SwitchPort(1, RW::HW::PortState::ON);
-
-	//RW::HW::RemoteBoxDevice *wrapper = qobject_cast<RW::HW::RemoteBoxDevice *>(m_DeviceMng->GetDevice(RW::HW::DeviceManager::DeviceType::RemoteBox));
-	//RemoteBoxWrapper::Wrapper* w = wrapper->GetDevice();
-	//bool res = w->SetRelayState(0x02);
-
-	m_Observer = new RW::CORE::InactivityWatcher("0.1");
-	m_Shutdown = new RW::CORE::ShutdownHandler(m_DeviceMng, "0.1");
+    m_Observer = new RW::CORE::InactivityWatcher("0.1", m_Config);
+    m_Shutdown = new RW::CORE::ShutdownHandler(m_DeviceMng, m_Config,"0.1");
 
 	QObject::connect(m_Observer, &RW::CORE::InactivityWatcher::UserInactive, m_Shutdown, &RW::CORE::ShutdownHandler::StartShutdownTimer);
     //QObject::connect(m_CommunicationServer, &RW::COM::CommunicationServer::RemoteHiddenHelperConnected, m_Observer, &RW::CORE::InactivityWatcher::StartInactivityObservation);
@@ -184,29 +194,25 @@ void RemoteService::start()
 	m_Scheduler->start();
 	m_CommunicationServer->Listen();
 
-    m_Observer->StartInactivityObservation();
-    RW::CORE::WinApiHelper win;
-    win.CreateProcessAsCurrentUser("RemoteHiddenHelper.exe", "");
-    
 
-	m_logger->info("Remote Service started");
+    m_ProcessObserver = new RW::CORE::ProcessObserver(m_obj);
+    m_ProcessObserver->setProgram("RemoteHiddenHelper.exe");
+    m_ProcessObserver->start();
+
+    m_logger->info("Remote Service started", (int) spdlog::sinks::FilterType::RemoteServiceStart);
 	m_logger->flush();
 }
 
 void RemoteService::stop()
 {
-	//try{
-	//	m_DeviceMng->DeInit();
-	//}
-	//catch (...)
-	//{
-
-	//}
-	//QtServiceBase::instance()->logMessage("Remote Service stopped");
     m_Observer->StopInactivityObservation();
     m_Shutdown->StopShutdownTimer();
 
-	m_logger->info("Remote Service stopped");
+    m_ProcessObserver->kill();
+
+    m_Config->InsertConfigValue(RW::CORE::ConfigurationName::UserName, "Offline");
+
+    m_logger->info("Remote Service stopped", (int)spdlog::sinks::FilterType::RemoteServiceStop);
 	m_logger->flush();
 }
 
@@ -214,14 +220,14 @@ void RemoteService::pause()
 {  
     m_Observer->StopInactivityObservation();
     m_Shutdown->StopShutdownTimer();
-	m_logger->info("Remote Service paused");
+    m_logger->info("Remote Service paused",(int)spdlog::sinks::FilterType::RemoteServicePause);
 	m_logger->flush();
 }
 
 void RemoteService::resume()
 {
     m_Observer->StartInactivityObservation();
-	m_logger->info("Remote Service resumed");
+    m_logger->info("Remote Service resumed", (int)spdlog::sinks::FilterType::RemoteServiceResume);
 	m_logger->flush();
 }
 
@@ -236,7 +242,7 @@ void RemoteService::SessionLock()
 	QString username;
 	if (win.ReturnCurrentUser(username))
 	{
-		m_logger->info("Session locked by User: {}", username.toStdString());
+        m_logger->info("Session locked by User: {}", (int)spdlog::sinks::FilterType::RemoteServiceLock, username.toStdString());
 	}
 	
 	m_logger->flush();
@@ -248,7 +254,7 @@ void RemoteService::SessionUnlock(){
 	QString username;
 	if (win.ReturnCurrentUser(username))
 	{
-		m_logger->info("Session unlocked by User: {}", username.toStdString());
+        m_logger->info("Session unlocked by User: {}", (int)spdlog::sinks::FilterType::RemoteServiceUnlock, username.toStdString());
 	}
 	m_logger->flush();
 }
@@ -257,10 +263,12 @@ void RemoteService::RemoteConnect()
 {
 	RW::CORE::WinApiHelper win;
 	QString username;
+    
 	if (win.ReturnCurrentUser(username))
 	{
-		m_logger->info("A new remote session starts for user: {}", username.toStdString());
+        m_logger->info("A new remote session starts for user: {}", (int)spdlog::sinks::FilterType::RemoteServiceConnect, username.toStdString());
 	}
+    m_Config->Load();
 	m_logger->flush();
 }
 
@@ -270,30 +278,52 @@ void RemoteService::RemoteDisconnect()
 	QString username;
 	if (win.ReturnCurrentUser(username))
 	{
-		m_logger->info("The current remote sessions end for user: {}", username.toStdString());
+        m_logger->info("The current remote sessions end for user: {}", (int)spdlog::sinks::FilterType::RemoteServiceDisconnect, username.toStdString());
 	}
 	m_logger->flush();
 }
 
 void RemoteService::SessionLogOn()
 {
+    QtServiceBase::instance()->logMessage("SessionLogOn");
 	RW::CORE::WinApiHelper win;
 	QString username;
 	if (win.ReturnCurrentUser(username))
 	{
-		m_logger->info("A new session started for user: {}", username.toStdString());
+        m_logger->info("A new session started for user: {}", (int)spdlog::sinks::FilterType::RemoteServiceSessionLogon, username.toStdString());
 	}
+    m_ProcessObserver = new RW::CORE::ProcessObserver(m_obj);
+    m_ProcessObserver->setProgram("RemoteHiddenHelper.exe");
+    m_ProcessObserver->start();
+
+    m_Config->InsertConfigValue(RW::CORE::ConfigurationName::UserName, username);
+
+    //Der Datenbank bekannt machen das es sich um einen neuen User handelt
+    //m_Config->InsertConfigValue(RW::CORE::ConfigurationName::UserName, username);
+    m_Config->Load();
 	m_logger->flush();
 }
 
 void RemoteService::SessionLogOff()
 {
+    QtServiceBase::instance()->logMessage("SessionLogOff");
+
+    delete m_ProcessObserver;
+    m_ProcessObserver = nullptr;
+
 	RW::CORE::WinApiHelper win;
 	QString username;
 	if (win.ReturnCurrentUser(username))
 	{
-		m_logger->info("The session ends for user: {}", username.toStdString());
+        m_logger->info("The session ends for user: {}", (int)spdlog::sinks::FilterType::RemoteServiceSessionLogoff, username.toStdString());
 	}
+
+    m_Observer->StopInactivityObservation();
+    m_Shutdown->StopShutdownTimer();
+
+    //Es kann kein User mehr auf der RemoteWorkstation sein deswegen Free "anmelden"
+    //m_Config->InsertConfigValue(RW::CORE::ConfigurationName::UserName, "Free");
+
 	m_logger->flush();
 }
 
@@ -303,7 +333,7 @@ void RemoteService::ConsoleConnect()
 	QString username;
 	if (win.ReturnCurrentUser(username))
 	{
-		m_logger->info("Console connected by user: {}", username.toStdString());
+        m_logger->info("Console connected by user: {}", (int)spdlog::sinks::FilterType::RemoteServiceConsoleConnect, username.toStdString());
 	}
 	m_logger->flush();
 }
@@ -314,7 +344,7 @@ void RemoteService::ConsoleDisconnect()
 	QString username;
 	if (win.ReturnCurrentUser(username))
 	{
-		m_logger->info("Console disconnected by user: {}", username.toStdString());
+        m_logger->info("Console disconnected by user: {}", (int)spdlog::sinks::FilterType::RemoteServiceConsoleDisconnect, username.toStdString());
 	}
 	m_logger->flush();
 }

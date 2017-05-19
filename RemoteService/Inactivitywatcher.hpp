@@ -10,17 +10,20 @@ namespace RW{
 
 	namespace CORE{
 		class AbstractCommand;
-
+        class ConfigurationManager;
 		class InactivityWatcher : public QObject
 		{
 			Q_OBJECT
 		private:
 			std::shared_ptr<spdlog::logger> m_logger;
+            ConfigurationManager* m_ConfigManager;
 			QTimer *m_TimerLogout;
 			long long m_Timeout;
             bool m_isRunning = false;
 		public:
-			explicit InactivityWatcher(QString Version, QObject *parent = 0);
+            explicit InactivityWatcher(QString Version, ConfigurationManager* Configmanager, QObject *parent = 0);
+        private:
+            void LogOutUserImmediately();
 		signals:
 			void UserInactive();
 			void NewMessage(COM::Message Msg);

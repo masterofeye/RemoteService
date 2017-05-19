@@ -11,6 +11,7 @@ namespace RW{
 	}
 
 	namespace CORE{
+        class ConfigurationManager;
 		class ShutdownHandler : public QObject
 		{
 			Q_OBJECT
@@ -20,11 +21,11 @@ namespace RW{
 			QTimer *m_ShutdownTimer;
 			long long m_Timeout;
             bool isRunning = false;
-
+            ConfigurationManager* m_ConfigurationManager;
 			RW::HW::DeviceManager* m_DeviceManager;
 
 		public:
-			ShutdownHandler(RW::HW::DeviceManager* Manager, QString Version, QObject *Parent = 0);
+            ShutdownHandler(RW::HW::DeviceManager* Manager, ConfigurationManager* ConfigManager, QString Version, QObject *Parent = 0);
 			~ShutdownHandler();
 
 		public slots:

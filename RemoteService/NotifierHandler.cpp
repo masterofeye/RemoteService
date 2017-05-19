@@ -18,7 +18,7 @@ namespace RW{
             case COM::MessageDescription::IN_Notifier:
             {
                 QList<QVariant> paramlist = Msg.ParameterList();
-                if (paramlist.count() != 3)
+                if (paramlist.count() != 4 && paramlist.count() != 3)
                 {
                     m_Logger->error("Wrong amount of parameter for IN_Notifier.");
                     return;
@@ -27,14 +27,16 @@ namespace RW{
                 bool isTimeout = false;
                 quint64 timeout = 0;
                 QString message = "";
+                quint8 index = 0;
 
                 isTimeout = paramlist.at(0).toBool();
                 timeout = paramlist.at(1).toULongLong();
                 message = paramlist.at(2).toString();
+                index = paramlist.at(3).toInt();
 
                 COM::Message externalMessage;
                 externalMessage.SetIsExternal(true);
-                QString identifier = COM::CommunicatonServer::GenUUID(COM::CommunicatonServer::TypeofServer::RemoteHiddenHelper).toString();
+                QString identifier = COM::Message::GenUUID(COM::TypeofServer::RemoteHiddenHelper).toString();
                 externalMessage.setIdentifier(identifier);
                 QList<QVariant> paramlistExternal;
                 if (isTimeout)
@@ -42,11 +44,13 @@ namespace RW{
                     externalMessage.SetMessageID(COM::MessageDescription::EX_ShowPopUpWithTimeout);
                     paramlistExternal.append(message);
                     paramlistExternal.append(timeout);
+                    paramlistExternal.append(index);
                 }
                 else
                 {
                     externalMessage.SetMessageID(COM::MessageDescription::EX_ShowPopUp);
                     paramlistExternal.append(message);
+                    paramlistExternal.append(index);
                     
                 }
                 externalMessage.SetParameterList(paramlistExternal);

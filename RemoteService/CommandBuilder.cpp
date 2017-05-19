@@ -15,40 +15,32 @@ namespace RW{
 		{
 		}
 
-        AbstractCommand* CommandBuilder::CreateCommand(CommandIds Cmd, COM::Message Obj)
+        AbstractCommand* CommandBuilder::CreateCommand(COM::Message Obj)
 		{
-			switch (Cmd)
+            switch (Obj.MessageID())
 			{
-			case RW::CORE::CommandIds::IO:
+            case RW::COM::MessageDescription::IN_IO:
 				return new IOCommand(Obj);
-			case RW::CORE::CommandIds::RELAY:
+            case RW::COM::MessageDescription::IN_RELAY:
 				return new RelayCommand(Obj);
-			case RW::CORE::CommandIds::USB:
+            case RW::COM::MessageDescription::IN_USB:
 				return new USBCommand(Obj);
-			case RW::CORE::CommandIds::FHOST:
+            case RW::COM::MessageDescription::IN_FHOST:
 				return nullptr;
-			case RW::CORE::CommandIds::ADC:
+            case RW::COM::MessageDescription::IN_ADC:
 				return new ADCCommand(Obj);
-			case RW::CORE::CommandIds::DAC:
+            case RW::COM::MessageDescription::IN_DAC:
 				return new DACCommand( Obj);
-			case RW::CORE::CommandIds::UART:
+            case RW::COM::MessageDescription::IN_UART:
 				return nullptr;
 				break;
-			case RW::CORE::CommandIds::I2C:
+            case RW::COM::MessageDescription::IN_I2C:
 				return nullptr;
 				break;
-			case RW::CORE::CommandIds::CFG:
-				break;
-			case RW::CORE::CommandIds::POWERSTRIPE:
+            case RW::COM::MessageDescription::IN_POWERSTRIPE:
 				return new PowerStripeCommand(Obj);
-			case RW::CORE::CommandIds::POWERSUPPLY:
+            case RW::COM::MessageDescription::IN_POWERSUPPLY:
 				return new PowerSupplyCommand(Obj);
-			case RW::CORE::CommandIds::FLASH:
-				return new FlashCommand(Obj);
-			case RW::CORE::CommandIds::LOGOUT:
-				return new LogOutCommand(Obj);
-			case RW::CORE::CommandIds::SHUTDOWN:
-				return new ShutdownCommand(Obj);
 			default:
 				m_logger->warn("No command type was found that match the parameter.");
 				return nullptr;

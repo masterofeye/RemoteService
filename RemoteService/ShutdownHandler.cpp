@@ -2,34 +2,34 @@
 
 #include "WinApiHelper.h"
 #include "DeviceManager.h"
-
-#if defined(DEBUG) && defined(DEBUG_WITHOUT_SHUTDOWN)
-#define DEFAULT_SHUTDOWN_TIMEOUT 60*60
-#elif defined(DEBUG)
-#define DEFAULT_SHUTDOWN_TIMEOUT 60*60*1000
-#else
-#define DEFAULT_SHUTDOWN_TIMEOUT 1000*60*30
-#endif
-
-
+#include "RemoteDataConnectLibrary.h"
 
 namespace RW{
 	namespace CORE{
 
-		ShutdownHandler::ShutdownHandler(RW::HW::DeviceManager* Manager, QString Version ,QObject *Parent) : QObject(Parent),
+        ShutdownHandler::ShutdownHandler(RW::HW::DeviceManager* Manager, ConfigurationManager* ConfigManager, QString Version, QObject *Parent) : QObject(Parent),
 			m_DeviceManager(Manager),
 			m_logger(spdlog::get("file_logger")),
-			m_ShutdownTimer(nullptr)
+			m_ShutdownTimer(nullptr),
+            m_ConfigurationManager(ConfigManager)
 		{
-			if (true)
-			{
-				//Set the default timeout value
-				m_Timeout = DEFAULT_SHUTDOWN_TIMEOUT;
-			}
-			else
-			{
-				//m_Timeout = obj->LogoutTimout();
-			}
+            WorkstationKind workstationType = WorkstationKind::NON;
+            QVariant type;
+            m_ConfigurationManager->GetConfigValue(ConfigurationName::WorkstationType, type);
+            workstationType = type.value<WorkstationKind>();
+
+            if (workstationType == WorkstationKind::RemoteWorkstation)
+            {
+                QVariant timeout;
+                m_ConfigurationManager->GetConfigValue(ConfigurationName::RwShutdownTimer,timeout);
+                m_Timeout = timeout.toInt();
+            }
+            else if (workstationType == WorkstationKind::BackendPC)
+            {
+                QVariant timeout;
+                m_ConfigurationManager->GetConfigValue(ConfigurationName::BeShutdownTimer, timeout);
+                m_Timeout = timeout.toInt();
+            }
 		}
 
 		ShutdownHandler::~ShutdownHandler()
@@ -61,7 +61,7 @@ namespace RW{
 			}
             isRunning = true;
 			connect(m_ShutdownTimer, &QTimer::timeout, this, &ShutdownHandler::Shutdown);
-			m_ShutdownTimer->start(DEFAULT_SHUTDOWN_TIMEOUT);
+            m_ShutdownTimer->start(m_Timeout);
 			m_logger->debug("Shutdown timger started");
 #ifdef DEBUG
 			m_logger->flush();

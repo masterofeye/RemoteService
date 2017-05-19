@@ -549,13 +549,7 @@ QtServiceSysPrivate::QtServiceSysPrivate()
     m_logger = spdlog::get("file_logger");
 	if (m_logger == nullptr)
 	{
-		if (instance->m_logger == nullptr)
-			QtServiceBase::instance()->logMessage("Logger ist null0");
-
 		m_logger = spdlog::create<spdlog::sinks::MySqlSink>("file_logger");
-		if (instance->m_logger == nullptr)
-			QtServiceBase::instance()->logMessage("Logger ist null1");
-
 	}
 }
 
@@ -583,7 +577,6 @@ void WINAPI QtServiceSysPrivate::serviceMain(DWORD dwArgc, wchar_t** lpszArgv)
 	instance->serviceStatus = RegisterServiceCtrlHandlerEx((TCHAR*)QtServiceBase::instance()->serviceName().utf16(), handler,0);
 	if (!instance->serviceStatus) // cannot happen - something is utterly wrong
 	{
-		QtServiceBase::instance()->logMessage("Test");
 		return;
 	}
 
@@ -818,7 +811,7 @@ DWORD QtServiceSysPrivate::serviceFlags(QtServiceBase::ServiceFlags flags) const
         control |= SERVICE_ACCEPT_STOP;
     if (flags & QtServiceBase::NeedsStopOnShutdown)
         control |= SERVICE_ACCEPT_SHUTDOWN;
-
+    control |= SERVICE_ACCEPT_SESSIONCHANGE;
     return control;
 }
 

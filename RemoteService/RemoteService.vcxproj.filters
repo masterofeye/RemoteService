@@ -4,9 +4,6 @@
     <Filter Include="Helper">
       <UniqueIdentifier>{102ef2e1-6cf5-4fab-bb35-58ea40003a15}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Helper\Shutdown">
-      <UniqueIdentifier>{84da5e7f-df1c-4fdb-bc13-b2a1dce41106}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Hardware">
       <UniqueIdentifier>{3102ea2f-9705-4d55-83bd-e545254412e0}</UniqueIdentifier>
     </Filter>
@@ -39,6 +36,17 @@
     </Filter>
     <Filter Include="Helper\Information">
       <UniqueIdentifier>{c94f696a-5772-42ea-8e6d-a8de3e7e0936}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Helper\Header Dateien">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h</Extensions>
+      <ParseFiles>true</ParseFiles>
+    </Filter>
+    <Filter Include="Helper\ProcessTools">
+      <UniqueIdentifier>{02d5b65c-ca03-41d3-a770-410adeb32363}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Helper\Shutdown">
+      <UniqueIdentifier>{84da5e7f-df1c-4fdb-bc13-b2a1dce41106}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -101,6 +109,9 @@
     </CustomBuild>
     <CustomBuild Include="NotifierHandler.h">
       <Filter>Helper\Information</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ProcessObserver.h">
+      <Filter>Helper\ProcessTools</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
@@ -224,9 +235,6 @@
     <ClCompile Include="GeneratedFiles\Release\moc_AnelHome.cpp">
       <Filter>Generierte Dateien\Release</Filter>
     </ClCompile>
-    <ClCompile Include="ProcessObserver.cpp">
-      <Filter>Helper</Filter>
-    </ClCompile>
     <ClCompile Include="NotifierHandler.cpp">
       <Filter>Helper\Information</Filter>
     </ClCompile>
@@ -236,10 +244,22 @@
     <ClCompile Include="GeneratedFiles\Release\moc_NotifierHandler.cpp">
       <Filter>Generierte Dateien\Release</Filter>
     </ClCompile>
+    <ClCompile Include="ProcessObserver.cpp">
+      <Filter>Helper\ProcessTools</Filter>
+    </ClCompile>
+    <ClCompile Include="ProcessObserverPrivate.cpp">
+      <Filter>Helper\ProcessTools</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_ProcessObserver.cpp">
+      <Filter>Generierte Dateien\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_ProcessObserver.cpp">
+      <Filter>Generierte Dateien\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ProcessObserver.h">
-      <Filter>Helper</Filter>
+    <ClInclude Include="ProcessObserverPrivate.h">
+      <Filter>Helper\ProcessTools</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
