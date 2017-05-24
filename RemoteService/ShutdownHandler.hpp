@@ -20,7 +20,7 @@ namespace RW{
 			std::shared_ptr<spdlog::logger> m_logger;
 			QTimer *m_ShutdownTimer;
 			long long m_Timeout;
-            bool isRunning = false;
+            bool m_IsRunning = false;
             ConfigurationManager* m_ConfigurationManager;
 			RW::HW::DeviceManager* m_DeviceManager;
 

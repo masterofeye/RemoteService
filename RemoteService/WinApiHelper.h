@@ -25,6 +25,7 @@ namespace RW
             bool WinApiHelper::CreateProcessAsCurrentUser(QString Programm, QString Arguments);
 			static bool ReturnCurrentUser(QString &Username);
             bool QueryActiveHW();
+            bool Shutdown();
 		};
 	}
 }

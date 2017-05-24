@@ -39,12 +39,14 @@ namespace RW{
                 QVariant timeout;
                 m_ConfigManager->GetConfigValue(ConfigurationName::RwLogOutTimer, timeout);
                 m_Timeout = timeout.toInt();
+                m_logger->debug("The current shutdown timeout is {}", (int)spdlog::sinks::FilterType::ShutdownHandler, m_Timeout);
             }
             else if (workstationType == WorkstationKind::BackendPC)
             {
                 QVariant timeout;
                 m_ConfigManager->GetConfigValue(ConfigurationName::BeLogOutTimer, timeout);
                 m_Timeout = timeout.toInt();
+                m_logger->debug("The current shutdown timeout is {}", (int)spdlog::sinks::FilterType::ShutdownHandler, m_Timeout);
             }
 		}
 
@@ -93,7 +95,9 @@ namespace RW{
                     {
                         m_isRunning = false;
                         m_logger->debug("User was logged out successfully.", (int)spdlog::sinks::FilterType::InactivityWatcher);
-                        emit UserInactive();
+                        COM::Message msg;
+                        msg.SetMessageID(COM::MessageDescription::IN_StartShutdownHandler);
+                        emit NewMessage(msg);
                     }
                 }
             break;

@@ -343,8 +343,19 @@ namespace RW
             if (DeviceInfoSet) {
                 SetupDiDestroyDeviceInfoList(DeviceInfoSet);
             }
+        }
 
 
+        bool WinApiHelper::Shutdown()
+        {
+            bool res = InitiateSystemShutdownEx(NULL, NULL, 0, TRUE, FALSE, SHTDN_REASON_MAJOR_OTHER | SHTDN_REASON_FLAG_PLANNED);
+            if (!res)
+            {
+                DWORD error = GetLastError();
+                m_logger->critical("Shutdown incomplete: {}", error);
+                
+            }
+            return res;
         }
 	}
 }

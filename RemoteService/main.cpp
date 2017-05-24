@@ -292,15 +292,15 @@ void RemoteService::SessionLogOn()
 	{
         m_logger->info("A new session started for user: {}", (int)spdlog::sinks::FilterType::RemoteServiceSessionLogon, username.toStdString());
 	}
+
+    m_Config->Load();
+
     m_ProcessObserver = new RW::CORE::ProcessObserver(m_obj);
     m_ProcessObserver->setProgram("RemoteHiddenHelper.exe");
     m_ProcessObserver->start();
 
     m_Config->InsertConfigValue(RW::CORE::ConfigurationName::UserName, username);
 
-    //Der Datenbank bekannt machen das es sich um einen neuen User handelt
-    //m_Config->InsertConfigValue(RW::CORE::ConfigurationName::UserName, username);
-    m_Config->Load();
 	m_logger->flush();
 }
 
@@ -320,6 +320,8 @@ void RemoteService::SessionLogOff()
 
     m_Observer->StopInactivityObservation();
     m_Shutdown->StopShutdownTimer();
+
+    m_Config->InsertConfigValue(RW::CORE::ConfigurationName::UserName, "Free");
 
     //Es kann kein User mehr auf der RemoteWorkstation sein deswegen Free "anmelden"
     //m_Config->InsertConfigValue(RW::CORE::ConfigurationName::UserName, "Free");

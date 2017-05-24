@@ -15,20 +15,23 @@ namespace RW{
 		{
             WorkstationKind workstationType = WorkstationKind::NON;
             QVariant type;
+
             m_ConfigurationManager->GetConfigValue(ConfigurationName::WorkstationType, type);
-            workstationType = type.value<WorkstationKind>();
+            workstationType = type.value<RW::WorkstationKind>();
 
             if (workstationType == WorkstationKind::RemoteWorkstation)
             {
                 QVariant timeout;
-                m_ConfigurationManager->GetConfigValue(ConfigurationName::RwShutdownTimer,timeout);
+                m_ConfigurationManager->GetConfigValue(ConfigurationName::RwLogOutTimer, timeout);
                 m_Timeout = timeout.toInt();
+                m_logger->debug("The current shutdown timeout is {}", (int)spdlog::sinks::FilterType::ShutdownHandler, m_Timeout);
             }
             else if (workstationType == WorkstationKind::BackendPC)
             {
                 QVariant timeout;
-                m_ConfigurationManager->GetConfigValue(ConfigurationName::BeShutdownTimer, timeout);
+                m_ConfigurationManager->GetConfigValue(ConfigurationName::BeLogOutTimer, timeout);
                 m_Timeout = timeout.toInt();
+                m_logger->debug("The current shutdown timeout is {}", (int)spdlog::sinks::FilterType::ShutdownHandler, m_Timeout);
             }
 		}
 
@@ -41,11 +44,11 @@ namespace RW{
             switch (Msg.MessageID())
             {
             case COM::MessageDescription::IN_StartShutdownHandler:
-                if(!isRunning)
+                if (!m_IsRunning)
                     StartShutdownTimer();
                 break;
             case COM::MessageDescription::IN_StopShutdownHandler:
-                if(isRunning)
+                if (m_IsRunning)
                     StopShutdownTimer();
                 break;
             default:
@@ -59,10 +62,11 @@ namespace RW{
 			{
 				m_ShutdownTimer = new QTimer(this);
 			}
-            isRunning = true;
+            m_IsRunning = true;
+            m_ShutdownTimer->setSingleShot(true);
 			connect(m_ShutdownTimer, &QTimer::timeout, this, &ShutdownHandler::Shutdown);
             m_ShutdownTimer->start(m_Timeout);
-			m_logger->debug("Shutdown timger started");
+            m_logger->debug("Shutdown timer started",(int)spdlog::sinks::FilterType::ShutdownHandler );
 #ifdef DEBUG
 			m_logger->flush();
 #endif // DEBUG
@@ -73,7 +77,7 @@ namespace RW{
 			if (m_ShutdownTimer != nullptr && m_ShutdownTimer->isActive())
 			{
 				m_ShutdownTimer->stop();
-				m_logger->debug("Shutdown timer stopped.");
+                m_logger->debug("Shutdown timer stopped.", (int)spdlog::sinks::FilterType::ShutdownHandler );
 			}
 #ifdef DEBUG
 			m_logger->flush();
@@ -98,11 +102,11 @@ namespace RW{
 			{
 				m_ShutdownTimer->stop();
 				emit ShutdownEvt();
-				m_logger->debug("ShutdownHandler: PC shutdown");
+                m_logger->debug("ShutdownHandler: PC shutdown", (int)spdlog::sinks::FilterType::ShutdownHandler );
 			}
 			else
 			{
-				m_logger->debug("ShutdownHandler: PC don't shutdown");
+                m_logger->debug("ShutdownHandler: PC don't shutdown", (int)spdlog::sinks::FilterType::ShutdownHandler );
 			}
 #endif // DEBUG
 #ifdef DEBUG
