@@ -1,4 +1,4 @@
-#include "inactivitywatcher.hpp"
+#include "inactivitywatcher.h"
 #include <windows.h>
 #include <QLibrary>
 
@@ -24,7 +24,7 @@ namespace RW{
 		
 		*/
         InactivityWatcher::InactivityWatcher(QString Version, ConfigurationManager* ConfigManager, QObject *parent) : QObject(parent),
-			m_logger(spdlog:: get("file_logger")),
+			m_logger(spdlog:: get("remoteservice")),
             m_TimerLogout(new QTimer(this)),
             m_ConfigManager(ConfigManager)
 		{
@@ -39,14 +39,14 @@ namespace RW{
                 QVariant timeout;
                 m_ConfigManager->GetConfigValue(ConfigurationName::RwLogOutTimer, timeout);
                 m_Timeout = timeout.toInt();
-                m_logger->debug("The current shutdown timeout is {}", (int)spdlog::sinks::FilterType::ShutdownHandler, m_Timeout);
+                m_logger->info("The current logout timeout is {}", (int)spdlog::sinks::FilterType::InactivityWatcher, m_Timeout);
             }
             else if (workstationType == WorkstationKind::BackendPC)
             {
                 QVariant timeout;
                 m_ConfigManager->GetConfigValue(ConfigurationName::BeLogOutTimer, timeout);
                 m_Timeout = timeout.toInt();
-                m_logger->debug("The current shutdown timeout is {}", (int)spdlog::sinks::FilterType::ShutdownHandler, m_Timeout);
+                m_logger->info("The current logout timeout is {}", (int)spdlog::sinks::FilterType::InactivityWatcher, m_Timeout);
             }
 		}
 
@@ -78,7 +78,7 @@ namespace RW{
                     else
                     {
                         m_isRunning = true;
-                        m_logger->debug("Inactivitity Timer started.", (int)spdlog::sinks::FilterType::InactivityWatcher);
+                        m_logger->info("Inactivitity Timer started.", (int)spdlog::sinks::FilterType::InactivityWatcher);
                     }
                 }
             break;
@@ -94,7 +94,7 @@ namespace RW{
                     else
                     {
                         m_isRunning = false;
-                        m_logger->debug("User was logged out successfully.", (int)spdlog::sinks::FilterType::InactivityWatcher);
+                        m_logger->info("User was logged out successfully.", (int)spdlog::sinks::FilterType::InactivityWatcher);
                         COM::Message msg;
                         msg.SetMessageID(COM::MessageDescription::IN_StartShutdownHandler);
                         emit NewMessage(msg);
@@ -113,7 +113,7 @@ namespace RW{
                     else
                     {
                         m_isRunning = false;
-                        m_logger->debug("Inactivitity Timer stopped.", (int)spdlog::sinks::FilterType::InactivityWatcher);
+                        m_logger->info("Inactivitity Timer stopped.", (int)spdlog::sinks::FilterType::InactivityWatcher);
                     }
                 }
             break;
@@ -199,6 +199,7 @@ namespace RW{
         {
             COM::Message msg;
             msg.SetMessageID(COM::MessageDescription::EX_LogoutImmediately);
+            msg.setIdentifier(COM::Message::GenUUID(COM::TypeofServer::RemoteHiddenHelper).toString());
             msg.SetIsExternal(true); 
             emit NewMessage(msg);
         }

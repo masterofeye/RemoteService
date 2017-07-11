@@ -7,7 +7,7 @@ namespace RW{
 		AnelHome::AnelHome(QObject *parent) : PowerStripeDevice(parent),
 			m_SendSocket(new QUdpSocket(this)),
 			m_ReceiveSocket(new QUdpSocket(this)),
-			m_logger(spdlog::get("file_logger"))
+			m_logger(spdlog::get("remoteservice"))
 		{
 			m_Sockets = new Device_Socket[8];
 			m_IpAddress.setAddress("192.168.0.24");

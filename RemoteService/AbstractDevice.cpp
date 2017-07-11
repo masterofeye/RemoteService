@@ -5,7 +5,7 @@ namespace RW{
 
 		AbstractDevice::AbstractDevice( QObject *parent) : QObject(parent),
 			m_DeviceName(""),
-			m_Logger(spdlog::get("file_logger"))
+			m_Logger(spdlog::get("remoteservice"))
 		{
 		}
 

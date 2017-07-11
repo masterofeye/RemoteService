@@ -8,7 +8,7 @@
 namespace RW{
     namespace CORE{
         ProcessObserver::ProcessObserver(bool ShouldRestart, QObject *Parent) : QObject(Parent),
-            m_Logger(spdlog::get("file_logger")),
+            m_Logger(spdlog::get("remoteservice")),
             d_ptr(new ProcessObserverPrivate(this)),
             m_ShouldRestart(ShouldRestart)
         {

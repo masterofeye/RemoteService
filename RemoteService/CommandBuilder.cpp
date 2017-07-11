@@ -5,7 +5,7 @@ namespace RW{
 	namespace CORE
 	{
         CommandBuilder::CommandBuilder(QObject *Parent) : AbstractCommandBuilder(Parent),
-			m_logger(spdlog::get("file_logger"))
+			m_logger(spdlog::get("remoteservice"))
 		{
 			//Q_ASSERT_X(m_logger == nullptr, "CommandBuilder", "m_logger is null");
 		}

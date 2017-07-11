@@ -47,9 +47,9 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\lib\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)\$(PlatformTarget)\$(Configuration)</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release\</IntDir>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">QtSolutions_Service-head</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">QtService</TargetName>
     <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</IgnoreImportLibrary>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
     <PostBuildEventUseInBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</PostBuildEventUseInBuild>
@@ -61,7 +61,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>.;..\src;$(QTDIR)\include;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtCore;release;$(QTDIR)\mkspecs\win32-msvc2013;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\src;$(QTDIR)\include;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtCore;$(QTDIR)\mkspecs\win32-msvc2013;release;..\..\..\RemoteUtil\RemoteThirdParty\;..\..\..\RemoteUtil\RemoteDataConnectLibrary\Include;$(QTDIR)\include\QtQml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zc:strictStrings -w34100 -w34189 -w44996 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>release\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
@@ -80,14 +80,14 @@
       <WarningLevel>Level3</WarningLevel>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>user32.lib;Wtsapi32.lib;Advapi32.lib;Qt5Gui.lib;Qt5Core.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(QTDIR)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Wtsapi32.lib;Advapi32.lib;Qt5Gui.lib;Qt5Core.lib;RemoteDataConnectLibrary.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\lib;$(QTDIR)\lib;..\..\..\RemoteUtil\RemoteDataConnectLibrary\Lib\$(Configuration)\;..\..\..\RemoteUtil\RemoteCommunicationLibrary\Lib\$(Configuration)\;..\..\RemoteUtil\RemoteBoxWrapper\Lib\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <IgnoreImportLibrary>true</IgnoreImportLibrary>
       <LinkDLL>true</LinkDLL>
       <LinkIncremental>false</LinkIncremental>
-      <OutputFile>$(OutDir)\QtSolutions_Service-head.dll</OutputFile>
+      <OutputFile>$(OutDir)\QtService.dll</OutputFile>
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
       <SubSystem>Windows</SubSystem>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -101,13 +101,15 @@
       <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;WIN64;QT_QTSERVICE_EXPORT;QT_NO_DEBUG;QT_GUI_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <PostBuildEvent>
-      <Command>copy "$(TargetPath)" C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin</Command>
-      <Message>Copy QtSolutions_Service-head.dll to C:\tool\RemotePkg\Qt\Qt5.7.0\5.7\msvc2013_64\bin</Message>
+      <Command>copy $(ProjectDir)$(PlatformTarget)\$(Configuration)\$(ProjectName).dll  $(SolutionDir)\build\$(PlatformTarget)\$(Configuration)\
+copy $(ProjectDir)$(PlatformTarget)\$(Configuration)\$(ProjectName).lib  $(SolutionDir)\build\$(PlatformTarget)\$(Configuration)\</Command>
+      <Message>
+      </Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>.;..\src;$(QTDIR)\include;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtQml;debug;$(QTDIR)\mkspecs\win32-msvc2013;..\..\RemoteService;..\..\..\RemoteUtil\RemoteDataConnectLibrary\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\src;$(QTDIR)\include;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtQml;debug;$(QTDIR)\mkspecs\win32-msvc2013;..\..\RemoteService;..\..\..\RemoteUtil\RemoteDataConnectLibrary\Include;..\..\..\RemoteUtil\RemoteThirdParty\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-w34100 -w34189 -w44996 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>debug\</AssemblerListingLocation>
       <BrowseInformation>true</BrowseInformation>
@@ -124,8 +126,8 @@
       <WarningLevel>Level3</WarningLevel>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>user32.lib;Wtsapi32.lib;Advapi32.lib;Qt5Guid.lib;Qt5Cored.lib;RemoteDataConnectLibraryd.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(QTDIR)\lib;..\..\lib;..\..\..\RemoteUtil\RemoteDataConnectLibrary\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Wtsapi32.lib;Advapi32.lib;Qt5Guid.lib;Qt5Cored.lib;RemoteDataConnectLibraryd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(QTDIR)\lib;..\..\..\RemoteUtil\RemoteDataConnectLibrary\Lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreImportLibrary>true</IgnoreImportLibrary>
@@ -144,9 +146,8 @@
       <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;WIN64;QT_QTSERVICE_EXPORT;QT_GUI_LIB;QT_CORE_LIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <PostBuildEvent>
-      <Command>copy $(ProjectDir)$(PlatformTarget)\$(Configuration)\$(ProjectName).dll  $(ProjectDir)..\..\bin
-copy $(ProjectDir)$(PlatformTarget)\$(Configuration)\$(ProjectName).lib  $(ProjectDir)..\..\lib
-</Command>
+      <Command>copy $(ProjectDir)$(PlatformTarget)\$(Configuration)\$(ProjectName).dll  $(SolutionDir)\build\$(PlatformTarget)\$(Configuration)\
+copy $(ProjectDir)$(PlatformTarget)\$(Configuration)\$(ProjectName).lib  $(SolutionDir)\build\$(PlatformTarget)\$(Configuration)\</Command>
       <Message>
       </Message>
     </PostBuildEvent>
@@ -260,7 +261,7 @@ copy $(ProjectDir)$(PlatformTarget)\$(Configuration)\$(ProjectName).lib  $(Proje
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;..\src\qtservice_win.cpp</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing qtservice_win.cpp...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName)\%(Filename).moc</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "..\src\qtservice_win.cpp" -o ".\GeneratedFiles\$(ConfigurationName)\%(Filename).moc"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DQT_QTSERVICE_EXPORT -DQT_GUI_LIB -DQT_CORE_LIB -DQTSERVICE_DEBUG -D_WINDLL "-I." "-I.\..\src" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtQml" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I.\..\..\RemoteService" "-I.\..\..\..\RemoteUtil\RemoteDataConnectLibrary\Include" "-IC:\Program Files (x86)\Visual Leak Detector\include"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "..\src\qtservice_win.cpp" -o ".\GeneratedFiles\$(ConfigurationName)\%(Filename).moc"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DQT_QTSERVICE_EXPORT -DQT_GUI_LIB -DQT_CORE_LIB -DQTSERVICE_DEBUG -D_WINDLL  "-I." "-I.\..\src" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtQml" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I.\..\..\RemoteService" "-I.\..\..\..\RemoteUtil\RemoteDataConnectLibrary\Include" "-I.\..\..\..\RemoteUtil\RemoteThirdParty" "-I.\..\..\RemoteUtil\thirdparty" "-IC:\Program Files (x86)\Visual Leak Detector\include"</Command>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
@@ -269,7 +270,7 @@ copy $(ProjectDir)$(PlatformTarget)\$(Configuration)\$(ProjectName).lib  $(Proje
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;..\src\qtservice_win.cpp</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing qtservice_win.cpp...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\%(Filename).moc</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "..\src\qtservice_win.cpp" -o ".\GeneratedFiles\$(ConfigurationName)\%(Filename).moc"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DQT_QTSERVICE_EXPORT -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG -D_WINDLL "-I." "-I.\..\src" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-IC:\Program Files (x86)\Visual Leak Detector\include"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "..\src\qtservice_win.cpp" -o ".\GeneratedFiles\$(ConfigurationName)\%(Filename).moc"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DQT_QTSERVICE_EXPORT -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG -D_WINDLL  "-I." "-I.\..\src" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I.\release" "-I.\..\..\..\RemoteUtil\RemoteThirdParty" "-I.\..\..\..\RemoteUtil\RemoteDataConnectLibrary\Include" "-I$(QTDIR)\include\QtQml" "-I.\..\..\RemoteUtil\thirdparty" "-IC:\Program Files (x86)\Visual Leak Detector\include"</Command>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
@@ -278,7 +279,7 @@ copy $(ProjectDir)$(PlatformTarget)\$(Configuration)\$(ProjectName).lib  $(Proje
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;..\src\qtservice.cpp</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing qtservice.cpp...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName)\%(Filename).moc</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "..\src\qtservice.cpp" -o ".\GeneratedFiles\$(ConfigurationName)\%(Filename).moc"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DQT_QTSERVICE_EXPORT -DQT_GUI_LIB -DQT_CORE_LIB -DQTSERVICE_DEBUG -D_WINDLL "-I." "-I.\..\src" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtQml" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I.\..\..\RemoteService" "-I.\..\..\..\RemoteUtil\RemoteDataConnectLibrary\Include" "-IC:\Program Files (x86)\Visual Leak Detector\include"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "..\src\qtservice.cpp" -o ".\GeneratedFiles\$(ConfigurationName)\%(Filename).moc"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DQT_QTSERVICE_EXPORT -DQT_GUI_LIB -DQT_CORE_LIB -DQTSERVICE_DEBUG -D_WINDLL  "-I." "-I.\..\src" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtQml" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I.\..\..\RemoteService" "-I.\..\..\..\RemoteUtil\RemoteDataConnectLibrary\Include" "-I.\..\..\..\RemoteUtil\RemoteThirdParty" "-I.\..\..\RemoteUtil\thirdparty" "-IC:\Program Files (x86)\Visual Leak Detector\include"</Command>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
@@ -287,14 +288,14 @@ copy $(ProjectDir)$(PlatformTarget)\$(Configuration)\$(ProjectName).lib  $(Proje
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;..\src\qtservice.cpp</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing qtservice.cpp...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\%(Filename).moc</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "..\src\qtservice.cpp" -o ".\GeneratedFiles\$(ConfigurationName)\%(Filename).moc"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DQT_QTSERVICE_EXPORT -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG -D_WINDLL "-I." "-I.\..\src" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-IC:\Program Files (x86)\Visual Leak Detector\include"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "..\src\qtservice.cpp" -o ".\GeneratedFiles\$(ConfigurationName)\%(Filename).moc"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DQT_QTSERVICE_EXPORT -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG -D_WINDLL  "-I." "-I.\..\src" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I.\release" "-I.\..\..\..\RemoteUtil\RemoteThirdParty" "-I.\..\..\..\RemoteUtil\RemoteDataConnectLibrary\Include" "-I$(QTDIR)\include\QtQml" "-I.\..\..\RemoteUtil\thirdparty" "-IC:\Program Files (x86)\Visual Leak Detector\include"</Command>
     </CustomBuild>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties MocDir=".\GeneratedFiles\$(ConfigurationName)" UicDir=".\GeneratedFiles" RccDir=".\GeneratedFiles" lupdateOptions="" lupdateOnBuild="1" lreleaseOptions="" Qt5Version_x0020_x64="msvc2013_64" MocOptions="" />
+      <UserProperties MocDir=".\GeneratedFiles\$(ConfigurationName)" UicDir=".\GeneratedFiles" RccDir=".\GeneratedFiles" lupdateOptions="" lupdateOnBuild="1" lreleaseOptions="" Qt5Version_x0020_x64="msvc2013_64_5.8" MocOptions="" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

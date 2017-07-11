@@ -17,7 +17,7 @@ namespace RW{
 		void JobScheduler::ProcessJobs()
 		{
 			if (m_logger == nullptr)
-				m_logger = spdlog::get("file_logger");
+				m_logger = spdlog::get("remoteservice");
 
 			//Q_ASSERT_X(m_logger == nullptr, "ProcessJobs", "m_logger is null");
 

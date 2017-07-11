@@ -55,6 +55,7 @@
 #include <QVector>
 #include <QThread>
 #include <Wtsapi32.h>
+#include <Dbt.h>
 #if QT_VERSION >= 0x050000
 #  include <QAbstractNativeEventFilter>
 #endif
@@ -580,6 +581,18 @@ void WINAPI QtServiceSysPrivate::serviceMain(DWORD dwArgc, wchar_t** lpszArgv)
 		return;
 	}
 
+
+    DEV_BROADCAST_DEVICEINTERFACE NotificationFilter;
+    ZeroMemory(&NotificationFilter, sizeof(NotificationFilter));
+    NotificationFilter.dbcc_size = sizeof(DEV_BROADCAST_DEVICEINTERFACE);
+    NotificationFilter.dbcc_devicetype = DBT_DEVTYP_DEVICEINTERFACE;
+    SERVICE_STATUS_HANDLE m_hServiceStatus;
+    HDEVNOTIFY m_hDevNotify = RegisterDeviceNotification(m_hServiceStatus,
+        &NotificationFilter, DEVICE_NOTIFY_SERVICE_HANDLE |
+        DEVICE_NOTIFY_ALL_INTERFACE_CLASSES);
+
+
+
     handler(QTSERVICE_STARTUP,0,nullptr,nullptr); // Signal startup to the application -
                                 // causes QtServiceBase::start() to be called in the main thread
 
@@ -602,6 +615,7 @@ void QtServiceSysPrivate::handleCustomEvent(QEvent *e)
         QtServiceBase::instance()->start();
         break;
     case SERVICE_CONTROL_STOP:
+        QtServiceBase::instance()->logMessage("STOP", QtServiceBase::Error);
         QtServiceBase::instance()->stop();
         QCoreApplication::instance()->quit();
         break;
@@ -669,6 +683,24 @@ QString QtServiceSysPrivate::Username(DWORD dwEventType)
 
 
 
+unsigned long __stdcall DeviceEventNotify(DWORD evtype, PVOID evdata)
+{
+
+    switch (evtype)
+    {
+    case DBT_DEVICEREMOVECOMPLETE:
+    {
+    }
+    break;
+    case DBT_DEVICEARRIVAL:
+    {
+    }
+    break;
+    }
+
+    return 0;
+}
+
 DWORD WINAPI QtServiceSysPrivate::handler(DWORD code,
                                           DWORD    dwEventType,
                                           LPVOID   lpEventData,
@@ -713,12 +745,15 @@ DWORD WINAPI QtServiceSysPrivate::handler(DWORD code,
     case SERVICE_CONTROL_INTERROGATE: // 4
         break;
 
-    case SERVICE_CONTROL_SHUTDOWN: // 5
+    case SERVICE_CONTROL_PRESHUTDOWN: // 5
+        QtServiceBase::instance()->logMessage("Shutdown", QtServiceBase::Error);
         // Don't waste time with reporting stop pending, just do it
         QCoreApplication::postEvent(instance->controllerHandler, new QEvent(QEvent::Type(QEvent::User + SERVICE_CONTROL_STOP)));
         instance->condition.wait(&instance->mutex);
         // status will be reported as stopped by start() when qapp::exec returns
         break;
+    case SERVICE_CONTROL_DEVICEEVENT:
+        DeviceEventNotify(dwEventType, lpEventData);
 	case SERVICE_CONTROL_SESSIONCHANGE:
 	{
 		if (instance->m_logger == nullptr)
@@ -784,13 +819,12 @@ DWORD WINAPI QtServiceSysPrivate::handler(DWORD code,
 
 
 
-
 void QtServiceSysPrivate::setStatus(DWORD state)
 {
     if (!available())
 	return;
     status.dwCurrentState = state;
-	status.dwControlsAccepted = SERVICE_ACCEPT_STOP | SERVICE_ACCEPT_SESSIONCHANGE;
+    status.dwControlsAccepted = SERVICE_ACCEPT_STOP | SERVICE_ACCEPT_SESSIONCHANGE | SERVICE_ACCEPT_SHUTDOWN;
     pSetServiceStatus(serviceStatus, &status);
 }
 
@@ -809,9 +843,8 @@ DWORD QtServiceSysPrivate::serviceFlags(QtServiceBase::ServiceFlags flags) const
         control |= SERVICE_ACCEPT_PAUSE_CONTINUE;
     if (!(flags & QtServiceBase::CannotBeStopped))
         control |= SERVICE_ACCEPT_STOP;
-    if (flags & QtServiceBase::NeedsStopOnShutdown)
-        control |= SERVICE_ACCEPT_SHUTDOWN;
-    control |= SERVICE_ACCEPT_SESSIONCHANGE;
+    control |= SERVICE_ACCEPT_PRESHUTDOWN;
+    control |= SERVICE_ACCEPT_SHUTDOWN;
     return control;
 }
 

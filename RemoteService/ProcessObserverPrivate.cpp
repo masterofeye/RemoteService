@@ -90,7 +90,7 @@ namespace RW{
         ProcessObserverPrivate::ProcessObserverPrivate(ProcessObserver* Observer) :
             q_ptr(Observer)
         {
-            m_Logger = spdlog::get("file_logger");
+            m_Logger = spdlog::get("remoteservice");
             processError = QProcess::UnknownError;
             processState = QProcess::NotRunning;
             pid = 0;

@@ -214,5 +214,6 @@ void ServerTestUI::OnLogOutUser()
     m.SetMessageID(RW::COM::MessageDescription::IN_LogoutImmediately);
     m.SetIsExternal(true);
     m.SetExcVariant(RW::COM::Message::ExecutionVariant::NON);
+    m.setIdentifier(COM::Message::GenUUID(COM::TypeofServer::ServiceTest).toString());
     emit NewMessage(m);
 }

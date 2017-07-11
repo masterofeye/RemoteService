@@ -2,7 +2,7 @@
 namespace RW{
     namespace CORE{
         NotifierHandler::NotifierHandler(QObject* Parent) : QObject(Parent),
-            m_Logger(spdlog::get("file_logger"))
+            m_Logger(spdlog::get("remoteservice"))
         {
         }
 

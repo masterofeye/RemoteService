@@ -8,6 +8,8 @@
 #include <devpkey.h>
 #include <devguid.h>
 #include <QApplication.h>
+#include <QAbstractEventDispatcher>
+#include <QAbstractNativeEventFilter>
 
 #pragma comment(lib, "wtsapi32.lib")
 #pragma comment(lib, "userenv.lib")
@@ -21,7 +23,31 @@ namespace RW
 {
     namespace CORE
     {
-        WinApiHelper::WinApiHelper() :m_logger(spdlog::get("file_logger"))
+        class ChangeDeviceFilter : public QAbstractNativeEventFilter
+        {
+        public:
+            ChangeDeviceFilter() {}
+            bool nativeEventFilter(const QByteArray &eventType, void *message, long *result)
+            {
+                MSG *msg;
+                static int i = 0;
+
+                msg = (MSG*)message;
+
+                if (msg->message == WM_DEVICECHANGE)
+                {
+                    i++;
+                    //qDebug() << "Count:" << i << "wParam:" << msg->wParam << "lParam:" << msg->lParam;
+                }
+                return true;
+            }
+        };
+
+        Q_GLOBAL_STATIC(ChangeDeviceFilter, changeDeviceFilter)
+
+
+
+        WinApiHelper::WinApiHelper() :m_logger(spdlog::get("remoteservice"))
         {
         }
 
@@ -179,7 +205,7 @@ namespace RW
 			NET_API_STATUS nStatus;
 			LPWSTR pszServerName = NULL;
 
-			std::shared_ptr<spdlog::logger> logger = spdlog::get("file_logger");
+			std::shared_ptr<spdlog::logger> logger = spdlog::get("remoteservice");
 			do // begin do
 			{
 				nStatus = NetWkstaUserEnum(pszServerName,
@@ -243,6 +269,10 @@ namespace RW
 			if (pBuf != NULL)
 				NetApiBufferFree(pBuf);
 			logger->trace("Total of {0:d} entries enumerated", dwTotalCount);
+
+            if (Username.isEmpty())
+                return false;
+
 			return true;
 		}
 
@@ -252,7 +282,7 @@ namespace RW
             SP_DEVINFO_DATA DeviceInfoData;
 			DEVPROPTYPE devicePropertyType;
 			DWORD error, dwPropertyRegDataType, dwSize;
-			TCHAR szDesc[4096], szHardwareIDs[4096];
+            TCHAR szDesc[4096], szHardwareIDs[4096], szFriendlyName[4096], szLocalInform[4096];
 			GUID *guidDev = (GUID*)&GUID_DEVCLASS_USB;
             DeviceInfoSet = SetupDiGetClassDevs(NULL, 0, 0, DIGCF_PRESENT | DIGCF_ALLCLASSES);
 
@@ -267,95 +297,84 @@ namespace RW
             quint16 DeviceIndex = 0;
 
             while (SetupDiEnumDeviceInfo(DeviceInfoSet, DeviceIndex, &DeviceInfoData))
-			{
-				DeviceIndex++;
+            {
+                DeviceIndex++;
 
                 if (SetupDiGetDeviceRegistryProperty(DeviceInfoSet, &DeviceInfoData, SPDRP_DEVICEDESC,
-					&dwPropertyRegDataType, (BYTE*)szDesc,
-					sizeof(szDesc),   // The size, in bytes
-					&dwSize))
-				{
+                    &dwPropertyRegDataType, (BYTE*)szDesc,
+                    sizeof(szDesc),   // The size, in bytes
+                    &dwSize))
+                {
 
-					QString testsssss = QString::fromWCharArray(szDesc);
-					m_logger->debug(testsssss.toStdString());
-				}
+                    QString testsssss = QString::fromWCharArray(szDesc);
+                    m_logger->debug("Description: {}",testsssss.toStdString());
+                }
 
-				if (SetupDiGetDeviceRegistryProperty(DeviceInfoSet, &DeviceInfoData, SPDRP_HARDWAREID,
-					&dwPropertyRegDataType, (BYTE*)szHardwareIDs,
-					sizeof(szHardwareIDs),    // The size, in bytes
-					&dwSize)) 
-					m_logger->debug(QString::fromWCharArray(szHardwareIDs).toStdString());
+                if (SetupDiGetDeviceRegistryProperty(DeviceInfoSet, &DeviceInfoData, SPDRP_HARDWAREID,
+                    &dwPropertyRegDataType, (BYTE*)szHardwareIDs,
+                    sizeof(szHardwareIDs),    // The size, in bytes
+                    &dwSize))
+                    m_logger->debug("HW-ID: {}", QString::fromWCharArray(szHardwareIDs).toStdString());
 
+                if (SetupDiGetDeviceRegistryProperty(DeviceInfoSet, &DeviceInfoData, SPDRP_FRIENDLYNAME,
+                    &dwPropertyRegDataType, (BYTE*)szFriendlyName,
+                    sizeof(szFriendlyName),    // The size, in bytes
+                    &dwSize))
+                    m_logger->debug("FriendlyName: {}", QString::fromWCharArray(szFriendlyName).toStdString());
 
-                /*if (!SetupDiGetDeviceProperty( DeviceInfoSet, &DeviceInfoData, &DEVPKEY_Device_Class, &devicePropertyType,
-                    (PBYTE)&DevGuid,
-                    sizeof(GUID),
-                    &Size,
-					0) || devicePropertyType != DEVPROP_TYPE_GUID) {
+                if (SetupDiGetDeviceRegistryProperty(DeviceInfoSet, &DeviceInfoData, SPDRP_LOCATION_INFORMATION,
+                    &dwPropertyRegDataType, (BYTE*)szLocalInform,
+                    sizeof(szLocalInform),    // The size, in bytes
+                    &dwSize))
+                    m_logger->debug("Location: {}", QString::fromWCharArray(szLocalInform).toStdString());
 
-                    error = GetLastError();
-
-					switch (error)
-					{
-					case ERROR_INVALID_FLAGS:
-						m_logger->error("The value of Flags is not zero.");
-						break;
-					case ERROR_INVALID_HANDLE:
-						m_logger->error("The device information set that is specified by DevInfoSet is not valid.");
-						break;
-					case ERROR_INVALID_PARAMETER:
-						m_logger->error("A supplied parameter is not valid.One possibility is that the device information element is not valid.");
-						break;
-					case ERROR_INVALID_REG_PROPERTY:
-						m_logger->error("The property key that is supplied by PropertyKey is not valid.");
-						break;
-					case ERROR_INVALID_DATA:
-						m_logger->error("An unspecified internal data value was not valid.");
-						break;
-					case ERROR_INVALID_USER_BUFFER:
-						m_logger->error("A user buffer is not valid. One possibility is that PropertyBuffer is NULL and PropertBufferSize is not zero.");
-						break;
-					case ERROR_NO_SUCH_DEVINST:
-						m_logger->error("The device instance that is specified by DevInfoData does not exist.");
-						break;
-					case ERROR_INSUFFICIENT_BUFFER:
-						m_logger->error("The PropertyBuffer buffer is too small to hold the requested property value, or an internal data buffer that was passed to a system call was too small.");
-						break;
-					case ERROR_NOT_ENOUGH_MEMORY:
-						m_logger->error("There was not enough system memory available to complete the operation.");
-						break;
-					case ERROR_NOT_FOUND:
-						m_logger->error("The requested device property does not exist.");
-						break;
-					case ERROR_ACCESS_DENIED:
-						m_logger->error("The caller does not have Administrator privileges.");
-						break;
-					default:
-						break;
-					}
-
-
-                    if (Error == ERROR_NOT_FOUND) {
-                    }
-                }*/
             }
 
             if (DeviceInfoSet) {
                 SetupDiDestroyDeviceInfoList(DeviceInfoSet);
             }
+
+            QAbstractEventDispatcher::instance()->installNativeEventFilter(changeDeviceFilter());
+
         }
+
+
+
 
 
         bool WinApiHelper::Shutdown()
         {
-            bool res = InitiateSystemShutdownEx(NULL, NULL, 0, TRUE, FALSE, SHTDN_REASON_MAJOR_OTHER | SHTDN_REASON_FLAG_PLANNED);
-            if (!res)
-            {
-                DWORD error = GetLastError();
-                m_logger->critical("Shutdown incomplete: {}", error);
-                
+            HANDLE hToken = NULL;
+            TOKEN_PRIVILEGES tkp = { 0 };
+            bool bRet = false;
+
+            // Get a token for this process. 
+            if (OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken)) {
+                if (LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME, &tkp.Privileges[0].Luid)) {
+                    tkp.PrivilegeCount = 1;  // one privilege to set    
+                    tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
+
+                    // Get the shutdown privilege for this process. 
+                    if (AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, NULL, 0)) {
+                        ::CloseHandle(hToken);
+
+                        if (ERROR_SUCCESS == GetLastError()) {
+
+                            DWORD dwFlags = EWX_POWEROFF;
+                            DWORD dwReason = SHTDN_REASON_MAJOR_SYSTEM;
+
+                            if (ExitWindowsEx(dwFlags, dwReason)) {
+                                bRet = true;
+                            }
+                        }
+                    }
+                }
             }
-            return res;
+
+            return bRet;
         }
+
+
+
 	}
 }

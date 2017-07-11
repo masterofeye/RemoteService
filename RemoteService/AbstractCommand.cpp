@@ -14,7 +14,7 @@ namespace RW{
 	namespace CORE
 	{
         AbstractCommand::AbstractCommand(const COM::Message Obj, QObject *Parent) : Next(nullptr),
-			m_logger(spdlog::get("file_logger"))
+			m_logger(spdlog::get("remoteservice"))
 		{
 			m_Parsing = false;
 
@@ -32,7 +32,7 @@ namespace RW{
 		}
 
         AbstractCommand::AbstractCommand(COM::MessageDescription CmdId, QString Source, QString Destination, COM::Message::ExecutionVariant ExecutionVariant, QList<QVariant> Parameter, QObject *Parent) : Next(nullptr),
-			m_logger(spdlog::get("file_logger")),
+			m_logger(spdlog::get("remoteservice")),
 			m_CommandID(CmdId),
 			m_Src(Source),
 			m_Dst(Destination),

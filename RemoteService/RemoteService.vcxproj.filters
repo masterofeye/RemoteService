@@ -48,14 +48,11 @@
     <Filter Include="Helper\Shutdown">
       <UniqueIdentifier>{84da5e7f-df1c-4fdb-bc13-b2a1dce41106}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Helper\Installer">
+      <UniqueIdentifier>{79a1a43b-acf3-4160-8ab9-0feb3694b7d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="ShutdownHandler.hpp">
-      <Filter>Helper\Shutdown</Filter>
-    </CustomBuild>
-    <CustomBuild Include="Inactivitywatcher.hpp">
-      <Filter>Helper\Shutdown</Filter>
-    </CustomBuild>
     <CustomBuild Include="JobScheduler.h">
       <Filter>Scheduler</Filter>
     </CustomBuild>
@@ -113,20 +110,14 @@
     <CustomBuild Include="ProcessObserver.h">
       <Filter>Helper\ProcessTools</Filter>
     </CustomBuild>
+    <CustomBuild Include="Inactivitywatcher.h">
+      <Filter>Helper\Shutdown</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ShutdownHandler.h">
+      <Filter>Helper\Shutdown</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GeneratedFiles\Debug\moc_Inactivitywatcher.cpp">
-      <Filter>Generierte Dateien\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_Inactivitywatcher.cpp">
-      <Filter>Generierte Dateien\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_ShutdownHandler.cpp">
-      <Filter>Generierte Dateien\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_ShutdownHandler.cpp">
-      <Filter>Generierte Dateien\Release</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Dateien</Filter>
     </ClCompile>
@@ -256,10 +247,39 @@
     <ClCompile Include="GeneratedFiles\Release\moc_ProcessObserver.cpp">
       <Filter>Generierte Dateien\Release</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_Inactivitywatcher.cpp">
+      <Filter>Generierte Dateien\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_Inactivitywatcher.cpp">
+      <Filter>Generierte Dateien\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_ShutdownHandler.cpp">
+      <Filter>Generierte Dateien\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_ShutdownHandler.cpp">
+      <Filter>Generierte Dateien\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ProcessObserverPrivate.h">
       <Filter>Helper\ProcessTools</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Generierte Dateien</Filter>
+    </ClInclude>
+    <ClInclude Include="resource1.h">
+      <Filter>Generierte Dateien</Filter>
+    </ClInclude>
+    <ClInclude Include="AutoIncrement.h">
+      <Filter>Helper\Installer</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\RemoteServiceInstaller\RemoteService.iss">
+      <Filter>Helper\Installer</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc" />
   </ItemGroup>
 </Project>

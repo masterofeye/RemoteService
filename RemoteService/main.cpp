@@ -44,14 +44,13 @@
 #include <QDir>
 #include <QSettings>
 #include "../QtService/src/qtservice.h"
-#include "inactivitywatcher.hpp"
+#include "inactivitywatcher.h"
 #include "spdlog\spdlog.h"
 
 //TestCode
 #include "RemoteDataConnectLibrary.h"
 #include "RemoteCommunicationLibrary.h"
-#include "Inactivitywatcher.hpp"
-#include "ShutdownHandler.hpp"
+#include "ShutdownHandler.h"
 #include <qt_windows.h>
 #include "JobScheduler.h"
 #include "DeviceManager.h"
@@ -114,9 +113,9 @@ RemoteService::RemoteService(int argc, char **argv)
     m_NotifierHandler(nullptr),
     m_Config(nullptr)
 {
-    
+
     setServiceDescription("The RemoteWorkstation Service.");
-    setServiceFlags(QtServiceBase::CanBeSuspended);
+    setServiceFlags(QtServiceBase::CanBeSuspended | QtServiceBase::NeedsStopOnShutdown);
 
 }
 
@@ -127,15 +126,16 @@ RemoteService::~RemoteService()
 	if (!m_Shutdown) delete m_Shutdown;
     if (!m_Scheduler) delete m_Scheduler;
 }
-
+  
 void RemoteService::start()
 {
+#ifdef DEBUG
 	Sleep(10000);
-
-	m_logger = spdlog::get("file_logger");
+#endif
+	m_logger = spdlog::get("remoteservice");
 	if (m_logger == nullptr)
 	{
-		m_logger = spdlog::create<spdlog::sinks::MySqlSink>("file_logger");
+		m_logger = spdlog::create<spdlog::sinks::MySqlSink>("remoteservice");
 	}
 	m_logger->set_pattern("[%H:%M:%S:%f] [%g] [%l] [thread %t] %v ");
 #ifdef REMOTESERVICE_DEBUG
@@ -148,6 +148,9 @@ void RemoteService::start()
 	//RW::CORE::WinApiHelper h;
 	//h.QueryActiveHW();
 	//m_logger->flush();
+    bool res = SetProcessShutdownParameters(0x3FF, SHUTDOWN_NORETRY);
+    if (res)
+    m_logger->critical("Result of SetProcessShutdownParameters hat funktioniert");
 
     m_Config = new RW::CORE::ConfigurationManager(m_logger,m_obj);
     m_NotifierHandler = new RW::CORE::NotifierHandler(m_obj);
@@ -162,10 +165,12 @@ void RemoteService::start()
     if (win.ReturnCurrentUser(username))
     {
         m_Config->InsertConfigValue(RW::CORE::ConfigurationName::UserName, username);
+        m_Config->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::ON));
     }
     else
     {
         m_Config->InsertConfigValue(RW::CORE::ConfigurationName::UserName, "Free");
+        m_Config->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::FREE));
     }
     
 
@@ -194,10 +199,12 @@ void RemoteService::start()
 	m_Scheduler->start();
 	m_CommunicationServer->Listen();
 
-
     m_ProcessObserver = new RW::CORE::ProcessObserver(m_obj);
     m_ProcessObserver->setProgram("RemoteHiddenHelper.exe");
     m_ProcessObserver->start();
+
+    //Solange noch kein User angemeldet ist, wird erstmal der ShutdownTimer gestartet
+    m_Shutdown->StartShutdownTimer();
 
     m_logger->info("Remote Service started", (int) spdlog::sinks::FilterType::RemoteServiceStart);
 	m_logger->flush();
@@ -208,12 +215,13 @@ void RemoteService::stop()
     m_Observer->StopInactivityObservation();
     m_Shutdown->StopShutdownTimer();
 
+    m_Config->InsertConfigValue(RW::CORE::ConfigurationName::UserName, "Offline");
+    m_Config->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::OFF));
+
     m_ProcessObserver->kill();
 
-    m_Config->InsertConfigValue(RW::CORE::ConfigurationName::UserName, "Offline");
-
     m_logger->info("Remote Service stopped", (int)spdlog::sinks::FilterType::RemoteServiceStop);
-	m_logger->flush();
+ 	m_logger->flush();
 }
 
 void RemoteService::pause()
@@ -226,6 +234,7 @@ void RemoteService::pause()
 
 void RemoteService::resume()
 {
+
     m_Observer->StartInactivityObservation();
     m_logger->info("Remote Service resumed", (int)spdlog::sinks::FilterType::RemoteServiceResume);
 	m_logger->flush();
@@ -269,6 +278,9 @@ void RemoteService::RemoteConnect()
         m_logger->info("A new remote session starts for user: {}", (int)spdlog::sinks::FilterType::RemoteServiceConnect, username.toStdString());
 	}
     m_Config->Load();
+
+    m_Config->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::OCCUPY));
+
 	m_logger->flush();
 }
 
@@ -280,6 +292,9 @@ void RemoteService::RemoteDisconnect()
 	{
         m_logger->info("The current remote sessions end for user: {}", (int)spdlog::sinks::FilterType::RemoteServiceDisconnect, username.toStdString());
 	}
+
+    m_Config->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::FREE));
+
 	m_logger->flush();
 }
 
@@ -300,6 +315,8 @@ void RemoteService::SessionLogOn()
     m_ProcessObserver->start();
 
     m_Config->InsertConfigValue(RW::CORE::ConfigurationName::UserName, username);
+    /*Workstation ist nun an und die Datenbank sollte das auch mitbekommen*/
+    m_Config->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::ON));
 
 	m_logger->flush();
 }
@@ -307,7 +324,6 @@ void RemoteService::SessionLogOn()
 void RemoteService::SessionLogOff()
 {
     QtServiceBase::instance()->logMessage("SessionLogOff");
-
     delete m_ProcessObserver;
     m_ProcessObserver = nullptr;
 
@@ -319,12 +335,10 @@ void RemoteService::SessionLogOff()
 	}
 
     m_Observer->StopInactivityObservation();
-    m_Shutdown->StopShutdownTimer();
 
     m_Config->InsertConfigValue(RW::CORE::ConfigurationName::UserName, "Free");
-
-    //Es kann kein User mehr auf der RemoteWorkstation sein deswegen Free "anmelden"
-    //m_Config->InsertConfigValue(RW::CORE::ConfigurationName::UserName, "Free");
+    /*Die Workstation ist nun herunter gefahren, dies sollte auch die Datenbank wissen*/
+    m_Config->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::OFF));
 
 	m_logger->flush();
 }
