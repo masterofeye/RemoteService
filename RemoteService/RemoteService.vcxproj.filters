@@ -37,11 +37,6 @@
     <Filter Include="Helper\Information">
       <UniqueIdentifier>{c94f696a-5772-42ea-8e6d-a8de3e7e0936}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Helper\Header Dateien">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h</Extensions>
-      <ParseFiles>true</ParseFiles>
-    </Filter>
     <Filter Include="Helper\ProcessTools">
       <UniqueIdentifier>{02d5b65c-ca03-41d3-a770-410adeb32363}</UniqueIdentifier>
     </Filter>
