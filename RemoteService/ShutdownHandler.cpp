@@ -100,6 +100,9 @@ namespace RW{
                     m_ShutdownTimer->stop();
                     emit ShutdownEvt();
 
+                    m_ConfigurationManager->InsertConfigValue(RW::CORE::ConfigurationName::UserName, "Offline");
+                    m_ConfigurationManager->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::OFF));
+
                     m_logger->info("ShutdownHandler: PC shutdown", (int)spdlog::sinks::FilterType::ShutdownHandler);
                 }
                 else

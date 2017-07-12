@@ -11,7 +11,7 @@ DefaultGroupName=RemoteService\
 UninstallDisplayIcon={app}\RemoteService.exe
 Compression=lzma2
 SolidCompression=yes
-OutputDir=RemoteServiceInstaller
+OutputDir=.
 OutputBaseFilename=RemoteServiceInstaller
 CloseApplications=no
 

@@ -277,9 +277,10 @@ void RemoteService::RemoteConnect()
 	{
         m_logger->info("A new remote session starts for user: {}", (int)spdlog::sinks::FilterType::RemoteServiceConnect, username.toStdString());
 	}
-    m_Config->Load();
-
+    m_Config->InsertConfigValue(RW::CORE::ConfigurationName::UserName, username);
     m_Config->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::OCCUPY));
+
+    m_Config->Load();
 
 	m_logger->flush();
 }
@@ -293,6 +294,7 @@ void RemoteService::RemoteDisconnect()
         m_logger->info("The current remote sessions end for user: {}", (int)spdlog::sinks::FilterType::RemoteServiceDisconnect, username.toStdString());
 	}
 
+    m_Config->InsertConfigValue(RW::CORE::ConfigurationName::UserName, "Free");
     m_Config->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::FREE));
 
 	m_logger->flush();
@@ -308,8 +310,6 @@ void RemoteService::SessionLogOn()
         m_logger->info("A new session started for user: {}", (int)spdlog::sinks::FilterType::RemoteServiceSessionLogon, username.toStdString());
 	}
 
-    m_Config->Load();
-
     m_ProcessObserver = new RW::CORE::ProcessObserver(m_obj);
     m_ProcessObserver->setProgram("RemoteHiddenHelper.exe");
     m_ProcessObserver->start();
@@ -317,6 +317,8 @@ void RemoteService::SessionLogOn()
     m_Config->InsertConfigValue(RW::CORE::ConfigurationName::UserName, username);
     /*Workstation ist nun an und die Datenbank sollte das auch mitbekommen*/
     m_Config->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::ON));
+
+    m_Config->Load();
 
 	m_logger->flush();
 }
