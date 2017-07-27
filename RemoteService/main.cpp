@@ -148,9 +148,6 @@ void RemoteService::start()
 	//RW::CORE::WinApiHelper h;
 	//h.QueryActiveHW();
 	//m_logger->flush();
-    bool res = SetProcessShutdownParameters(0x3FF, SHUTDOWN_NORETRY);
-    if (res)
-    m_logger->critical("Result of SetProcessShutdownParameters hat funktioniert");
 
     m_Config = new RW::CORE::ConfigurationManager(m_logger,m_obj);
     m_NotifierHandler = new RW::CORE::NotifierHandler(m_obj);
@@ -164,13 +161,16 @@ void RemoteService::start()
     RW::CORE::WinApiHelper win;
     if (win.ReturnCurrentUser(username))
     {
+
         m_Config->InsertConfigValue(RW::CORE::ConfigurationName::UserName, username);
         m_Config->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::ON));
+        m_logger->debug("RemoteService State is: {}", "ON");
     }
     else
     {
         m_Config->InsertConfigValue(RW::CORE::ConfigurationName::UserName, "Free");
         m_Config->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::FREE));
+        m_logger->debug("RemoteService State is: {}", "FREE");
     }
     
 
@@ -217,6 +217,7 @@ void RemoteService::stop()
 
     m_Config->InsertConfigValue(RW::CORE::ConfigurationName::UserName, "Offline");
     m_Config->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::OFF));
+    m_logger->debug("RemoteService State is: {}", "OFF");
 
     m_ProcessObserver->kill();
 
@@ -276,12 +277,21 @@ void RemoteService::RemoteConnect()
 	if (win.ReturnCurrentUser(username))
 	{
         m_logger->info("A new remote session starts for user: {}", (int)spdlog::sinks::FilterType::RemoteServiceConnect, username.toStdString());
+        m_Config->InsertConfigValue(RW::CORE::ConfigurationName::UserName, username);
+        m_Config->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::OCCUPY));
+        m_logger->debug("RemoteService State is: {}", "OCCUPY");
+        m_Config->Load();
+
 	}
-    m_Config->InsertConfigValue(RW::CORE::ConfigurationName::UserName, username);
-    m_Config->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::OCCUPY));
+    else
+    {
+        m_Config->InsertConfigValue(RW::CORE::ConfigurationName::UserName, "Free");
+        m_Config->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::FREE));
+        m_logger->debug("RemoteService State is: {}", "FREE");
+        m_Config->Load();
+    }
 
-    m_Config->Load();
-
+    
 	m_logger->flush();
 }
 
@@ -293,10 +303,24 @@ void RemoteService::RemoteDisconnect()
 	{
         m_logger->info("The current remote sessions end for user: {}", (int)spdlog::sinks::FilterType::RemoteServiceDisconnect, username.toStdString());
 	}
+    //Wenn der Rechner bereits ausgeschalten wurde erfolgt unter umständen hier nochmal der RemoteDisconnect, 
+    //dabei sollte der Status aber nicht verändert werden
+    /****SessionLogoff**/
+    /**********|********/
+    /**********|********/
+    /******SHUTDOWN*****/
+    /**********|********/
+    /**********|********/
+    /**RemoteDisconnect*/
 
-    m_Config->InsertConfigValue(RW::CORE::ConfigurationName::UserName, "Free");
-    m_Config->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::FREE));
-
+    QVariant val;
+    m_Config->GetConfigValue(RW::CORE::ConfigurationName::WorkstationState, val);
+    if (!(val.value<RW::WorkstationState>() == RW::WorkstationState::OFF))
+    {
+        m_Config->InsertConfigValue(RW::CORE::ConfigurationName::UserName, "Free");
+        m_Config->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::FREE));
+        m_logger->debug("RemoteService State is: {}", "FREE");
+    }
 	m_logger->flush();
 }
 
@@ -309,6 +333,7 @@ void RemoteService::SessionLogOn()
 	{
         m_logger->info("A new session started for user: {}", (int)spdlog::sinks::FilterType::RemoteServiceSessionLogon, username.toStdString());
 	}
+    m_logger->debug("Der Username ist {}:", username.toStdString());
 
     m_ProcessObserver = new RW::CORE::ProcessObserver(m_obj);
     m_ProcessObserver->setProgram("RemoteHiddenHelper.exe");
@@ -317,6 +342,7 @@ void RemoteService::SessionLogOn()
     m_Config->InsertConfigValue(RW::CORE::ConfigurationName::UserName, username);
     /*Workstation ist nun an und die Datenbank sollte das auch mitbekommen*/
     m_Config->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::ON));
+    m_logger->debug("RemoteService State is: {}", "ON");
 
     m_Config->Load();
 
@@ -340,7 +366,8 @@ void RemoteService::SessionLogOff()
 
     m_Config->InsertConfigValue(RW::CORE::ConfigurationName::UserName, "Free");
     /*Die Workstation ist nun herunter gefahren, dies sollte auch die Datenbank wissen*/
-    m_Config->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::OFF));
+    m_Config->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::FREE));
+    m_logger->debug("RemoteService State is: {}", "FREE");
 
 	m_logger->flush();
 }

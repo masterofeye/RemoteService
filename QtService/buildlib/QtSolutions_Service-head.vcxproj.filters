@@ -68,4 +68,12 @@
       <Filter>Generated Files\Release</Filter>
     </CustomBuild>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="QtService.rc" />
+  </ItemGroup>
 </Project>

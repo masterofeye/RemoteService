@@ -102,7 +102,7 @@ namespace RW{
 
                     m_ConfigurationManager->InsertConfigValue(RW::CORE::ConfigurationName::UserName, "Offline");
                     m_ConfigurationManager->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::OFF));
-
+                    m_logger->debug("RemoteService State is : {}", "OFF");
                     m_logger->info("ShutdownHandler: PC shutdown", (int)spdlog::sinks::FilterType::ShutdownHandler);
                 }
                 else

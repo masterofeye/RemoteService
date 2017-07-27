@@ -6,6 +6,10 @@
 #include <QBoxLayout>
 #include <qlineedit.h>
 #include <qcombobox.h>
+#include <QtCharts>
+#include <qchartview.h>
+#include "RemoteDataConnectLibrary.h"
+
 
 ServerTestUI::ServerTestUI(QWidget *parent)
     : QMainWindow(parent)
@@ -112,18 +116,10 @@ ServerTestUI::ServerTestUI(QWidget *parent)
     m_USBLayout2->addWidget(m_USB2_PORT3);
     m_MainLayout->addLayout(m_USBLayout2);
 
+    QTabWidget* tab = (QTabWidget*)ui.centralWidget->findChild<QTabWidget*>();
+    tab->widget(0)->setLayout(m_MainLayout);
 
-
-
-
-
-
-
-
-
-
-
-    this->centralWidget()->setLayout(m_MainLayout);
+    CreateDatabaseTab(tab->widget(1));
 
 }
 
@@ -131,6 +127,110 @@ ServerTestUI::~ServerTestUI()
 {
 
 }
+
+void ServerTestUI::CreateDatabaseTab(QWidget* Widget)
+{
+    QVBoxLayout* vbox = new QVBoxLayout(Widget);
+    
+    QComboBox* selectPc = new QComboBox(Widget);
+    vbox->addWidget(selectPc);
+    selectPc->insertItems(0, GetPCLogEntryList());
+    connect(selectPc, SIGNAL(activated(QString)), this, SLOT(FillGraphicForPcState(QString)));
+
+    m_ChartView = new QChartView(Widget);
+    m_ChartView->setRenderHint(QPainter::Antialiasing);
+
+    vbox->addWidget(m_ChartView);
+
+    Widget->setLayout(vbox);
+}
+
+QStringList ServerTestUI::GetPCLogEntryList()
+{
+    RW::SQL::Repository* m_rep = new RW::SQL::Repository(RW::SourceType::SQL,this);
+    QList<RW::SQL::LogEntry> logEntryList;
+    m_rep->GetAllLogEntry(logEntryList);
+
+    QStringList list;
+    for each (auto var in logEntryList)
+    {
+        list.append(var.ComputerNameRW());
+    }
+    list.removeDuplicates();
+    delete m_rep;
+    return list;
+}
+
+void ServerTestUI::FillGraphicForPcState(QString Hostname)
+{
+    RW::SQL::Repository* m_rep = new RW::SQL::Repository(RW::SourceType::SQL, this);
+    QList<RW::SQL::LogEntry> logEntryList;
+    m_rep->GetLogEntryByHostName(Hostname,logEntryList);
+
+    qint8 lastVal = 0;
+    QLineSeries* serie = new QLineSeries(this);
+    for each (auto var in logEntryList)
+    {
+        serie->append(var.Date().toMSecsSinceEpoch(), lastVal);
+        switch (var.Filter())
+        {
+        case spdlog::sinks::FilterType::RemoteServiceStart:
+            serie->append(var.Date().toMSecsSinceEpoch(), 1);
+            lastVal = 1;
+
+        case spdlog::sinks::FilterType::RemoteServiceStop:
+            serie->append(var.Date().toMSecsSinceEpoch(), -1);
+            lastVal = -1;
+            break;
+        case spdlog::sinks::FilterType::RemoteServiceConnect:
+            serie->append(var.Date().toMSecsSinceEpoch(), 4);
+            lastVal = 4;
+            break;
+            
+        case spdlog::sinks::FilterType::RemoteServiceDisconnect:
+            serie->append(var.Date().toMSecsSinceEpoch(), 3);
+            lastVal = 3;
+            break;
+        case spdlog::sinks::FilterType::RemoteServiceSessionLogon:
+            serie->append(var.Date().toMSecsSinceEpoch(), 5);
+            lastVal = 5;
+            break;
+        case spdlog::sinks::FilterType::RemoteServiceSessionLogoff:
+            serie->append(var.Date().toMSecsSinceEpoch(), 2);
+            lastVal = 2;
+            break;
+        default:
+            break;
+        }
+
+    }
+
+   
+    QChart* chart = new QChart();
+    chart->addSeries(serie);
+    QDateTimeAxis *axisX = new QDateTimeAxis;
+    axisX->setTickCount(10);
+    axisX->setFormat("HH:mm:ss");
+    axisX->setTitleText("Date");
+    chart->addAxis(axisX, Qt::AlignBottom);
+    serie->attachAxis(axisX);
+
+    QValueAxis *axisY = new QValueAxis;
+    axisY->setLabelFormat("%i");
+    axisY->setTitleText("Sunspots count");
+    chart->addAxis(axisY, Qt::AlignLeft);
+    serie->attachAxis(axisY);
+
+
+
+    
+    
+    m_ChartView->setChart(chart);
+
+
+    delete m_rep;
+}
+
 
 void ServerTestUI::OnNotify()
 {
@@ -217,3 +317,5 @@ void ServerTestUI::OnLogOutUser()
     m.setIdentifier(COM::Message::GenUUID(COM::TypeofServer::ServiceTest).toString());
     emit NewMessage(m);
 }
+
+

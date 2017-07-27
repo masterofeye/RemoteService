@@ -5,12 +5,13 @@
 #include "ui_servertestui.h"
 #include <RemoteCommunicationLibrary.h>
 #include <spdlog\logger.h>
-
+#include <QChartView>
 using namespace RW;
 
 class QPushButton;
 class QBoxLayout;
 class QLineEdit;
+QT_CHARTS_USE_NAMESPACE
 
 class ServerTestUI : public QMainWindow
 {
@@ -51,12 +52,18 @@ private:
     QBoxLayout *m_Generic = nullptr;
     QComboBox *m_ComboBox = nullptr;
 
+    QChartView *m_ChartView = nullptr;
+
 public:
     ServerTestUI(QWidget *parent = 0);
     ~ServerTestUI();
 
 private:
     Ui::ServerTestUIClass ui;
+private:
+    void CreateDatabaseTab(QWidget* Widget);
+    QStringList GetPCLogEntryList();
+
 
 public slots:
     void OnNotify();
@@ -65,8 +72,9 @@ public slots:
     void OnAnel3();
     void OnReconnect();
     void OnLogOutUser();
-
     void OnProcessMessage(COM::Message Msg);
+
+    void FillGraphicForPcState(QString Hostname);
 signals:
     void NewMessage(COM::Message Msg);
 };

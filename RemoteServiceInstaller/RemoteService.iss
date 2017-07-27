@@ -34,7 +34,7 @@ Source: "..\build\x64\Release\RemoteDataConnectLibrary.dll"; DestDir: "{app}"
 Source: "..\build\x64\Release\sqldrivers\qsqlmysql.dll"; DestDir: "{app}\sqldrivers"
 Source: "..\build\x64\Release\platforms\qwindows.dll"; DestDir: "{app}\platforms"
 Source: "..\build\x64\Release\unregister.bat"; DestDir: "{app}\"
-Source: "..\build\x64\Release\register.bat"; DestDir: "{app}\"; BeforeInstall: MyAfterInstall
+Source: "..\build\x64\Release\register.bat"; DestDir: "{app}\"; AfterInstall: MyAfterInstall
 
 [Code]
 procedure MyBeforeInstall();

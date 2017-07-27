@@ -106,6 +106,9 @@ copy $(ProjectDir)$(PlatformTarget)\$(Configuration)\$(ProjectName).lib  $(Solut
       <Message>
       </Message>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>python ..\QtServiceInstaller\versionincrement.py</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -290,6 +293,12 @@ copy $(ProjectDir)$(PlatformTarget)\$(Configuration)\$(ProjectName).lib  $(Solut
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\%(Filename).moc</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "..\src\qtservice.cpp" -o ".\GeneratedFiles\$(ConfigurationName)\%(Filename).moc"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DQT_QTSERVICE_EXPORT -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG -D_WINDLL  "-I." "-I.\..\src" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I.\release" "-I.\..\..\..\RemoteUtil\RemoteThirdParty" "-I.\..\..\..\RemoteUtil\RemoteDataConnectLibrary\Include" "-I$(QTDIR)\include\QtQml" "-I.\..\..\RemoteUtil\thirdparty" "-IC:\Program Files (x86)\Visual Leak Detector\include"</Command>
     </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="QtService.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
