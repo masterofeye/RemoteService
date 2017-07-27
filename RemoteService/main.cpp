@@ -174,12 +174,18 @@ void RemoteService::start()
     }
     
 
-	m_logger->debug("Device manager initialize");
-	m_DeviceMng->SetLogger(m_logger);
-	if(!m_DeviceMng->Init())
-		m_logger->error("Device manager couldn't initialized correct");
-	else
-		m_logger->info("Device manager initialized correct");
+
+    QVariant workstationType;
+    m_Config->GetConfigValue(RW::CORE::ConfigurationName::WorkstationType, workstationType);
+    if (workstationType.value<RW::WorkstationKind>() == RW::WorkstationKind::RemoteWorkstation)
+    {
+        m_logger->debug("Device manager initialize");
+        m_DeviceMng->SetLogger(m_logger);
+        if (!m_DeviceMng->Init())
+            m_logger->error("Device manager couldn't initialized correct");
+        else
+            m_logger->info("Device manager initialized correct");
+    }
 
     m_Observer = new RW::CORE::InactivityWatcher("0.1", m_Config);
     m_Shutdown = new RW::CORE::ShutdownHandler(m_DeviceMng, m_Config,"0.1");

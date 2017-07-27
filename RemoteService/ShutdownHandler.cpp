@@ -92,7 +92,8 @@ namespace RW{
                 WinApiHelper helper;
 
                 //All registered device will be shutdown now
-                //m_DeviceManager->DeInit();
+                if (m_DeviceManager != nullptr)
+                    m_DeviceManager->DeInit();
 
                 if (helper.Shutdown())
                 {
