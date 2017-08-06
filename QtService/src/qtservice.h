@@ -155,7 +155,11 @@ protected:
 	virtual void SessionLogOff();
 	virtual void ConsoleConnect();
 	virtual void ConsoleDisconnect();
-
+    virtual void DeviceRemoveComplete(QString DeviceName);
+    virtual void DeviceArrival(QString DeviceName);
+    virtual void DeviceQueryRemove(QString DeviceName);
+    virtual void DeviceQueryRemoveFailed(QString DeviceName);
+    virtual void DeviceCustomEvent(QString DeviceName);
 	virtual void createApplication(int &argc, char **argv) = 0;
 
 	virtual int executeApplication() = 0;

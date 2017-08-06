@@ -5,12 +5,19 @@
 #include "VoltCraft.h"
 #include "AnelHome.h"
 #include "AbstractDevice.h"
+#include "WinApiHelper.h"
+#include "RemoteDataConnectLibrary.h"
 
 namespace RW{
 	namespace HW{
-		DeviceManager::DeviceManager(QObject *Parent) : QObject(Parent),
+
+
+
+
+        DeviceManager::DeviceManager(CORE::ConfigurationManager* CfgManager, QObject *Parent) : QObject(Parent),
 			m_DeviceList(new QMap<DeviceType, AbstractDevice*>()),
-			m_State(State::DeInit)
+			m_State(State::DeInit),
+            m_ConfigManager(CfgManager)
 		{
 
 		}
@@ -52,6 +59,8 @@ namespace RW{
 				}
 
 			}
+            CollectHardwarePeripherie();
+
 			return true;
 		}
 
@@ -76,5 +85,42 @@ namespace RW{
 		{
 			return (AbstractDevice*)m_DeviceList->value(Type);
 		}
+
+        bool DeviceManager::CollectHardwarePeripherie()
+        {
+            bool res = false;
+
+            /*Liste aller verfügbaren Geräte holen*/
+            QMap<QString, QVariant> deviceList;
+            m_ConfigManager->GetConfigValue(RW::CORE::ConfigurationName::PeripheralTable, deviceList);
+
+            /*Liste erstellen welche HW am Rechner verfügbar ist*/
+            QMap<PeripheralType, QVariant> deviceActiveList;
+            /*HW auslesen*/
+            RW::CORE::WinApiHelper helper;
+            QVector<RW::CORE::DeviceInformation> deviceInfoList(20);
+            helper.QueryActiveHW(deviceInfoList);
+            /*mit möglicher HW vergleichen und in neue liste eintragen*/
+            for each (auto var in deviceInfoList)
+            {
+                if (deviceList.contains(var.HardwareID))
+                {
+                    QVariant val = deviceList.value(var.HardwareID);
+                    RW::SQL::Peripheral peripheral = val.value<RW::SQL::Peripheral>();
+                    deviceActiveList.insert(peripheral.Type(), QVariant::fromValue(peripheral));
+                }
+            }
+            return res;
+        }
+
+        bool DeviceManager::RegisterNewDevice(QString DeviceName)
+        {
+            return false;
+        }
+
+        bool DeviceManager::DeregisterNewDevice(QString DeviceName)
+        {
+            return false;
+        }
 	}
 }

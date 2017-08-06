@@ -100,6 +100,11 @@ protected:
 	void SessionLogOff();
 	void ConsoleConnect();
 	void ConsoleDisconnect();
+    void DeviceRemoveComplete(QString DeviceName);
+    void DeviceArrival(QString DeviceName);
+    void DeviceQueryRemove(QString DeviceName);
+    void DeviceQueryRemoveFailed(QString DeviceName);
+    void DeviceCustomEvent(QString DeviceName);
 
     void HiddenHelperCrashed(QProcess::ProcessError error);
 };
@@ -151,7 +156,7 @@ void RemoteService::start()
 
     m_Config = new RW::CORE::ConfigurationManager(m_logger,m_obj);
     m_NotifierHandler = new RW::CORE::NotifierHandler(m_obj);
-    m_DeviceMng = new RW::HW::DeviceManager(m_obj);
+    m_DeviceMng = new RW::HW::DeviceManager(m_Config,m_obj);
 	m_Scheduler = new RW::CORE::JobScheduler(m_DeviceMng);
     m_CommunicationServer = new RW::COM::CommunicatonServer(true, RW::COM::TypeofServer::RemoteService,"Server", 1234, m_logger, m_obj);
 
@@ -400,6 +405,29 @@ void RemoteService::ConsoleDisconnect()
 	m_logger->flush();
 }
 
+void RemoteService::DeviceRemoveComplete(QString DeviceName)
+{
+    m_DeviceMng->RegisterNewDevice(DeviceName);
+}
+
+void RemoteService::DeviceArrival(QString DeviceName)
+{
+    m_DeviceMng->DeregisterNewDevice(DeviceName);
+}
+
+void RemoteService::DeviceQueryRemove(QString DeviceName)
+{
+
+}
+
+void RemoteService::DeviceQueryRemoveFailed(QString DeviceName)
+{
+
+}
+
+void RemoteService::DeviceCustomEvent(QString DeviceName)
+{
+}
 
 int main(int argc, char **argv)
 {

@@ -11,6 +11,25 @@ namespace RW
 {
 	namespace CORE
 	{ 
+        struct DeviceInformation
+        {
+            QString DeviceDescription = "";
+            QString HardwareID = "";
+            QString FiendlyName = "";
+            QString LocationInfo = "";
+            QString LocationPaths = "";
+            QString Address = "";
+            QString BusTypeGuiD = "";
+            QString Class = "";
+            QString ClassGuid = "";
+            QString DevType = "";
+            QString EnumeratorName = "";
+            QString DeviceManufacturer = "";
+            QString PhysicalDeviceObjectName = "";
+            QString ServiceName = "";
+        };
+
+
 		class WinApiHelper :
 			public QObject
 		{
@@ -24,7 +43,7 @@ namespace RW
             HANDLE WinApiHelper::GetCurrentUserToken();
             bool WinApiHelper::CreateProcessAsCurrentUser(QString Programm, QString Arguments);
 			static bool ReturnCurrentUser(QString &Username);
-            bool QueryActiveHW();
+            bool QueryActiveHW(QVector<DeviceInformation> &Info);
             bool Shutdown();
 		};
 	}

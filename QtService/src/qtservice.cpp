@@ -972,6 +972,11 @@ void QtServiceBase::SessionLogOn(){};
 void QtServiceBase::SessionLogOff(){};
 void QtServiceBase::ConsoleConnect(){};
 void QtServiceBase::ConsoleDisconnect(){};
+void QtServiceBase::DeviceRemoveComplete(QString DeviceName){};
+void QtServiceBase::DeviceArrival(QString DeviceName){};
+void QtServiceBase::DeviceQueryRemove(QString DeviceName){};
+void QtServiceBase::DeviceQueryRemoveFailed(QString DeviceName){};
+void QtServiceBase::DeviceCustomEvent(QString DeviceName){};
 
 
 /*!

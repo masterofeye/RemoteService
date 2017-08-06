@@ -10,6 +10,7 @@
 #include <QApplication.h>
 #include <QAbstractEventDispatcher>
 #include <QAbstractNativeEventFilter>
+#include <qvector.h>
 
 #pragma comment(lib, "wtsapi32.lib")
 #pragma comment(lib, "userenv.lib")
@@ -29,6 +30,8 @@ namespace RW
             ChangeDeviceFilter() {}
             bool nativeEventFilter(const QByteArray &eventType, void *message, long *result)
             {
+                Q_UNUSED(result)
+                Q_UNUSED(eventType)
                 MSG *msg;
                 static int i = 0;
 
@@ -87,7 +90,7 @@ namespace RW
             {
                 WTSFreeMemory(pSessionsBuffer);
                 DWORD err = GetLastError();
-                m_logger->error("WTSEnumerateSessions failed. GetLastError: ");// << err;
+                m_logger->error("WTSEnumerateSessions failed. GetLastError: {}", err);
                 return false;
             }
         }
@@ -137,8 +140,7 @@ namespace RW
             STARTUPINFO StartupInfo;
             PROCESS_INFORMATION processInfo;
             StartupInfo.cb = sizeof(STARTUPINFO);
-            SECURITY_ATTRIBUTES Security1;
-            SECURITY_ATTRIBUTES Security2;
+   
 
             ZeroMemory(&processInfo, sizeof(PROCESS_INFORMATION));
             ZeroMemory(&StartupInfo, sizeof(STARTUPINFO));
@@ -187,9 +189,6 @@ namespace RW
             CloseHandle(primaryToken);
             return true;
         }
-
-
-
 
 		bool WinApiHelper::ReturnCurrentUser(QString &Username)
 		{
@@ -276,13 +275,18 @@ namespace RW
 			return true;
 		}
 
-        bool WinApiHelper::QueryActiveHW()
+        bool WinApiHelper::QueryActiveHW(QVector<DeviceInformation>  &Info)
         {
             HDEVINFO DeviceInfoSet;
             SP_DEVINFO_DATA DeviceInfoData;
-			DEVPROPTYPE devicePropertyType;
-			DWORD error, dwPropertyRegDataType, dwSize;
-            TCHAR szDesc[4096], szHardwareIDs[4096], szFriendlyName[4096], szLocalInform[4096];
+			//DEVPROPTYPE devicePropertyType;
+            DWORD dwSize= 0, dwPropertyRegDataType = 0;
+            TCHAR szDesc[4096], szHardwareIDs[4096], szFriendlyName[4096], szLocalInform[4096],
+                szClassGuid[4096], szClass[4096], szAddress[4096], szBusGuid[4096], szDevType[4096],
+                szEnumeratorName[4096], szDeviceManufacturer[4096], szPhysicalDeviceObjectName[4096], szServiceName[4096];
+
+
+
 			GUID *guidDev = (GUID*)&GUID_DEVCLASS_USB;
             DeviceInfoSet = SetupDiGetClassDevs(NULL, 0, 0, DIGCF_PRESENT | DIGCF_ALLCLASSES);
 
@@ -298,6 +302,9 @@ namespace RW
 
             while (SetupDiEnumDeviceInfo(DeviceInfoSet, DeviceIndex, &DeviceInfoData))
             {
+                if (DeviceIndex > Info.count() - 10)
+                    Info.resize(DeviceIndex + 20);
+
                 DeviceIndex++;
 
                 if (SetupDiGetDeviceRegistryProperty(DeviceInfoSet, &DeviceInfoData, SPDRP_DEVICEDESC,
@@ -305,36 +312,77 @@ namespace RW
                     sizeof(szDesc),   // The size, in bytes
                     &dwSize))
                 {
-
-                    QString testsssss = QString::fromWCharArray(szDesc);
-                    m_logger->debug("Description: {}",testsssss.toStdString());
+                    Info[DeviceIndex].DeviceDescription = QString::fromWCharArray(szDesc);
                 }
 
                 if (SetupDiGetDeviceRegistryProperty(DeviceInfoSet, &DeviceInfoData, SPDRP_HARDWAREID,
                     &dwPropertyRegDataType, (BYTE*)szHardwareIDs,
                     sizeof(szHardwareIDs),    // The size, in bytes
                     &dwSize))
-                    m_logger->debug("HW-ID: {}", QString::fromWCharArray(szHardwareIDs).toStdString());
+                    Info[DeviceIndex].HardwareID = QString::fromWCharArray(szHardwareIDs);
 
                 if (SetupDiGetDeviceRegistryProperty(DeviceInfoSet, &DeviceInfoData, SPDRP_FRIENDLYNAME,
                     &dwPropertyRegDataType, (BYTE*)szFriendlyName,
                     sizeof(szFriendlyName),    // The size, in bytes
                     &dwSize))
-                    m_logger->debug("FriendlyName: {}", QString::fromWCharArray(szFriendlyName).toStdString());
+                    Info[DeviceIndex].FiendlyName = QString::fromWCharArray(szFriendlyName);
 
                 if (SetupDiGetDeviceRegistryProperty(DeviceInfoSet, &DeviceInfoData, SPDRP_LOCATION_INFORMATION,
                     &dwPropertyRegDataType, (BYTE*)szLocalInform,
                     sizeof(szLocalInform),    // The size, in bytes
                     &dwSize))
-                    m_logger->debug("Location: {}", QString::fromWCharArray(szLocalInform).toStdString());
-
+                    Info[DeviceIndex].LocationInfo = QString::fromWCharArray(szLocalInform);
+                if (SetupDiGetDeviceRegistryProperty(DeviceInfoSet, &DeviceInfoData, SPDRP_ADDRESS,
+                    &dwPropertyRegDataType, (BYTE*)szAddress,
+                    sizeof(szAddress),    // The size, in bytes
+                    &dwSize))
+                    Info[DeviceIndex].Address = QString::fromWCharArray(szAddress);
+                if (SetupDiGetDeviceRegistryProperty(DeviceInfoSet, &DeviceInfoData, SPDRP_CLASS,
+                    &dwPropertyRegDataType, (BYTE*)szClass,
+                    sizeof(szClass),    // The size, in bytes
+                    &dwSize))
+                    Info[DeviceIndex].Class = QString::fromWCharArray(szClass);
+                if (SetupDiGetDeviceRegistryProperty(DeviceInfoSet, &DeviceInfoData, SPDRP_BUSTYPEGUID,
+                    &dwPropertyRegDataType, (BYTE*)szBusGuid,
+                    sizeof(szBusGuid),    // The size, in bytes
+                    &dwSize))
+                    Info[DeviceIndex].BusTypeGuiD = QString::fromWCharArray(szBusGuid);
+                if (SetupDiGetDeviceRegistryProperty(DeviceInfoSet, &DeviceInfoData, SPDRP_CLASSGUID,
+                    &dwPropertyRegDataType, (BYTE*)szClassGuid,
+                    sizeof(szClassGuid),    // The size, in bytes
+                    &dwSize))
+                    Info[DeviceIndex].ClassGuid = QString::fromWCharArray(szClassGuid);
+                if (SetupDiGetDeviceRegistryProperty(DeviceInfoSet, &DeviceInfoData, SPDRP_DEVTYPE,
+                    &dwPropertyRegDataType, (BYTE*)szDevType,
+                    sizeof(szDevType),    // The size, in bytes
+                    &dwSize))
+                    Info[DeviceIndex].DevType = QString::fromWCharArray(szDevType);
+                if (SetupDiGetDeviceRegistryProperty(DeviceInfoSet, &DeviceInfoData, SPDRP_ENUMERATOR_NAME,
+                    &dwPropertyRegDataType, (BYTE*)szEnumeratorName,
+                    sizeof(szEnumeratorName),    // The size, in bytes
+                    &dwSize))
+                    Info[DeviceIndex].EnumeratorName = QString::fromWCharArray(szEnumeratorName);
+                if (SetupDiGetDeviceRegistryProperty(DeviceInfoSet, &DeviceInfoData, SPDRP_MFG,
+                    &dwPropertyRegDataType, (BYTE*)szDeviceManufacturer,
+                    sizeof(szDeviceManufacturer),    // The size, in bytes
+                    &dwSize))
+                    Info[DeviceIndex].DeviceManufacturer = QString::fromWCharArray(szDeviceManufacturer);
+                if (SetupDiGetDeviceRegistryProperty(DeviceInfoSet, &DeviceInfoData, SPDRP_PHYSICAL_DEVICE_OBJECT_NAME,
+                    &dwPropertyRegDataType, (BYTE*)szPhysicalDeviceObjectName,
+                    sizeof(szPhysicalDeviceObjectName),    // The size, in bytes
+                    &dwSize))
+                    Info[DeviceIndex].PhysicalDeviceObjectName = QString::fromWCharArray(szPhysicalDeviceObjectName);
+                if (SetupDiGetDeviceRegistryProperty(DeviceInfoSet, &DeviceInfoData, SPDRP_SERVICE,
+                    &dwPropertyRegDataType, (BYTE*)szServiceName,
+                    sizeof(szServiceName),    // The size, in bytes
+                    &dwSize))
+                    Info[DeviceIndex].ServiceName = QString::fromWCharArray(szServiceName);
             }
 
             if (DeviceInfoSet) {
                 SetupDiDestroyDeviceInfoList(DeviceInfoSet);
             }
 
-            QAbstractEventDispatcher::instance()->installNativeEventFilter(changeDeviceFilter());
 
         }
 

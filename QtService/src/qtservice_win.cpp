@@ -56,6 +56,8 @@
 #include <QThread>
 #include <Wtsapi32.h>
 #include <Dbt.h>
+#include <devguid.h>
+
 #if QT_VERSION >= 0x050000
 #  include <QAbstractNativeEventFilter>
 #endif
@@ -64,8 +66,11 @@
 #include <QDebug>
 #endif
 
+
+
 #include "spdlog\spdlog.h"
 #include "RemoteDataConnectLibrary.h"
+
 
 typedef SERVICE_STATUS_HANDLE(WINAPI*PRegisterServiceCtrlHandler)(const wchar_t*,LPHANDLER_FUNCTION_EX);
 static PRegisterServiceCtrlHandler pRegisterServiceCtrlHandler = 0;
@@ -469,6 +474,22 @@ void QtServiceBase::logMessage(const QString &message, MessageType type,
     }
 }
 
+class QDeviceEvent : public QEvent {
+private: 
+    QString m_DeviceName = "";
+public:
+    QDeviceEvent(QString DeviceName, QEvent::Type Type) : QEvent(Type),
+        m_DeviceName(m_DeviceName){}
+    static const QEvent::Type myType = static_cast<QEvent::Type>(QEvent::User);
+    void SetDeviceName(QString DeviceName){ m_DeviceName = DeviceName; };
+    QString DeviceName() { return m_DeviceName; }
+
+};
+
+
+
+
+
 class QtServiceControllerHandler : public QObject
 {
     Q_OBJECT
@@ -494,6 +515,11 @@ public:
 		QTSERVICE_CONSOLE_DISCONNECT = 133,
 		QTSERVICE_REMOTE_CONNECT = 134,
 		QTSERVICE_REMOTE_DISCONNECT = 135,
+        QTSERVICE_DBT_DEVICEREMOVECOMPLETE = 136,
+        QTSERVICE_DBT_DEVICEARRIVAL = 137,
+        QTSERVICE_DBT_DEVICEQUERYREMOVE = 138,
+        QTSERVICE_DBT_DEVICEQUERYREMOVEFAILED = 139,
+        QTSERVICE_DBT_CUSTOMEVENT = 140,
         QTSERVICE_STARTUP = 256
     };
     QtServiceSysPrivate();
@@ -510,6 +536,7 @@ public:
     QStringList serviceArgs;
     std::shared_ptr<spdlog::logger> m_logger;
 	static QString Username(DWORD dwEventType);
+    static unsigned long __stdcall QtServiceSysPrivate::DeviceEventNotify(DWORD evtype, PVOID evdata);
 
     static QtServiceSysPrivate *instance;
 #if QT_VERSION < 0x050000
@@ -574,24 +601,40 @@ void WINAPI QtServiceSysPrivate::serviceMain(DWORD dwArgc, wchar_t** lpszArgv)
     instance->startSemaphore.release(); // let the qapp creation start
     instance->startSemaphore2.acquire(); // wait until its done
     // Register the control request handler
-    //instance->serviceStatus = pRegisterServiceCtrlHandler((TCHAR*)QtServiceBase::instance()->serviceName().utf16(), handler);
+
 	instance->serviceStatus = RegisterServiceCtrlHandlerEx((TCHAR*)QtServiceBase::instance()->serviceName().utf16(), handler,0);
 	if (!instance->serviceStatus) // cannot happen - something is utterly wrong
 	{
 		return;
 	}
 
+    static const GUID GuidDevInterfaceList[] =
+    {
+        { 0xa5dcbf10, 0x6530, 0x11d2, { 0x90, 0x1f, 0x00, 0xc0, 0x4f, 0xb9, 0x51, 0xed } },
+        { 0x53f56307, 0xb6bf, 0x11d0, { 0x94, 0xf2, 0x00, 0xa0, 0xc9, 0x1e, 0xfb, 0x8b } },
+        { 0x4d1e55b2, 0xf16f, 0x11Cf, { 0x88, 0xcb, 0x00, 0x11, 0x11, 0x00, 0x00, 0x30 } },
+        { 0xad498944, 0x762f, 0x11d0, { 0x8d, 0xcb, 0x00, 0xc0, 0x4f, 0xc3, 0x35, 0x8c } }
+    };
 
     DEV_BROADCAST_DEVICEINTERFACE NotificationFilter;
     ZeroMemory(&NotificationFilter, sizeof(NotificationFilter));
     NotificationFilter.dbcc_size = sizeof(DEV_BROADCAST_DEVICEINTERFACE);
     NotificationFilter.dbcc_devicetype = DBT_DEVTYP_DEVICEINTERFACE;
-    SERVICE_STATUS_HANDLE m_hServiceStatus;
-    HDEVNOTIFY m_hDevNotify = RegisterDeviceNotification(m_hServiceStatus,
-        &NotificationFilter, DEVICE_NOTIFY_SERVICE_HANDLE |
-        DEVICE_NOTIFY_ALL_INTERFACE_CLASSES);
 
 
+
+    HDEVNOTIFY hDeviceNotify = NULL;
+    for (int i = 0; i < sizeof(GuidDevInterfaceList); i++)
+    {
+        NotificationFilter.dbcc_classguid = GuidDevInterfaceList[i];
+
+        hDeviceNotify = RegisterDeviceNotification(instance->serviceStatus, &NotificationFilter,DEVICE_NOTIFY_SERVICE_HANDLE);
+        if (hDeviceNotify == NULL)
+        {
+            DWORD  error = GetLastError();
+            QtServiceBase::instance()->logMessage("Failure: " + error, QtServiceBase::MessageType::Error);
+        }
+    }
 
     handler(QTSERVICE_STARTUP,0,nullptr,nullptr); // Signal startup to the application -
                                 // causes QtServiceBase::start() to be called in the main thread
@@ -609,7 +652,6 @@ void WINAPI QtServiceSysPrivate::serviceMain(DWORD dwArgc, wchar_t** lpszArgv)
 void QtServiceSysPrivate::handleCustomEvent(QEvent *e)
 {
     int code = e->type() - QEvent::User;
-
     switch(code) {
     case QTSERVICE_STARTUP: // Startup
         QtServiceBase::instance()->start();
@@ -648,6 +690,36 @@ void QtServiceSysPrivate::handleCustomEvent(QEvent *e)
 	case QTSERVICE_REMOTE_DISCONNECT:
 		QtServiceBase::instance()->RemoteDisconnect();
 		break;
+    case QTSERVICE_DBT_DEVICEREMOVECOMPLETE:
+    {
+        QDeviceEvent* dEvent = static_cast<QDeviceEvent*>(e);
+        QtServiceBase::instance()->DeviceRemoveComplete(dEvent->DeviceName());
+        break;
+    }
+    case QTSERVICE_DBT_DEVICEARRIVAL:
+    {
+        QDeviceEvent* dEvent = static_cast<QDeviceEvent*>(e);
+        QtServiceBase::instance()->DeviceArrival(dEvent->DeviceName());
+        break;
+    }
+    case QTSERVICE_DBT_DEVICEQUERYREMOVE:
+    {
+        QDeviceEvent* dEvent = static_cast<QDeviceEvent*>(e);
+        QtServiceBase::instance()->DeviceQueryRemove(dEvent->DeviceName());
+        break;
+    }
+    case QTSERVICE_DBT_DEVICEQUERYREMOVEFAILED:
+    {
+        QDeviceEvent* dEvent = static_cast<QDeviceEvent*>(e);
+        QtServiceBase::instance()->DeviceQueryRemoveFailed(dEvent->DeviceName());
+        break;
+    }
+    case QTSERVICE_DBT_CUSTOMEVENT:
+    {
+        QDeviceEvent* dEvent = static_cast<QDeviceEvent*>(e);
+        QtServiceBase::instance()->DeviceCustomEvent(dEvent->DeviceName());
+        break;
+    }
     default:
 	if (code >= 128 && code <= 255)
 	    QtServiceBase::instance()->processCommand(code - 128);
@@ -682,19 +754,61 @@ QString QtServiceSysPrivate::Username(DWORD dwEventType)
 
 
 
-unsigned long __stdcall DeviceEventNotify(DWORD evtype, PVOID evdata)
+unsigned long __stdcall QtServiceSysPrivate::DeviceEventNotify(DWORD evtype, PVOID evdata)
 {
 
     switch (evtype)
     {
-    case DBT_DEVICEREMOVECOMPLETE:
-    {
-    }
-    break;
-    case DBT_DEVICEARRIVAL:
-    {
-    }
-    break;
+        case DBT_DEVICEREMOVECOMPLETE:
+        {
+            PDEV_BROADCAST_HDR pHdr = (PDEV_BROADCAST_HDR)evdata;
+            if (pHdr->dbch_devicetype == DBT_DEVTYP_DEVICEINTERFACE)
+            {
+                PDEV_BROADCAST_DEVICEINTERFACE pDevice = (PDEV_BROADCAST_DEVICEINTERFACE)pHdr;
+                QCoreApplication::postEvent(instance->controllerHandler, new QDeviceEvent(QString::fromWCharArray(pDevice->dbcc_name), QEvent::Type(QEvent::User + QTSERVICE_DBT_DEVICEREMOVECOMPLETE)));
+            }
+        }
+        break;
+        case DBT_DEVICEARRIVAL:
+        {
+            PDEV_BROADCAST_HDR pHdr = (PDEV_BROADCAST_HDR)evdata;
+            if (pHdr->dbch_devicetype == DBT_DEVTYP_DEVICEINTERFACE)
+            {
+                PDEV_BROADCAST_DEVICEINTERFACE pDevice = (PDEV_BROADCAST_DEVICEINTERFACE)pHdr;
+                QCoreApplication::postEvent(instance->controllerHandler, new QDeviceEvent(QString::fromWCharArray(pDevice->dbcc_name), QEvent::Type(QEvent::User + QTSERVICE_DBT_DEVICEARRIVAL)));
+            }
+        }
+        break;
+        case DBT_DEVICEQUERYREMOVE: 
+        {
+            PDEV_BROADCAST_HDR pHdr = (PDEV_BROADCAST_HDR)evdata;
+            if (pHdr->dbch_devicetype == DBT_DEVTYP_DEVICEINTERFACE)
+            {
+                PDEV_BROADCAST_DEVICEINTERFACE pDevice = (PDEV_BROADCAST_DEVICEINTERFACE)pHdr;
+                QCoreApplication::postEvent(instance->controllerHandler, new QDeviceEvent(QString::fromWCharArray(pDevice->dbcc_name), QEvent::Type(QEvent::User + QTSERVICE_DBT_DEVICEQUERYREMOVE)));
+            }
+        }
+        break;
+        case DBT_DEVICEQUERYREMOVEFAILED:
+        {
+            PDEV_BROADCAST_HDR pHdr = (PDEV_BROADCAST_HDR)evdata;
+            if (pHdr->dbch_devicetype == DBT_DEVTYP_DEVICEINTERFACE)
+            {
+                PDEV_BROADCAST_DEVICEINTERFACE pDevice = (PDEV_BROADCAST_DEVICEINTERFACE)pHdr;
+                QCoreApplication::postEvent(instance->controllerHandler, new QDeviceEvent(QString::fromWCharArray(pDevice->dbcc_name), QEvent::Type(QEvent::User + QTSERVICE_DBT_DEVICEQUERYREMOVEFAILED)));
+            }
+        }
+        break;
+        case DBT_CUSTOMEVENT:
+        {
+            PDEV_BROADCAST_HDR pHdr = (PDEV_BROADCAST_HDR)evdata;
+            if (pHdr->dbch_devicetype == DBT_DEVTYP_DEVICEINTERFACE)
+            {
+                PDEV_BROADCAST_DEVICEINTERFACE pDevice = (PDEV_BROADCAST_DEVICEINTERFACE)pHdr;
+                QCoreApplication::postEvent(instance->controllerHandler, new QDeviceEvent(QString::fromWCharArray(pDevice->dbcc_name), QEvent::Type(QEvent::User + QTSERVICE_DBT_CUSTOMEVENT)));
+            }
+        }
+        break;
     }
 
     return 0;
@@ -752,6 +866,7 @@ DWORD WINAPI QtServiceSysPrivate::handler(DWORD code,
         break;
     case SERVICE_CONTROL_DEVICEEVENT:
         DeviceEventNotify(dwEventType, lpEventData);
+        break;
 	case SERVICE_CONTROL_SESSIONCHANGE:
 	{
 		if (instance->m_logger == nullptr)
@@ -789,16 +904,8 @@ DWORD WINAPI QtServiceSysPrivate::handler(DWORD code,
 		}
 		instance->condition.wait(&instance->mutex);
 
-		//Todo entfernen 
-		if (WTS_SESSION_REMOTE_CONTROL == (dwEventType & WTS_SESSION_REMOTE_CONTROL))
-		{
-			QtServiceBase::instance()->logMessage("WTS_SESSION_REMOTE_CONTROL");
-			instance->m_logger->info("WTS_SESSION_REMOTE_CONTROL");
-
-		}
-		instance->m_logger->flush();
 	}
-			break;
+	break;
     default:
         if ( code >= 128 && code <= 255 ) {
             QCoreApplication::postEvent(instance->controllerHandler, new QEvent(QEvent::Type(QEvent::User + code)));
