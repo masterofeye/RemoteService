@@ -254,6 +254,9 @@
     <ClCompile Include="GeneratedFiles\Release\moc_ShutdownHandler.cpp">
       <Filter>Generierte Dateien\Release</Filter>
     </ClCompile>
+    <ClCompile Include="USBDevice.cpp">
+      <Filter>Hardware</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ProcessObserverPrivate.h">
@@ -267,6 +270,9 @@
     </ClInclude>
     <ClInclude Include="AutoIncrement.h">
       <Filter>Helper\Installer</Filter>
+    </ClInclude>
+    <ClInclude Include="USBDevice.h">
+      <Filter>Hardware</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

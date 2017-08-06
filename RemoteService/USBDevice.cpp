@@ -41,6 +41,8 @@ namespace RW{
 				return true;
 			}
 
+			/*zweiter Versuch, nun wird versucht das Gerät zu entfernen und danach einen rescan durchzuführen*/
+
 			devcon.arguments().clear();
 			devcon.arguments() << REMOVE_CMD << m_HardwareID;
 			devcon.start();
@@ -51,7 +53,9 @@ namespace RW{
 				return false;
 			}
 
-
+			devcon.arguments().clear();
+			devcon.arguments() << RESCAN_CMD;
+			devcon.start();
 		}
 
 		bool USBDevice::Shutdown()
