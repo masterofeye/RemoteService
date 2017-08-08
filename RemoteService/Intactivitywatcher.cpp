@@ -89,7 +89,7 @@ namespace RW{
                     if (Msg.Success() == false)
                     {
                         m_isRunning = true;
-                        m_logger->critical("Couldn't start inactivity timer: {}", (int)spdlog::sinks::FilterType::InactivityWatcher, Msg.Result().toString().toStdString());
+                        m_logger->critical("Couldn't logout the successfully: {}", (int)spdlog::sinks::FilterType::InactivityWatcher, Msg.Result().toString().toStdString());
                     }
                     else
                     {
