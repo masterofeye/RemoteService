@@ -89,12 +89,15 @@ namespace RW{
                     if (Msg.Success() == false)
                     {
                         m_isRunning = true;
-                        m_logger->critical("Couldn't start inactivity timer: {}", (int)spdlog::sinks::FilterType::InactivityWatcher, Msg.Result().toString().toStdString());
+                        m_logger->critical("Error occoured durring Logout. Shutdown will be stopped now. ErrorID: {}", (int)spdlog::sinks::FilterType::InactivityWatcher, Msg.Result().toString().toStdString());
+                        COM::Message msg;
+                        msg.SetMessageID(COM::MessageDescription::IN_StopShutdownHandler);
+                        emit NewMessage(msg);
                     }
                     else
                     {
                         m_isRunning = false;
-                        m_logger->info("User was logged out successfully.", (int)spdlog::sinks::FilterType::InactivityWatcher);
+                        m_logger->info("Logged was possibly processed, the shutdown timer will be started.", (int)spdlog::sinks::FilterType::InactivityWatcher);
                         COM::Message msg;
                         msg.SetMessageID(COM::MessageDescription::IN_StartShutdownHandler);
                         emit NewMessage(msg);
@@ -141,7 +144,14 @@ namespace RW{
                 msg.SetIsExternal(true);
                 QList<QVariant> paramList;
                 paramList.append(m_Timeout);
-                msg.SetParameterList(paramList);
+			
+				/*Wir müssen den Usernamen an den RemoteHiddenhelper schicken um sicher zu sein, 
+				dass die richtige Session ausgeloggt wird.*/
+				QVariant username;
+				m_ConfigManager->GetConfigValue(ConfigurationName::UserName, username);
+				paramList.append(username.toString());
+                
+				msg.SetParameterList(paramList);
                 connect(m_TimerLogout, &QTimer::timeout, this, &InactivityWatcher::OnTimeoutStart);
                 m_TimerLogout->setSingleShot(true);
                 m_TimerLogout->start(5000);

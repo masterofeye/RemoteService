@@ -217,7 +217,7 @@ namespace RW{
         bool ProcessObserverPrivate::_q_startupNotification()
         {
             Q_Q(ProcessObserver);
-            m_Logger->debug("QProcessPrivate::startupNotification()");
+            //m_Logger->debug("QProcessPrivate::startupNotification()");
 
             if (startupSocketNotifier)
                 startupSocketNotifier->setEnabled(false);
