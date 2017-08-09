@@ -344,7 +344,6 @@ void RemoteService::SessionLogOn()
 	{
         m_logger->info("A new session started for user: {}", (int)spdlog::sinks::FilterType::RemoteServiceSessionLogon, username.toStdString());
 	}
-    m_logger->debug("Der Username ist {}:", username.toStdString());
 
     m_ProcessObserver = new RW::CORE::ProcessObserver(m_obj);
     m_ProcessObserver->setProgram("RemoteHiddenHelper.exe");

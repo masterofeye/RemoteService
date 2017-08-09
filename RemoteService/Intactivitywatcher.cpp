@@ -89,12 +89,15 @@ namespace RW{
                     if (Msg.Success() == false)
                     {
                         m_isRunning = true;
-                        m_logger->critical("Couldn't logout the successfully: {}", (int)spdlog::sinks::FilterType::InactivityWatcher, Msg.Result().toString().toStdString());
+                        m_logger->critical("Error occoured durring Logout. Shutdown will be stopped now. ErrorID: {}", (int)spdlog::sinks::FilterType::InactivityWatcher, Msg.Result().toString().toStdString());
+                        COM::Message msg;
+                        msg.SetMessageID(COM::MessageDescription::IN_StopShutdownHandler);
+                        emit NewMessage(msg);
                     }
                     else
                     {
                         m_isRunning = false;
-                        m_logger->info("User was logged out successfully.", (int)spdlog::sinks::FilterType::InactivityWatcher);
+                        m_logger->info("Logged was possibly processed, the shutdown timer will be started.", (int)spdlog::sinks::FilterType::InactivityWatcher);
                         COM::Message msg;
                         msg.SetMessageID(COM::MessageDescription::IN_StartShutdownHandler);
                         emit NewMessage(msg);
