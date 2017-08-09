@@ -144,7 +144,14 @@ namespace RW{
                 msg.SetIsExternal(true);
                 QList<QVariant> paramList;
                 paramList.append(m_Timeout);
-                msg.SetParameterList(paramList);
+			
+				/*Wir müssen den Usernamen an den RemoteHiddenhelper schicken um sicher zu sein, 
+				dass die richtige Session ausgeloggt wird.*/
+				QVariant username;
+				m_ConfigManager->GetConfigValue(ConfigurationName::UserName, username);
+				paramList.append(username.toString());
+                
+				msg.SetParameterList(paramList);
                 connect(m_TimerLogout, &QTimer::timeout, this, &InactivityWatcher::OnTimeoutStart);
                 m_TimerLogout->setSingleShot(true);
                 m_TimerLogout->start(5000);
