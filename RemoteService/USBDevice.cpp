@@ -1,4 +1,5 @@
 #include "USBDevice.h"
+#include <qprocess.h>
 
 #define DEVCON "devcon.exe"
 #define RESTART_CMD "restart"
@@ -19,18 +20,18 @@ namespace RW{
 
 		bool USBDevice::ParseStdOut(QString StdOutput)
 		{
-		
+            return true;
 		}
 
 		bool USBDevice::Initialize()
 		{
-
+            return true;
 		}
 
 		bool USBDevice::Reset()
 		{
 			QProcess devcon;
-			devcon.program = DEVCON;
+			devcon.setProgram(DEVCON);
 			devcon.arguments() << RESTART_CMD << m_HardwareID;
 
 			devcon.start();
@@ -56,11 +57,12 @@ namespace RW{
 			devcon.arguments().clear();
 			devcon.arguments() << RESCAN_CMD;
 			devcon.start();
+            return true;
 		}
 
 		bool USBDevice::Shutdown()
 		{
-
+            return true;
 		}
 
 

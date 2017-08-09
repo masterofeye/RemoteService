@@ -15,7 +15,7 @@ namespace RW{
 
 
         DeviceManager::DeviceManager(CORE::ConfigurationManager* CfgManager, QObject *Parent) : QObject(Parent),
-			m_DeviceList(new QMap<DeviceType, AbstractDevice*>()),
+            m_DeviceList(new QMap<PeripheralType, AbstractDevice*>()),
 			m_State(State::DeInit),
             m_ConfigManager(CfgManager)
 		{
@@ -30,26 +30,26 @@ namespace RW{
 		bool DeviceManager::Init()
 		{
 			//TODO dies muss durch config gesetzt werden
-			m_DeviceList->insert(RW::HW::DeviceManager::DeviceType::PowerStripe, new AnelHome(this));
-			//m_DeviceList->insert(RW::HW::DeviceManager::DeviceType::PowerSupply, new VoltCraft(this));
-			//m_DeviceList->insert(RW::HW::DeviceManager::DeviceType::RemoteBox, new RemoteBoxDevice(this));
+            m_DeviceList->insert(PeripheralType::PowerStripe, new AnelHome(this));
+			//m_DeviceList->insert(PeripheralType::PowerSupply, new VoltCraft(this));
+			//m_DeviceList->insert(PeripheralType::RemoteBox, new RemoteBoxDevice(this));
 
 
-			QMapIterator<DeviceType, AbstractDevice*> i(*m_DeviceList);
+            QMapIterator<PeripheralType, AbstractDevice*> i(*m_DeviceList);
 			while (i.hasNext()) {
 				if (!i.next().value()->Initialize())
 				{
 					switch (i.key())
 					{
-					case RW::HW::DeviceManager::DeviceType::PowerSupply:
+                    case PeripheralType::PowerSupply:
 						m_logger->error("PowerSupply initialisation failed.");
 						m_State = State::Failure;
 						break;
-					case RW::HW::DeviceManager::DeviceType::RemoteBox:
+                    case PeripheralType::RemoteBox:
 						m_logger->error("RemoteBox initialisation failed.");
 						m_State = State::Failure;
 						break;
-					case RW::HW::DeviceManager::DeviceType::PowerStripe:
+                    case PeripheralType::PowerStripe:
 						m_logger->error("PowerStripe initialisation failed.");
 						m_State = State::Failure;
 						break;
@@ -68,7 +68,7 @@ namespace RW{
 		{
 			if (m_State == State::Init)
 			{
-				QMapIterator<DeviceType, AbstractDevice*> i(*m_DeviceList);
+                QMapIterator<PeripheralType, AbstractDevice*> i(*m_DeviceList);
 				while (i.hasNext()) {
 					i.next().value()->Shutdown();
 				}
@@ -81,7 +81,7 @@ namespace RW{
 
 		}
 
-		AbstractDevice* DeviceManager::GetDevice(DeviceType Type)
+        AbstractDevice* DeviceManager::GetDevice(PeripheralType Type)
 		{
 			return (AbstractDevice*)m_DeviceList->value(Type);
 		}

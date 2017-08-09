@@ -3,10 +3,13 @@
 #include "spdlog\spdlog.h"
 
 namespace RW{
+    enum class PeripheralType;
+
     namespace CORE
     {
         class ConfigurationManager;
     }
+
 	namespace HW{
 
 		class AbstractDevice;
@@ -20,16 +23,6 @@ namespace RW{
 		{
 			Q_OBJECT
 		public:
-            /*!
-            @brief Enumeration, welche eine Auflistung aller Geräte, die über den DeviceManager gesteuert werden. 
-            */
-			enum class DeviceType
-			{
-				RemoteBox, /*!< enumeration für RemoteBox*/
-				PowerStripe, /*!< enumeration für PowerStripe*/
-				PowerSupply, /*!< enumeration für PowerSupply*/
-			};
-
             /*!
             @brief Enumeration, für den Zustand, die ein Gerät einnehmen kann.
             */
@@ -45,7 +38,7 @@ namespace RW{
 			std::shared_ptr<spdlog::logger> m_logger;
 			State m_State;
 
-			QMap<DeviceType,AbstractDevice*> *m_DeviceList;
+            QMap<PeripheralType, AbstractDevice*> *m_DeviceList;
             CORE::ConfigurationManager* m_ConfigManager;
 		public:
             DeviceManager(CORE::ConfigurationManager* CfgManager, QObject *Parent = nullptr);
@@ -64,7 +57,7 @@ namespace RW{
             Eine Prüfung auf null_ptr ist erforderlich.
             @param DeviceType Siehe dafür \ref DeviceType 
             */
-			AbstractDevice* GetDevice(DeviceType Type);
+            AbstractDevice* GetDevice(PeripheralType Type);
 
             /*!
             @brief Initialisiert alle Geräte die unter der Kontrolle des DeviceManagers stehen.

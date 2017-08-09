@@ -5,7 +5,7 @@
 #include "PowerSupplyDevice.h"
 #include "FlashCmdProcessor.h"
 #include "DeviceManager.h"
-
+#include "RemoteDataConnectLibrary.h"
 #include "WinApiHelper.h"
 
 namespace RW{
@@ -72,7 +72,7 @@ namespace RW{
 		void RelayCommand::SetDevice(QObject* const Device)
 		{
 			HW::DeviceManager* manager = qobject_cast<HW::DeviceManager*>(Device);
-			m_RemoteBoxWrapper = (RemoteBoxWrapper::Wrapper*) manager->GetDevice(HW::DeviceManager::DeviceType::RemoteBox);
+            m_RemoteBoxWrapper = (RemoteBoxWrapper::Wrapper*) manager->GetDevice(RW::PeripheralType::RemoteBox);
 		}
 
 		bool RelayCommand::Execute()
@@ -131,7 +131,7 @@ namespace RW{
 		void IOCommand::SetDevice(QObject * const Device)
 		{
 			HW::DeviceManager* manager = qobject_cast<HW::DeviceManager*>(Device);
-			m_RemoteBoxWrapper = (RemoteBoxWrapper::Wrapper*) manager->GetDevice(HW::DeviceManager::DeviceType::RemoteBox);
+            m_RemoteBoxWrapper = (RemoteBoxWrapper::Wrapper*) manager->GetDevice( PeripheralType::RemoteBox);
 		}
 
 		bool IOCommand::Execute()
@@ -204,7 +204,7 @@ namespace RW{
 		void USBCommand::SetDevice(QObject * const Device)
 		{
 			HW::DeviceManager* manager = qobject_cast<HW::DeviceManager*>(Device);
-			m_RemoteBoxWrapper = (RemoteBoxWrapper::Wrapper*) manager->GetDevice(HW::DeviceManager::DeviceType::RemoteBox);
+            m_RemoteBoxWrapper = (RemoteBoxWrapper::Wrapper*) manager->GetDevice(PeripheralType::RemoteBox);
 		}
 
 		bool USBCommand::Execute()
@@ -276,7 +276,7 @@ namespace RW{
 		void ADCCommand::SetDevice(QObject * const Device)
 		{
 			HW::DeviceManager* manager = qobject_cast<HW::DeviceManager*>(Device);
-			m_RemoteBoxWrapper = (RemoteBoxWrapper::Wrapper*) manager->GetDevice(HW::DeviceManager::DeviceType::RemoteBox);
+			m_RemoteBoxWrapper = (RemoteBoxWrapper::Wrapper*) manager->GetDevice(PeripheralType::RemoteBox);
 		}
 
 		bool ADCCommand::Execute()
@@ -331,7 +331,7 @@ namespace RW{
 		void DACCommand::SetDevice(QObject * const Device)
 		{
 			HW::DeviceManager* manager = qobject_cast<HW::DeviceManager*>(Device);
-			m_RemoteBoxWrapper = (RemoteBoxWrapper::Wrapper*) manager->GetDevice(HW::DeviceManager::DeviceType::RemoteBox);
+			m_RemoteBoxWrapper = (RemoteBoxWrapper::Wrapper*) manager->GetDevice(PeripheralType::RemoteBox);
 		}
 
 		bool DACCommand::Execute()
@@ -385,7 +385,7 @@ namespace RW{
 		void PowerStripeCommand::SetDevice(QObject * const Device)
 		{
 			HW::DeviceManager* manager = qobject_cast<HW::DeviceManager*>(Device);
-			m_Device = (HW::PowerStripeDevice*) manager->GetDevice(HW::DeviceManager::DeviceType::PowerStripe);
+            m_Device = (HW::PowerStripeDevice*) manager->GetDevice(PeripheralType::PowerStripe);
 		}
 
 
@@ -442,7 +442,7 @@ namespace RW{
 		void PowerSupplyCommand::SetDevice(QObject * const Device)
 		{
 			HW::DeviceManager* manager = qobject_cast<HW::DeviceManager*>(Device);
-			m_Device = (HW::PowerSupplyDevice*) manager->GetDevice(HW::DeviceManager::DeviceType::PowerSupply);
+			m_Device = (HW::PowerSupplyDevice*) manager->GetDevice(PeripheralType::PowerSupply);
 		}
 
 		bool PowerSupplyCommand::Execute()
