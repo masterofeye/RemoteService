@@ -315,7 +315,7 @@ void RemoteService::RemoteDisconnect()
         m_logger->info("The current remote sessions end for user: {}", (int)spdlog::sinks::FilterType::RemoteServiceDisconnect, username.toStdString());
 	}
     //Wenn der Rechner bereits ausgeschalten wurde erfolgt unter umständen hier nochmal der RemoteDisconnect, 
-    //dabei sollte der Status aber nicht verändert werden
+    //dabei sollte der Status aber nicht verändert werden. Auch wenn die Status bereits FREE ist sollten wir hier nichts tun.
     /****SessionLogoff**/
     /**********|********/
     /**********|********/
@@ -323,14 +323,14 @@ void RemoteService::RemoteDisconnect()
     /**********|********/
     /**********|********/
     /**RemoteDisconnect*/
-
     QVariant val;
     m_Config->GetConfigValue(RW::CORE::ConfigurationName::WorkstationState, val);
-    if (!(val.value<RW::WorkstationState>() == RW::WorkstationState::OFF))
+    if ((val.value<RW::WorkstationState>() != RW::WorkstationState::OFF) &&
+        (val.value<RW::WorkstationState>() != RW::WorkstationState::FREE))
     {
-        m_Config->InsertConfigValue(RW::CORE::ConfigurationName::UserName, "Free");
-        m_Config->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::FREE));
-        m_logger->debug("RemoteService State is: {}", "FREE");
+        m_Config->InsertConfigValue(RW::CORE::ConfigurationName::UserName, "Occupy");
+        m_Config->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::OCCUPY));
+        m_logger->debug("RemoteService State is: {}", "OCCUPY");
     }
 	m_logger->flush();
 }
