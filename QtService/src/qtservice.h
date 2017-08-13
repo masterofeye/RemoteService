@@ -155,6 +155,7 @@ protected:
 	virtual void SessionLogOff();
 	virtual void ConsoleConnect();
 	virtual void ConsoleDisconnect();
+	virtual void Shutdown();
     virtual void DeviceRemoveComplete(QString DeviceName);
     virtual void DeviceArrival(QString DeviceName);
     virtual void DeviceQueryRemove(QString DeviceName);
