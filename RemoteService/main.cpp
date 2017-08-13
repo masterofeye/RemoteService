@@ -60,6 +60,7 @@
 #include "ProcessObserver.h"
 #include "AnelHome.h"
 #include "NotifierHandler.h"
+#include "WtsSessionManager.h"
 
 
 
@@ -82,6 +83,7 @@ private:
     RW::CORE::NotifierHandler *m_NotifierHandler = nullptr;
     RW::CORE::ProcessObserver *m_ProcessObserver = nullptr;
     RW::CORE::ConfigurationManager *m_Config = nullptr;
+	RW::CORE::WtsSessionManager* m_SessionManager = nullptr;
 public:
 	RemoteService(int argc, char **argv);
 	~RemoteService();
@@ -100,6 +102,7 @@ protected:
 	void SessionLogOff();
 	void ConsoleConnect();
 	void ConsoleDisconnect();
+	void Shutdown();
     void DeviceRemoveComplete(QString DeviceName);
     void DeviceArrival(QString DeviceName);
     void DeviceQueryRemove(QString DeviceName);
@@ -116,7 +119,8 @@ RemoteService::RemoteService(int argc, char **argv)
     m_Shutdown(nullptr),
     m_DeviceMng(nullptr),
     m_NotifierHandler(nullptr),
-    m_Config(nullptr)
+    m_Config(nullptr),
+	m_SessionManager(nullptr)
 {
 
     setServiceDescription("The RemoteWorkstation Service.");
@@ -159,25 +163,30 @@ void RemoteService::start()
     m_DeviceMng = new RW::HW::DeviceManager(m_Config,m_obj);
 	m_Scheduler = new RW::CORE::JobScheduler(m_DeviceMng);
     m_CommunicationServer = new RW::COM::CommunicatonServer(true, RW::COM::TypeofServer::RemoteService,"Server", 1234, m_logger, m_obj);
-
+	m_SessionManager = new RW::CORE::WtsSessionManager(m_Config, m_obj);
     
     m_Config->Load();
-    QString username;
-    RW::CORE::WinApiHelper win;
-    if (win.ReturnCurrentUser(username))
-    {
+	m_Observer = new RW::CORE::InactivityWatcher("0.1", m_Config);
+	m_Shutdown = new RW::CORE::ShutdownHandler(m_DeviceMng, m_Config, "0.1");
 
-        m_Config->InsertConfigValue(RW::CORE::ConfigurationName::UserName, username);
-        m_Config->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::ON));
-        m_logger->debug("RemoteService State is: {}", "ON");
-    }
-    else
-    {
-        m_Config->InsertConfigValue(RW::CORE::ConfigurationName::UserName, "Free");
-        m_Config->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::FREE));
-        m_logger->debug("RemoteService State is: {}", "FREE");
-    }
-    
+	QObject::connect(m_Observer, &RW::CORE::InactivityWatcher::UserInactive, m_Shutdown, &RW::CORE::ShutdownHandler::StartShutdownTimer);
+	//QObject::connect(m_CommunicationServer, &RW::COM::CommunicationServer::RemoteHiddenHelperConnected, m_Observer, &RW::CORE::InactivityWatcher::StartInactivityObservation);
+	//QObject::connect(m_Scheduler, &RW::CORE::JobScheduler::SendAnswer, m_Observer, &RW::CORE::InactivityWatcher::StopInactivityObservationWithCmd);
+	/*Start Oberservation for user inactivity*/
+
+	QObject::connect(m_CommunicationServer, &RW::COM::CommunicatonServer::NewMessage, m_Scheduler, &RW::CORE::JobScheduler::AddNewJob);
+	QObject::connect(m_Scheduler, &RW::CORE::JobScheduler::SendAnswer, m_CommunicationServer, &RW::COM::CommunicatonServer::OnProcessMessage);
+
+
+	m_CommunicationServer->Register(m_Observer);
+	m_CommunicationServer->Register(m_Shutdown);
+	m_CommunicationServer->Register(m_NotifierHandler);
+	m_CommunicationServer->Register(m_SessionManager);
+
+	RW::COM::Message message;
+	message.SetMessageID(RW::COM::MessageDescription::IN_SESSIONSTARTSERVER);
+	emit m_CommunicationServer->NewMessage(message);
+
 
 
     QVariant workstationType;
@@ -194,18 +203,6 @@ void RemoteService::start()
 
     m_Observer = new RW::CORE::InactivityWatcher("0.1", m_Config);
     m_Shutdown = new RW::CORE::ShutdownHandler(m_DeviceMng, m_Config,"0.1");
-
-	QObject::connect(m_Observer, &RW::CORE::InactivityWatcher::UserInactive, m_Shutdown, &RW::CORE::ShutdownHandler::StartShutdownTimer);
-    //QObject::connect(m_CommunicationServer, &RW::COM::CommunicationServer::RemoteHiddenHelperConnected, m_Observer, &RW::CORE::InactivityWatcher::StartInactivityObservation);
-	//QObject::connect(m_Scheduler, &RW::CORE::JobScheduler::SendAnswer, m_Observer, &RW::CORE::InactivityWatcher::StopInactivityObservationWithCmd);
-	/*Start Oberservation for user inactivity*/
-
-    QObject::connect(m_CommunicationServer, &RW::COM::CommunicatonServer::NewMessage, m_Scheduler, &RW::CORE::JobScheduler::AddNewJob);
-    QObject::connect(m_Scheduler, &RW::CORE::JobScheduler::SendAnswer, m_CommunicationServer, &RW::COM::CommunicatonServer::OnProcessMessage);
-
-    m_CommunicationServer->Register(m_Observer);
-    m_CommunicationServer->Register(m_Shutdown);
-    m_CommunicationServer->Register(m_NotifierHandler);
 
 	m_Scheduler->start();
 	m_CommunicationServer->Listen();
@@ -226,10 +223,6 @@ void RemoteService::stop()
     m_Observer->StopInactivityObservation();
     m_Shutdown->StopShutdownTimer();
 
-    m_Config->InsertConfigValue(RW::CORE::ConfigurationName::UserName, "Offline");
-    m_Config->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::OFF));
-    m_logger->debug("RemoteService State is: {}", "OFF");
-
     m_ProcessObserver->kill();
 
     m_logger->info("Remote Service stopped", (int)spdlog::sinks::FilterType::RemoteServiceStop);
@@ -246,7 +239,6 @@ void RemoteService::pause()
 
 void RemoteService::resume()
 {
-
     m_Observer->StartInactivityObservation();
     m_logger->info("Remote Service resumed", (int)spdlog::sinks::FilterType::RemoteServiceResume);
 	m_logger->flush();
@@ -282,78 +274,41 @@ void RemoteService::SessionUnlock(){
 
 void RemoteService::RemoteConnect()
 {
-	RW::CORE::WinApiHelper win;
-	QString username;
-    
-	if (win.ReturnCurrentUser(username))
-	{
-        m_logger->info("A new remote session starts for user: {}", (int)spdlog::sinks::FilterType::RemoteServiceConnect, username.toStdString());
-        m_Config->InsertConfigValue(RW::CORE::ConfigurationName::UserName, username);
-        m_Config->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::OCCUPY));
-        m_logger->debug("RemoteService State is: {}", "OCCUPY");
-        m_Config->Load();
-
-	}
-    else
-    {
-        m_Config->InsertConfigValue(RW::CORE::ConfigurationName::UserName, "Free");
-        m_Config->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::FREE));
-        m_logger->debug("RemoteService State is: {}", "FREE");
-        m_Config->Load();
-    }
-
-    
+	m_logger->debug("CONNECT");
+	RW::COM::Message message;
+	message.SetMessageID(RW::COM::MessageDescription::IN_SESSIONCONNECT);
+	emit m_CommunicationServer->NewMessage(message);
+	m_Config->Load();
 	m_logger->flush();
 }
 
 void RemoteService::RemoteDisconnect()
 {
-	RW::CORE::WinApiHelper win;
-	QString username;
-	if (win.ReturnCurrentUser(username))
-	{
-        m_logger->info("The current remote sessions end for user: {}", (int)spdlog::sinks::FilterType::RemoteServiceDisconnect, username.toStdString());
-	}
-    //Wenn der Rechner bereits ausgeschalten wurde erfolgt unter umständen hier nochmal der RemoteDisconnect, 
-    //dabei sollte der Status aber nicht verändert werden. Auch wenn die Status bereits FREE ist sollten wir hier nichts tun.
-    /****SessionLogoff**/
-    /**********|********/
-    /**********|********/
-    /******SHUTDOWN*****/
-    /**********|********/
-    /**********|********/
-    /**RemoteDisconnect*/
-    QVariant val;
-    m_Config->GetConfigValue(RW::CORE::ConfigurationName::WorkstationState, val);
-    if ((val.value<RW::WorkstationState>() != RW::WorkstationState::OFF) &&
-        (val.value<RW::WorkstationState>() != RW::WorkstationState::FREE))
-    {
-        m_Config->InsertConfigValue(RW::CORE::ConfigurationName::UserName, "Occupy");
-        m_Config->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::OCCUPY));
-        m_logger->debug("RemoteService State is: {}", "OCCUPY");
-    }
+	m_logger->debug("DISCONNECT");
+	RW::COM::Message message;
+	message.SetMessageID(RW::COM::MessageDescription::IN_SESSIONDISCONNECT);
+	emit m_CommunicationServer->NewMessage(message);
 	m_logger->flush();
 }
 
 void RemoteService::SessionLogOn()
 {
-    QtServiceBase::instance()->logMessage("SessionLogOn");
-	RW::CORE::WinApiHelper win;
-	QString username;
-	if (win.ReturnCurrentUser(username))
-	{
-        m_logger->info("A new session started for user: {}", (int)spdlog::sinks::FilterType::RemoteServiceSessionLogon, username.toStdString());
-	}
+	//RW::CORE::WinApiHelper win;
+	//QString username;
+	//if (win.ReturnCurrentUser(username))
+	//{
+ //       m_logger->info("A new session started for user: {}", (int)spdlog::sinks::FilterType::RemoteServiceSessionLogon, username.toStdString());
+	//}
 
     m_ProcessObserver = new RW::CORE::ProcessObserver(m_obj);
     m_ProcessObserver->setProgram("RemoteHiddenHelper.exe");
     m_ProcessObserver->start();
 
-    m_Config->InsertConfigValue(RW::CORE::ConfigurationName::UserName, username);
-    /*Workstation ist nun an und die Datenbank sollte das auch mitbekommen*/
-    m_Config->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::ON));
-    m_logger->debug("RemoteService State is: {}", "ON");
 
+	m_logger->debug("LOGON");
+	RW::COM::Message message;
+	message.SetMessageID(RW::COM::MessageDescription::IN_SESSIONLOGON);
+	emit m_CommunicationServer->NewMessage(message);
     m_Config->Load();
 
 	m_logger->flush();
@@ -361,23 +316,13 @@ void RemoteService::SessionLogOn()
 
 void RemoteService::SessionLogOff()
 {
-    QtServiceBase::instance()->logMessage("SessionLogOff");
     delete m_ProcessObserver;
     m_ProcessObserver = nullptr;
-
-	RW::CORE::WinApiHelper win;
-	QString username;
-	if (win.ReturnCurrentUser(username))
-	{
-        m_logger->info("The session ends for user: {}", (int)spdlog::sinks::FilterType::RemoteServiceSessionLogoff, username.toStdString());
-	}
-
     m_Observer->StopInactivityObservation();
-
-    m_Config->InsertConfigValue(RW::CORE::ConfigurationName::UserName, "Free");
-    /*Die Workstation ist nun herunter gefahren, dies sollte auch die Datenbank wissen*/
-    m_Config->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::FREE));
-    m_logger->debug("RemoteService State is: {}", "FREE");
+	m_logger->debug("LOGOFF");
+	RW::COM::Message message;
+	message.SetMessageID(RW::COM::MessageDescription::IN_SESSIONLOGOFF);
+	emit m_CommunicationServer->NewMessage(message);
 
 	m_logger->flush();
 }
@@ -404,14 +349,23 @@ void RemoteService::ConsoleDisconnect()
 	m_logger->flush();
 }
 
+void RemoteService::Shutdown()
+{
+	RW::COM::Message message;
+	message.SetMessageID(RW::COM::MessageDescription::IN_SESSIONSHUTDOWN);
+	emit m_CommunicationServer->NewMessage(message);
+}
+
+
 void RemoteService::DeviceRemoveComplete(QString DeviceName)
 {
-    m_DeviceMng->RegisterNewDevice(DeviceName);
+	m_DeviceMng->DeregisterNewDevice(DeviceName);
 }
 
 void RemoteService::DeviceArrival(QString DeviceName)
 {
-    m_DeviceMng->DeregisterNewDevice(DeviceName);
+	m_DeviceMng->RegisterNewDevice(DeviceName);
+
 }
 
 void RemoteService::DeviceQueryRemove(QString DeviceName)

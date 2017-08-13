@@ -15,11 +15,11 @@ namespace RW{
 			bool Reset(){ return false; }
 			bool Shutdown(){ return false; }
 
-			bool GetVoltage(double &Value){ return true; }
-			bool GetCurrent(double &Value){ return true; }
-			bool GetCurrentLimit(double &Value){ return true; }
-			bool SetCurrentLimit(double Value){ return true; }
-			bool SetVoltage(double Value){ return true; }
+			bool GetVoltage(double &Value){ Q_UNUSED(Value) return true; }
+			bool GetCurrent(double &Value){ Q_UNUSED(Value) return true; }
+			bool GetCurrentLimit(double &Value){ Q_UNUSED(Value) return true; }
+			bool SetCurrentLimit(double Value){ Q_UNUSED(Value) return true; }
+			bool SetVoltage(double Value){ Q_UNUSED(Value) return true; }
 		};
 
 	}
