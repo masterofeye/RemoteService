@@ -352,6 +352,7 @@
     <ClCompile Include="ProcessObserver.cpp" />
     <ClCompile Include="ProcessObserverPrivate.cpp" />
     <ClCompile Include="SessionStateMachine.cpp" />
+    <ClCompile Include="USBDevice.cpp" />
     <ClCompile Include="UtilProcess.cpp" />
     <ClCompile Include="VoltCraft.cpp" />
     <ClCompile Include="PowerStripeDevice.cpp" />
@@ -379,6 +380,7 @@
     <ClInclude Include="ProcessObserverPrivate.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="resource1.h" />
+    <ClInclude Include="USBDevice.h" />
     <CustomBuild Include="SessionStateMachine.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing SessionStateMachine.h...</Message>
