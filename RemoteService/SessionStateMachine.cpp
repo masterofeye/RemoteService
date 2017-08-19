@@ -9,6 +9,7 @@ namespace RW{
 			m_Logger(spdlog::get("remoteservice")),
 			m_ConfigManager(Configmanager)
 		{
+            m_CurrentState = ST_SHUTDOWN;
 		}
 
 		SessionStateMachine::~SessionStateMachine()
@@ -19,12 +20,12 @@ namespace RW{
 		void SessionStateMachine::NewSession(SessionData* Data = nullptr)
 		{
 			BEGIN_TRANSITION_MAP						        // - Current State -
-				TRANSITION_MAP_ENTRY(ST_STARTSERVICE)			    // ST_STARTSERVICE
+                TRANSITION_MAP_ENTRY(ST_CONNECT)			    // ST_STARTSERVICE
 				TRANSITION_MAP_ENTRY(ST_LOGON)				    // ST_CONNECT
 				TRANSITION_MAP_ENTRY(ST_CONNECT)				// ST_DISCONNECT
 				TRANSITION_MAP_ENTRY(CANNOT_HAPPEN)				// ST_LOGON
 				TRANSITION_MAP_ENTRY(ST_CONNECT)				// ST_LOGOFF
-				TRANSITION_MAP_ENTRY(CANNOT_HAPPEN)				// ST_SHUTDOWN
+                TRANSITION_MAP_ENTRY(ST_STARTSERVICE)		    // ST_SHUTDOWN
 			END_TRANSITION_MAP(Data)
 		}
 
@@ -40,7 +41,7 @@ namespace RW{
 			END_TRANSITION_MAP(Data)
 		}
 
-		void SessionStateMachine::LogOff(SessionData* Data = nullptr)
+		void SessionStateMachine::LogOff(SessionData* Data)
 		{
 			BEGIN_TRANSITION_MAP						        // - Current State -
 				TRANSITION_MAP_ENTRY(ST_LOGOFF)			        // ST_STARTSERVICE
@@ -52,7 +53,17 @@ namespace RW{
 			END_TRANSITION_MAP(Data)
 		}
 
-
+        void SessionStateMachine::Shutdown(SessionData* Data)
+        {
+            BEGIN_TRANSITION_MAP						        // - Current State -
+                TRANSITION_MAP_ENTRY(ST_SHUTDOWN)			    // ST_STARTSERVICE
+                TRANSITION_MAP_ENTRY(ST_SHUTDOWN)				// ST_CONNECT
+                TRANSITION_MAP_ENTRY(ST_SHUTDOWN)				// ST_DISCONNECT
+                TRANSITION_MAP_ENTRY(ST_SHUTDOWN)				// ST_LOGON
+                TRANSITION_MAP_ENTRY(ST_SHUTDOWN)				// ST_LOGOFF
+                TRANSITION_MAP_ENTRY(CANNOT_HAPPEN)				// ST_SHUTDOWN
+            END_TRANSITION_MAP(Data)
+        }
 
 
 		// state machine sits here when motor is not running
@@ -97,12 +108,10 @@ namespace RW{
 
 		void SessionStateMachine::ST_Disconnect(EventData* Data)
 		{
-
 			m_Logger->info("ST_DISCONNECT");
 			m_ConfigManager->InsertConfigValue(RW::CORE::ConfigurationName::UserName, "Occupy");
 			m_ConfigManager->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::OCCUPY));
 			m_Logger->debug("RemoteService State is: {}", "OCCUPY");
-
 		}
 
 		void SessionStateMachine::ST_Logon(SessionData* Data)
@@ -126,6 +135,8 @@ namespace RW{
 
 		void SessionStateMachine::ST_LogOff(EventData* Data)
 		{
+            //Data sollte nicht benutzt werden.
+            Q_UNUSED(Data)
 			m_Logger->info("ST_LOGOFF");
 			m_ConfigManager->InsertConfigValue(RW::CORE::ConfigurationName::UserName, "Free");
 			m_ConfigManager->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::FREE));
@@ -135,10 +146,13 @@ namespace RW{
 
 		void SessionStateMachine::ST_Shutdown(EventData* Data)
 		{
+            //Data sollte nicht benutzt werden, weil beim Shutdown, keinerlei Nutzer aktiv sein sollten.
+            Q_UNUSED(Data)
 			m_Logger->info("ST_SHUTDOWN");
 			m_ConfigManager->InsertConfigValue(RW::CORE::ConfigurationName::UserName, "Offline");
 			m_ConfigManager->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::OFF));
 			m_Logger->debug("RemoteService State is: {}", "OFF");
+            m_Logger->flush();
 
 		}
 	}

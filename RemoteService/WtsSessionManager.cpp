@@ -154,9 +154,7 @@ namespace RW
 			case COM::MessageDescription::IN_SESSIONSHUTDOWN:
 			{
 				UpdateSessionsState();
-				GetCurrentlyLoggedUser(username);
-				SessionData* data = new SessionData(username);
-				m_StateMachine->LogOff(data);
+				m_StateMachine->Shutdown();
 				break;
 			}
 			default:

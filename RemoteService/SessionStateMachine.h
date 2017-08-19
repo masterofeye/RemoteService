@@ -28,8 +28,8 @@ namespace RW{
 
 			void NewSession(SessionData* Data);
 			void Disconnect(SessionData* Data);
-			void LogOff(SessionData* Data);
-
+            void LogOff(SessionData* Data = nullptr);
+            void Shutdown(SessionData* Data = nullptr);
 
 		private:
 			// state machine state functions
