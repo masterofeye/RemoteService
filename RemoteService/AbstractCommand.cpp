@@ -591,6 +591,7 @@ namespace RW{
 
 		void ShutdownCommand::SetDevice(QObject * const Device)
 		{
+			Q_UNUSED(Device)
 		}
 
 		bool ShutdownCommand::Execute()
@@ -644,6 +645,7 @@ namespace RW{
 
 		void FlashCommand::SetDevice(QObject * const Device)
 		{
+			Q_UNUSED(Device)
 		}
 		
 		bool FlashCommand::Execute()

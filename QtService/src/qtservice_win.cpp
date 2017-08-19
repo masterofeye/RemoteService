@@ -666,6 +666,9 @@ void QtServiceSysPrivate::handleCustomEvent(QEvent *e)
     case SERVICE_CONTROL_CONTINUE:
         QtServiceBase::instance()->resume();
         break;
+	case SERVICE_CONTROL_SHUTDOWN:
+		QtServiceBase::instance()->Shutdown();
+		break;
 	case QTSERVICE_SESSION_LOGON:
 		QtServiceBase::instance()->SessionLogOn();
 		break;
@@ -858,9 +861,9 @@ DWORD WINAPI QtServiceSysPrivate::handler(DWORD code,
     case SERVICE_CONTROL_INTERROGATE: // 4
         break;
 
-    case SERVICE_CONTROL_PRESHUTDOWN: // 5
+	case SERVICE_CONTROL_SHUTDOWN: // 5
         // Don't waste time with reporting stop pending, just do it
-        QCoreApplication::postEvent(instance->controllerHandler, new QEvent(QEvent::Type(QEvent::User + SERVICE_CONTROL_STOP)));
+        QCoreApplication::postEvent(instance->controllerHandler, new QEvent(QEvent::Type(QEvent::User + code)));
         instance->condition.wait(&instance->mutex);
         // status will be reported as stopped by start() when qapp::exec returns
         break;

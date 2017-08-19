@@ -46,6 +46,9 @@
     <Filter Include="Helper\Installer">
       <UniqueIdentifier>{79a1a43b-acf3-4160-8ab9-0feb3694b7d7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Helper\StateMachine">
+      <UniqueIdentifier>{7cf88472-bbe9-40af-92f0-2aaccc9c3947}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="JobScheduler.h">
@@ -110,6 +113,15 @@
     </CustomBuild>
     <CustomBuild Include="ShutdownHandler.h">
       <Filter>Helper\Shutdown</Filter>
+    </CustomBuild>
+    <CustomBuild Include="WtsSession.h">
+      <Filter>Helper\WindowsApI</Filter>
+    </CustomBuild>
+    <CustomBuild Include="WtsSessionManager.h">
+      <Filter>Helper\WindowsApI</Filter>
+    </CustomBuild>
+    <CustomBuild Include="SessionStateMachine.h">
+      <Filter>Helper\StateMachine</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
@@ -254,8 +266,35 @@
     <ClCompile Include="GeneratedFiles\Release\moc_ShutdownHandler.cpp">
       <Filter>Generierte Dateien\Release</Filter>
     </ClCompile>
-    <ClCompile Include="USBDevice.cpp">
-      <Filter>Hardware</Filter>
+    <ClCompile Include="WtsSession.cpp">
+      <Filter>Helper\WindowsApI</Filter>
+    </ClCompile>
+    <ClCompile Include="WtsSessionManager.cpp">
+      <Filter>Helper\WindowsApI</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_WtsSession.cpp">
+      <Filter>Generierte Dateien\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_WtsSessionManager.cpp">
+      <Filter>Generierte Dateien\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_WtsSessionManager.cpp">
+      <Filter>Generierte Dateien\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_WtsSession.cpp">
+      <Filter>Generierte Dateien\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="StateMachine.cpp">
+      <Filter>Helper\StateMachine</Filter>
+    </ClCompile>
+    <ClCompile Include="SessionStateMachine.cpp">
+      <Filter>Helper\StateMachine</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_SessionStateMachine.cpp">
+      <Filter>Generierte Dateien\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_SessionStateMachine.cpp">
+      <Filter>Generierte Dateien\Release</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -271,8 +310,8 @@
     <ClInclude Include="AutoIncrement.h">
       <Filter>Helper\Installer</Filter>
     </ClInclude>
-    <ClInclude Include="USBDevice.h">
-      <Filter>Hardware</Filter>
+    <ClInclude Include="StateMachine.h">
+      <Filter>Helper\StateMachine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

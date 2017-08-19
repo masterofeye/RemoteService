@@ -977,6 +977,7 @@ void QtServiceBase::DeviceArrival(QString DeviceName){};
 void QtServiceBase::DeviceQueryRemove(QString DeviceName){};
 void QtServiceBase::DeviceQueryRemoveFailed(QString DeviceName){};
 void QtServiceBase::DeviceCustomEvent(QString DeviceName){};
+void QtServiceBase::Shutdown(){};
 
 
 /*!

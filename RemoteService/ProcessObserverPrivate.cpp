@@ -262,6 +262,7 @@ namespace RW{
 
         bool ProcessObserverPrivate::waitForFinished(int msecs)
         {
+			Q_UNUSED(msecs)
             //QIncrementalSleepTimer timer(msecs);
 
             //forever{

@@ -284,7 +284,16 @@
     <ClCompile Include="GeneratedFiles\Debug\moc_RemoteBoxDevice.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_SessionStateMachine.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_ShutdownHandler.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_WtsSession.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_WtsSessionManager.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_AbstractCommand.cpp">
@@ -323,7 +332,16 @@
     <ClCompile Include="GeneratedFiles\Release\moc_RemoteBoxDevice.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_SessionStateMachine.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_ShutdownHandler.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_WtsSession.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_WtsSessionManager.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Intactivitywatcher.cpp" />
@@ -333,7 +351,7 @@
     <ClCompile Include="NotifierHandler.cpp" />
     <ClCompile Include="ProcessObserver.cpp" />
     <ClCompile Include="ProcessObserverPrivate.cpp" />
-    <ClCompile Include="USBDevice.cpp" />
+    <ClCompile Include="SessionStateMachine.cpp" />
     <ClCompile Include="UtilProcess.cpp" />
     <ClCompile Include="VoltCraft.cpp" />
     <ClCompile Include="PowerStripeDevice.cpp" />
@@ -341,6 +359,8 @@
     <ClCompile Include="RemoteBoxDevice.cpp" />
     <ClCompile Include="ShutdownHandler.cpp" />
     <ClCompile Include="WinApiHelper.cpp" />
+    <ClCompile Include="WtsSession.cpp" />
+    <ClCompile Include="WtsSessionManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Constants.h">
@@ -359,7 +379,36 @@
     <ClInclude Include="ProcessObserverPrivate.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="resource1.h" />
-    <ClInclude Include="USBDevice.h" />
+    <CustomBuild Include="SessionStateMachine.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing SessionStateMachine.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DQT -DDEBUG -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DREMOTESERVICE_DEBUG -D_UNICODE "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtXML" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I$(QTDIR)\include\QtQml" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\..\RemoteUtil\RemoteThirdParty" "-I.\..\..\RemoteUtil\RemoteDataConnectLibrary\Include" "-I.\..\..\RemoteUtil\RemoteBoxWrapper" "-I.\..\..\RemoteUtil\RemoteCommunicationLibrary\Include" "-IC:\Program Files (x86)\Visual Leak Detector\include"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing SessionStateMachine.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DQT -DDEBUG -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtXML" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I$(QTDIR)\include\QtQml" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\..\RemoteUtil\RemoteThirdParty" "-I.\..\..\RemoteUtil\RemoteDataConnectLibrary\Include" "-I.\..\..\RemoteUtil\RemoteBoxWrapper" "-I.\..\..\RemoteUtil\RemoteCommunicationLibrary\Include" "-IC:\Program Files (x86)\Visual Leak Detector\include"</Command>
+    </CustomBuild>
+    <CustomBuild Include="WtsSession.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing WtsSession.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DQT -DDEBUG -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DREMOTESERVICE_DEBUG -D_UNICODE "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtXML" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I$(QTDIR)\include\QtQml" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\..\RemoteUtil\RemoteThirdParty" "-I.\..\..\RemoteUtil\RemoteDataConnectLibrary\Include" "-I.\..\..\RemoteUtil\RemoteBoxWrapper" "-I.\..\..\RemoteUtil\RemoteCommunicationLibrary\Include" "-IC:\Program Files (x86)\Visual Leak Detector\include"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing WtsSession.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DQT -DDEBUG -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtXML" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I$(QTDIR)\include\QtQml" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\..\RemoteUtil\RemoteThirdParty" "-I.\..\..\RemoteUtil\RemoteDataConnectLibrary\Include" "-I.\..\..\RemoteUtil\RemoteBoxWrapper" "-I.\..\..\RemoteUtil\RemoteCommunicationLibrary\Include" "-IC:\Program Files (x86)\Visual Leak Detector\include"</Command>
+    </CustomBuild>
+    <CustomBuild Include="WtsSessionManager.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing WtsSessionManager.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DQT -DDEBUG -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DREMOTESERVICE_DEBUG -D_UNICODE "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtXML" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I$(QTDIR)\include\QtQml" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\..\RemoteUtil\RemoteThirdParty" "-I.\..\..\RemoteUtil\RemoteDataConnectLibrary\Include" "-I.\..\..\RemoteUtil\RemoteBoxWrapper" "-I.\..\..\RemoteUtil\RemoteCommunicationLibrary\Include" "-IC:\Program Files (x86)\Visual Leak Detector\include"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing WtsSessionManager.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DQT -DDEBUG -D_CONSOLE -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtXML" "-I$(QTDIR)\mkspecs\win32-msvc2013" "-I$(QTDIR)\include\QtQml" "-I$(QTDIR)\include\QtNetwork" "-IC:\Users\Master\Downloads\qt-solutions-master\qtservice\src" "-I.\..\..\RemoteUtil\RemoteThirdParty" "-I.\..\..\RemoteUtil\RemoteDataConnectLibrary\Include" "-I.\..\..\RemoteUtil\RemoteBoxWrapper" "-I.\..\..\RemoteUtil\RemoteCommunicationLibrary\Include" "-IC:\Program Files (x86)\Visual Leak Detector\include"</Command>
+    </CustomBuild>
     <CustomBuild Include="NotifierHandler.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing NotifierHandler.h...</Message>
@@ -416,7 +465,6 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <!--<Import Project="C:\Projekte\RemoteUtil\VS_Properties\Moc.props" />-->
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
-    <Import Project="..\PropertySheet.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <!--<Import Project="C:\Projekte\RemoteUtil\VS_Properties\Moc.props" />-->
