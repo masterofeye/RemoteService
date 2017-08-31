@@ -148,15 +148,11 @@ void RemoteService::start()
 	}
 	m_logger->set_pattern("[%H:%M:%S:%f] [%g] [%l] [thread %t] %v ");
 #ifdef REMOTESERVICE_DEBUG
-	m_logger->set_level(spdlog::level::trace);
+	m_logger->set_level(spdlog::level::debug);
 #else
 	m_logger->set_level(spdlog::level::info);
 #endif 
 	m_logger->set_type(1);
-
-	//RW::CORE::WinApiHelper h;
-	//h.QueryActiveHW();
-	//m_logger->flush();
 
     m_Config = new RW::CORE::ConfigurationManager(m_logger,m_obj);
     m_NotifierHandler = new RW::CORE::NotifierHandler(m_obj);
@@ -166,8 +162,8 @@ void RemoteService::start()
 	m_SessionManager = new RW::CORE::WtsSessionManager(m_Config, m_obj);
     
     m_Config->Load();
-	m_Observer = new RW::CORE::InactivityWatcher("0.1", m_Config);
-	m_Shutdown = new RW::CORE::ShutdownHandler(m_DeviceMng, m_Config, "0.1");
+    m_Observer = new RW::CORE::InactivityWatcher("0.1", m_Config);
+    m_Shutdown = new RW::CORE::ShutdownHandler(m_DeviceMng, m_Config, "0.1");
 
 	QObject::connect(m_Observer, &RW::CORE::InactivityWatcher::UserInactive, m_Shutdown, &RW::CORE::ShutdownHandler::StartShutdownTimer);
 	//QObject::connect(m_CommunicationServer, &RW::COM::CommunicationServer::RemoteHiddenHelperConnected, m_Observer, &RW::CORE::InactivityWatcher::StartInactivityObservation);
@@ -201,18 +197,17 @@ void RemoteService::start()
             m_logger->info("Device manager initialized correct");
     }
 
-    //m_Observer = new RW::CORE::InactivityWatcher("0.1", m_Config);
-    //m_Shutdown = new RW::CORE::ShutdownHandler(m_DeviceMng, m_Config,"0.1");
+
 
 	m_Scheduler->start();
 	m_CommunicationServer->Listen();
 
     m_ProcessObserver = new RW::CORE::ProcessObserver(m_obj);
     m_ProcessObserver->setProgram("RemoteHiddenHelper.exe");
-    //Winm_ProcessObserver->start();
+    m_ProcessObserver->start();
 
     //Solange noch kein User angemeldet ist, wird erstmal der ShutdownTimer gestartet
-    //m_Shutdown->StartShutdownTimer();
+    m_Shutdown->StartShutdownTimer();
 
     m_logger->info("Remote Service started", (int) spdlog::sinks::FilterType::RemoteServiceStart);
 	m_logger->flush();
