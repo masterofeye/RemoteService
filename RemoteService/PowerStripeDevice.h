@@ -8,7 +8,7 @@ namespace RW{
 			public AbstractDevice
 		{
 		public:
-			PowerStripeDevice(QObject *parent = 0);
+            PowerStripeDevice(PeripheralType DeviceType, QObject *parent = 0);
 			~PowerStripeDevice();
 
 			virtual bool SwitchPort(quint8 Port, PortState St) = 0;

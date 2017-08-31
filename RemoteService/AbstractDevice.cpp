@@ -1,11 +1,13 @@
 #include "AbstractDevice.h"
+#include "RemoteDataConnectLibrary.h"
 
 namespace RW{
 	namespace HW{
 
-		AbstractDevice::AbstractDevice( QObject *parent) : QObject(parent),
+        AbstractDevice::AbstractDevice(PeripheralType DeviceType, QObject *parent) : QObject(parent),
 			m_DeviceName(""),
-			m_Logger(spdlog::get("remoteservice"))
+			m_Logger(spdlog::get("remoteservice")),
+            m_DeviceType(DeviceType)
 		{
 		}
 

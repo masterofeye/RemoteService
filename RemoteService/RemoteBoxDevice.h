@@ -16,7 +16,7 @@ namespace RW{
 			Q_OBJECT
 			RemoteBoxWrapper::Wrapper* m_Wrapper;
 		public:
-			RemoteBoxDevice(QObject *parent = 0);
+            RemoteBoxDevice(PeripheralType DeviceType, QObject *parent = 0);
 			virtual ~RemoteBoxDevice();
 
 			bool Initialize();

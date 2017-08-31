@@ -352,6 +352,7 @@
     <ClCompile Include="ProcessObserver.cpp" />
     <ClCompile Include="ProcessObserverPrivate.cpp" />
     <ClCompile Include="SessionStateMachine.cpp" />
+    <ClCompile Include="StateMachine.cpp" />
     <ClCompile Include="USBDevice.cpp" />
     <ClCompile Include="UtilProcess.cpp" />
     <ClCompile Include="VoltCraft.cpp" />
@@ -359,6 +360,7 @@
     <ClCompile Include="PowerSupplyDevice.cpp" />
     <ClCompile Include="RemoteBoxDevice.cpp" />
     <ClCompile Include="ShutdownHandler.cpp" />
+    <ClCompile Include="WinApiDeviceHelper.cpp" />
     <ClCompile Include="WinApiHelper.cpp" />
     <ClCompile Include="WtsSession.cpp" />
     <ClCompile Include="WtsSessionManager.cpp" />
@@ -380,7 +382,9 @@
     <ClInclude Include="ProcessObserverPrivate.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="resource1.h" />
+    <ClInclude Include="StateMachine.h" />
     <ClInclude Include="USBDevice.h" />
+    <ClInclude Include="WinApiDeviceHelper.h" />
     <CustomBuild Include="SessionStateMachine.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing SessionStateMachine.h...</Message>

@@ -59,7 +59,7 @@ private:
 	Device_Socket* m_Sockets;
 	std::shared_ptr<spdlog::logger> m_logger;
 public:
-	AnelHome(QObject *parent = 0);
+    AnelHome(PeripheralType DeviceType, QObject *parent = 0);
 	~AnelHome();
 
 	bool Initialize();

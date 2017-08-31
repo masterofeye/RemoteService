@@ -11,7 +11,7 @@ namespace RW{
 			/*!HardwareID des USB Gerätes. Wird unteranderem um das Geräte zurücksetzen.*/
 			QString m_HardwareID;
 		public:
-			USBDevice(QObject *parent = 0);
+            USBDevice(PeripheralType DeviceType, QObject *parent = 0);
 			virtual ~USBDevice();
 
 			virtual bool Initialize();

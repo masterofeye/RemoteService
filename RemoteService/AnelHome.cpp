@@ -4,7 +4,7 @@
 namespace RW{
 	namespace HW{
 
-		AnelHome::AnelHome(QObject *parent) : PowerStripeDevice(parent),
+        AnelHome::AnelHome(PeripheralType DeviceType, QObject *parent) : PowerStripeDevice(DeviceType,parent),
 			m_SendSocket(new QUdpSocket(this)),
 			m_ReceiveSocket(new QUdpSocket(this)),
 			m_logger(spdlog::get("remoteservice"))

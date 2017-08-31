@@ -4,7 +4,7 @@
 namespace RW{
 	namespace HW{
 
-		RemoteBoxDevice::RemoteBoxDevice(QObject *Parent) : AbstractDevice(Parent),
+        RemoteBoxDevice::RemoteBoxDevice(PeripheralType DeviceType, QObject *Parent) : AbstractDevice(DeviceType, Parent),
 			m_Wrapper(new RemoteBoxWrapper::Wrapper())
 		{
 		}

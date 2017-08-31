@@ -8,7 +8,7 @@ namespace RW{
 			public AbstractDevice
 		{
 		public:
-			PowerSupplyDevice(QObject *parent = 0);
+            PowerSupplyDevice(PeripheralType DeviceType, QObject *parent = 0);
 			virtual ~PowerSupplyDevice();
 			
 			virtual bool GetVoltage(double &Value) = 0;

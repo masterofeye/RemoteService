@@ -3,7 +3,7 @@
 namespace RW{
 	namespace HW{
 
-		PowerStripeDevice::PowerStripeDevice(QObject *parent) : AbstractDevice(parent)
+        PowerStripeDevice::PowerStripeDevice(PeripheralType DeviceType, QObject *parent) : AbstractDevice(DeviceType,parent)
 		{
 		}
 

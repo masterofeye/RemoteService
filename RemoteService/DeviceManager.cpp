@@ -5,8 +5,8 @@
 #include "VoltCraft.h"
 #include "AnelHome.h"
 #include "AbstractDevice.h"
-#include "WinApiHelper.h"
 #include "RemoteDataConnectLibrary.h"
+#include "WinApiDeviceHelper.h"
 
 namespace RW{
 	namespace HW{
@@ -16,8 +16,9 @@ namespace RW{
 
         DeviceManager::DeviceManager(CORE::ConfigurationManager* CfgManager, QObject *Parent) : QObject(Parent),
             m_DeviceList(new QMap<PeripheralType, AbstractDevice*>()),
-			m_State(State::DeInit),
-            m_ConfigManager(CfgManager)
+			m_State(State::Init),
+            m_ConfigManager(CfgManager),
+            m_WinHelper(new CORE::WinApiDeviceHelper(this))
 		{
 
 		}
@@ -29,44 +30,22 @@ namespace RW{
 
 		bool DeviceManager::Init()
 		{
-			//TODO dies muss durch config gesetzt werden
-            m_DeviceList->insert(PeripheralType::PowerStripe, new AnelHome(this));
-			//m_DeviceList->insert(PeripheralType::PowerSupply, new VoltCraft(this));
-			//m_DeviceList->insert(PeripheralType::RemoteBox, new RemoteBoxDevice(this));
-
-
-            QMapIterator<PeripheralType, AbstractDevice*> i(*m_DeviceList);
-			while (i.hasNext()) {
-				if (!i.next().value()->Initialize())
-				{
-					switch (i.key())
-					{
-                    case PeripheralType::PowerSupply:
-						m_logger->error("PowerSupply initialisation failed.");
-						m_State = State::Failure;
-						break;
-                    case PeripheralType::RemoteBox:
-						m_logger->error("RemoteBox initialisation failed.");
-						m_State = State::Failure;
-						break;
-                    case PeripheralType::PowerStripe:
-						m_logger->error("PowerStripe initialisation failed.");
-						m_State = State::Failure;
-						break;
-					}
-					if (m_State == State::Failure)
-						return false;
-				}
-
-			}
-            CollectHardwarePeripherie();
-
+            QVariant var;
+            //Geräteliste durchgehen und jedes Geräte in der Liste, versuchen zu initialisieren und dann zu registrieren.
+            m_ConfigManager->GetConfigValue(RW::CORE::ConfigurationName::PeripheralTable, var);
+            QList<RW::SQL::Peripheral> list = var.value<QList<RW::SQL::Peripheral>>();
+            for each (auto var in list)
+            {
+                RegisterNewDevice(var);
+            }
+             
+            m_State = State::Running;
 			return true;
 		}
 
 		bool DeviceManager::DeInit()
 		{
-			if (m_State == State::Init)
+            if (m_State == State::Running)
 			{
                 QMapIterator<PeripheralType, AbstractDevice*> i(*m_DeviceList);
 				while (i.hasNext()) {
@@ -86,41 +65,37 @@ namespace RW{
 			return (AbstractDevice*)m_DeviceList->value(Type);
 		}
 
-        bool DeviceManager::CollectHardwarePeripherie()
+        bool DeviceManager::RegisterNewDevice(RW::SQL::Peripheral& Device)
         {
-            bool res = false;
+            if (m_WinHelper->QuerySpecificDevice(Device.HardwareID().first()))
+            {
+                m_DeviceList->insert(Device.InteralType(), new AnelHome(RW::PeripheralType::PowerStripe_Anel, this));
+                return true;
+            }
+            else if (Device.InteralType() == PeripheralType::PowerSupply_Voltcraft_FPS1136) //Sonderregel Netzteil werden nicht erfasst, durch WindowsHardware
+            {
+                m_DeviceList->insert(Device.InteralType(), new VoltCraft(RW::PeripheralType::PowerSupply_Voltcraft_FPS1136, this));
+                return true;
+            }
+            else if (Device.InteralType() == PeripheralType::PowerStripe_Anel) //Sonderregel Anel Home wird nicht über WindowsApi erfasst
+            {
+                m_DeviceList->insert(Device.InteralType(), new AnelHome(RW::PeripheralType::PowerStripe_Anel, this));
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+            Device.SetRegistered(true);
 
-            ///*Liste aller verfügbaren Geräte holen*/
-            //QMap<QString, QVariant> deviceList;
-            //m_ConfigManager->GetConfigValue(RW::CORE::ConfigurationName::PeripheralTable, deviceList);
-
-            ///*Liste erstellen welche HW am Rechner verfügbar ist*/
-            //QMap<PeripheralType, QVariant> deviceActiveList;
-            ///*HW auslesen*/
-            //RW::CORE::WinApiHelper helper;
-            //QVector<RW::CORE::DeviceInformation> deviceInfoList(20);
-            //helper.QueryActiveHW(deviceInfoList);
-            ///*mit möglicher HW vergleichen und in neue liste eintragen*/
-            //for each (auto var in deviceInfoList)
-            //{
-            //    if (deviceList.contains(var.HardwareID))
-            //    {
-            //        QVariant val = deviceList.value(var.HardwareID);
-            //        RW::SQL::Peripheral peripheral = val.value<RW::SQL::Peripheral>();
-            //        deviceActiveList.insert(peripheral.Type(), QVariant::fromValue(peripheral));
-            //    }
-            //}
-            return res;
+            return true;
         }
 
-        bool DeviceManager::RegisterNewDevice(QString DeviceName)
+        bool DeviceManager::DeregisterNewDevice(RW::SQL::Peripheral& Device)
         {
+            Device.SetRegistered(false);
             return false;
         }
 
-        bool DeviceManager::DeregisterNewDevice(QString DeviceName)
-        {
-            return false;
-        }
 	}
 }

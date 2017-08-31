@@ -9,7 +9,7 @@
 namespace RW{
 	namespace HW{
 
-		USBDevice::USBDevice(QObject *Parent) : AbstractDevice(Parent)
+        USBDevice::USBDevice(PeripheralType DeviceType, QObject *Parent) : AbstractDevice(DeviceType, Parent)
 		{
 		}
 
@@ -25,6 +25,7 @@ namespace RW{
 
 		bool USBDevice::Initialize()
 		{
+            m_State = State::Init;
             return true;
 		}
 
@@ -39,6 +40,7 @@ namespace RW{
 			if (ParseStdOut(devcon.readAllStandardOutput()))
 			{
 				//Geräte wurde erfolgreich zurückgesetzt.
+                m_State = State::Failure;
 				return true;
 			}
 
@@ -51,17 +53,20 @@ namespace RW{
 			if (!ParseStdOut(devcon.readAllStandardOutput()))
 			{
 				//Geräte wurde nicht erfolgreich entfernt
+                m_State = State::Failure;
 				return false;
 			}
 
 			devcon.arguments().clear();
 			devcon.arguments() << RESCAN_CMD;
 			devcon.start();
+            m_State = State::Running;
             return true;
 		}
 
 		bool USBDevice::Shutdown()
 		{
+            m_State = State::Deinit;
             return true;
 		}
 

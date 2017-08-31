@@ -3,7 +3,7 @@
 namespace RW{
 	namespace HW{
 
-		PowerSupplyDevice::PowerSupplyDevice(QObject *Parent) : AbstractDevice(Parent)
+        PowerSupplyDevice::PowerSupplyDevice(PeripheralType DeviceType, QObject *Parent) : AbstractDevice(DeviceType, Parent)
 		{
 		}
 

@@ -3,7 +3,7 @@
 namespace RW{
 	namespace HW{
 
-		VoltCraft::VoltCraft(QObject *Parent) : PowerSupplyDevice(Parent)
+        VoltCraft::VoltCraft(PeripheralType DeviceType, QObject *Parent) : PowerSupplyDevice(DeviceType, Parent)
 		{
 		}
 

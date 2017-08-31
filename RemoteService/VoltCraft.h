@@ -8,7 +8,7 @@ namespace RW{
 			public PowerSupplyDevice
 		{
 		public:
-			VoltCraft(QObject *parent = 0);
+            VoltCraft(PeripheralType DeviceType, QObject *parent = 0);
 			~VoltCraft();
 
 			bool Initialize(){ return false; }

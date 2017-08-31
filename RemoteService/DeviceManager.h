@@ -8,10 +8,11 @@ namespace RW{
     namespace CORE
     {
         class ConfigurationManager;
+        class WinApiDeviceHelper;
     }
 
 	namespace HW{
-
+        enum class State;
 		class AbstractDevice;
 
         /*!
@@ -23,16 +24,7 @@ namespace RW{
 		{
 			Q_OBJECT
 		public:
-            /*!
-            @brief Enumeration, für den Zustand, die ein Gerät einnehmen kann.
-            */
-			enum class State
-			{
-				Init,/*!< Gerät ist initialisiert und Betriebsbereit*/
-				DeInit,/*!< Gerät ist deinitialisiert*/
-                Failure,/*!< Gerät befinde sich im Fehlerzustand*/
 
-			};
  
 		private:
 			std::shared_ptr<spdlog::logger> m_logger;
@@ -40,6 +32,7 @@ namespace RW{
 
             QMap<PeripheralType, AbstractDevice*> *m_DeviceList;
             CORE::ConfigurationManager* m_ConfigManager;
+            CORE::WinApiDeviceHelper* m_WinHelper;
 		public:
             DeviceManager(CORE::ConfigurationManager* CfgManager, QObject *Parent = nullptr);
 			virtual ~DeviceManager();
@@ -81,14 +74,14 @@ namespace RW{
             @param DeviceName Name des Gerätes, welches registriert werden soll.
             @return Gibt true zurück, wenn das Geräte registriert werden konnte.
             */
-            bool RegisterNewDevice(QString DeviceName);
+            bool RegisterNewDevice(RW::SQL::Peripheral&);
 
             /*!
             @brief Deregistriert ein Geräte vom DeviceManager. 
             @param DeviceName Name des Gerätes, welches deregistriert werden soll.
             @return Gibt true zurück, wenn das Geräte derigistriert werden konnte.
             */
-            bool DeregisterNewDevice(QString DeviceName);
+            bool DeregisterNewDevice(RW::SQL::Peripheral&);
 
 
 		};

@@ -148,7 +148,7 @@ void RemoteService::start()
 	}
 	m_logger->set_pattern("[%H:%M:%S:%f] [%g] [%l] [thread %t] %v ");
 #ifdef REMOTESERVICE_DEBUG
-	m_logger->set_level(spdlog::level::debug);
+	m_logger->set_level(spdlog::level::trace);
 #else
 	m_logger->set_level(spdlog::level::info);
 #endif 
@@ -201,18 +201,18 @@ void RemoteService::start()
             m_logger->info("Device manager initialized correct");
     }
 
-    m_Observer = new RW::CORE::InactivityWatcher("0.1", m_Config);
-    m_Shutdown = new RW::CORE::ShutdownHandler(m_DeviceMng, m_Config,"0.1");
+    //m_Observer = new RW::CORE::InactivityWatcher("0.1", m_Config);
+    //m_Shutdown = new RW::CORE::ShutdownHandler(m_DeviceMng, m_Config,"0.1");
 
 	m_Scheduler->start();
 	m_CommunicationServer->Listen();
 
     m_ProcessObserver = new RW::CORE::ProcessObserver(m_obj);
     m_ProcessObserver->setProgram("RemoteHiddenHelper.exe");
-    m_ProcessObserver->start();
+    //Winm_ProcessObserver->start();
 
     //Solange noch kein User angemeldet ist, wird erstmal der ShutdownTimer gestartet
-    m_Shutdown->StartShutdownTimer();
+    //m_Shutdown->StartShutdownTimer();
 
     m_logger->info("Remote Service started", (int) spdlog::sinks::FilterType::RemoteServiceStart);
 	m_logger->flush();
