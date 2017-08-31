@@ -478,9 +478,9 @@ class QDeviceEvent : public QEvent {
 private: 
     QString m_DeviceName = "";
 public:
-    QDeviceEvent(QString DeviceName, QEvent::Type Type) : QEvent(Type),
-        m_DeviceName(m_DeviceName){}
-    static const QEvent::Type myType = static_cast<QEvent::Type>(QEvent::User);
+    explicit  QDeviceEvent(QEvent::Type Type, QString DeviceName) : QEvent(Type),
+        m_DeviceName(DeviceName){}
+    ~QDeviceEvent(){}
     void SetDeviceName(QString DeviceName){ m_DeviceName = DeviceName; };
     QString DeviceName() { return m_DeviceName; }
 
@@ -768,7 +768,7 @@ unsigned long __stdcall QtServiceSysPrivate::DeviceEventNotify(DWORD evtype, PVO
             if (pHdr->dbch_devicetype == DBT_DEVTYP_DEVICEINTERFACE)
             {
                 PDEV_BROADCAST_DEVICEINTERFACE pDevice = (PDEV_BROADCAST_DEVICEINTERFACE)pHdr;
-                QCoreApplication::postEvent(instance->controllerHandler, new QDeviceEvent(QString::fromWCharArray(pDevice->dbcc_name), QEvent::Type(QEvent::User + QTSERVICE_DBT_DEVICEREMOVECOMPLETE)));
+                QCoreApplication::postEvent(instance->controllerHandler, new QDeviceEvent(QEvent::Type(QEvent::User + QTSERVICE_DBT_DEVICEREMOVECOMPLETE), QString::fromWCharArray(pDevice->dbcc_name)));
             }
         }
         break;
@@ -778,7 +778,7 @@ unsigned long __stdcall QtServiceSysPrivate::DeviceEventNotify(DWORD evtype, PVO
             if (pHdr->dbch_devicetype == DBT_DEVTYP_DEVICEINTERFACE)
             {
                 PDEV_BROADCAST_DEVICEINTERFACE pDevice = (PDEV_BROADCAST_DEVICEINTERFACE)pHdr;
-                QCoreApplication::postEvent(instance->controllerHandler, new QDeviceEvent(QString::fromWCharArray(pDevice->dbcc_name), QEvent::Type(QEvent::User + QTSERVICE_DBT_DEVICEARRIVAL)));
+                QCoreApplication::postEvent(instance->controllerHandler, new QDeviceEvent(QEvent::Type(QEvent::User + QTSERVICE_DBT_DEVICEARRIVAL),QString::fromWCharArray(pDevice->dbcc_name)));
             }
         }
         break;
@@ -788,7 +788,7 @@ unsigned long __stdcall QtServiceSysPrivate::DeviceEventNotify(DWORD evtype, PVO
             if (pHdr->dbch_devicetype == DBT_DEVTYP_DEVICEINTERFACE)
             {
                 PDEV_BROADCAST_DEVICEINTERFACE pDevice = (PDEV_BROADCAST_DEVICEINTERFACE)pHdr;
-                QCoreApplication::postEvent(instance->controllerHandler, new QDeviceEvent(QString::fromWCharArray(pDevice->dbcc_name), QEvent::Type(QEvent::User + QTSERVICE_DBT_DEVICEQUERYREMOVE)));
+                QCoreApplication::postEvent(instance->controllerHandler, new QDeviceEvent(QEvent::Type(QEvent::User + QTSERVICE_DBT_DEVICEQUERYREMOVE), QString::fromWCharArray(pDevice->dbcc_name)));
             }
         }
         break;
@@ -798,7 +798,7 @@ unsigned long __stdcall QtServiceSysPrivate::DeviceEventNotify(DWORD evtype, PVO
             if (pHdr->dbch_devicetype == DBT_DEVTYP_DEVICEINTERFACE)
             {
                 PDEV_BROADCAST_DEVICEINTERFACE pDevice = (PDEV_BROADCAST_DEVICEINTERFACE)pHdr;
-                QCoreApplication::postEvent(instance->controllerHandler, new QDeviceEvent(QString::fromWCharArray(pDevice->dbcc_name), QEvent::Type(QEvent::User + QTSERVICE_DBT_DEVICEQUERYREMOVEFAILED)));
+                QCoreApplication::postEvent(instance->controllerHandler, new QDeviceEvent(QEvent::Type(QEvent::User + QTSERVICE_DBT_DEVICEQUERYREMOVEFAILED), QString::fromWCharArray(pDevice->dbcc_name)));
             }
         }
         break;
@@ -808,7 +808,7 @@ unsigned long __stdcall QtServiceSysPrivate::DeviceEventNotify(DWORD evtype, PVO
             if (pHdr->dbch_devicetype == DBT_DEVTYP_DEVICEINTERFACE)
             {
                 PDEV_BROADCAST_DEVICEINTERFACE pDevice = (PDEV_BROADCAST_DEVICEINTERFACE)pHdr;
-                QCoreApplication::postEvent(instance->controllerHandler, new QDeviceEvent(QString::fromWCharArray(pDevice->dbcc_name), QEvent::Type(QEvent::User + QTSERVICE_DBT_CUSTOMEVENT)));
+                QCoreApplication::postEvent(instance->controllerHandler, new QDeviceEvent(QEvent::Type(QEvent::User + QTSERVICE_DBT_CUSTOMEVENT),QString::fromWCharArray(pDevice->dbcc_name)));
             }
         }
         break;
