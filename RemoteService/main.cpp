@@ -141,6 +141,7 @@ void RemoteService::start()
 #ifdef DEBUG
 	Sleep(10000);
 #endif
+
 	m_logger = spdlog::get("remoteservice");
 	if (m_logger == nullptr)
 	{
@@ -190,22 +191,23 @@ void RemoteService::start()
     if (workstationType.value<RW::WorkstationKind>() == RW::WorkstationKind::RemoteWorkstation)
     {
         m_logger->debug("Device manager initialize");
-        m_DeviceMng->SetLogger(m_logger);
-        if (!m_DeviceMng->Init())
-            m_logger->error("Device manager couldn't initialized correct");
-        else
-            m_logger->info("Device manager initialized correct");
+        //m_DeviceMng->SetLogger(m_logger);
+        //if (!m_DeviceMng->Init())
+        //    m_logger->error("Device manager couldn't initialized correct");
+        //else
+        //    m_logger->info("Device manager initialized correct");
     }
 
-
-
+    m_logger->info("Start Scheduler now!");
 	m_Scheduler->start();
-	m_CommunicationServer->Listen();
 
+    m_logger->info("Start CommunicationServer now!");
+    m_CommunicationServer->ListenJustLocal();
+
+    m_logger->info("Start RemoteHiddenhelper now!");
     m_ProcessObserver = new RW::CORE::ProcessObserver(m_obj);
     m_ProcessObserver->setProgram("RemoteHiddenHelper.exe");
     m_ProcessObserver->start();
-
     //Solange noch kein User angemeldet ist, wird erstmal der ShutdownTimer gestartet
     m_Shutdown->StartShutdownTimer();
 
@@ -294,6 +296,7 @@ void RemoteService::SessionLogOn()
 	//{
  //       m_logger->info("A new session started for user: {}", (int)spdlog::sinks::FilterType::RemoteServiceSessionLogon, username.toStdString());
 	//}
+    m_CommunicationServer->ListenJustGlobal();
 
     m_ProcessObserver = new RW::CORE::ProcessObserver(m_obj);
     m_ProcessObserver->setProgram("RemoteHiddenHelper.exe");
