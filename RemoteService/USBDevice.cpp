@@ -9,7 +9,7 @@
 namespace RW{
 	namespace HW{
 
-        USBDevice::USBDevice(PeripheralType DeviceType, QObject *Parent) : AbstractDevice(DeviceType, Parent)
+        USBDevice::USBDevice(PeripheralType DeviceType, QVector<std::function<void(void)>> SwitchOnCondition, QObject *Parent) : AbstractDevice(DeviceType, SwitchOnCondition, Parent)
 		{
 		}
 
@@ -17,6 +17,42 @@ namespace RW{
 		USBDevice::~USBDevice()
 		{
 		}
+
+        void USBDevice::OnProcessMessage(COM::Message Msg)
+        {
+            switch (Msg.MessageID())
+            {
+            case COM::MessageDescription::IN_USB_SWITCH_ON:
+                if ((m_State == State::Deinit || m_State == State::Init) && !Msg.IsProcessed())
+                {
+                    Initialize();
+                }
+                break;
+            case COM::MessageDescription::IN_USB_SWITCH_OFF:
+                if (m_State == State::Running && !Msg.IsProcessed())
+                {
+                    Deinitialize();
+                }
+                break;
+            case COM::MessageDescription::IN_USB_SWITCH_RESET:
+                if ((m_State == State::Running || m_State == State::Failure) && !Msg.IsProcessed())
+                {
+                    Reset();
+                }
+                break;
+            default: 
+                break;
+            }
+        }
+
+        void USBDevice::Callback()
+        {
+
+        }
+        std::function<void(void)> USBDevice::GetCallback(TypeOfElement)
+        {
+            return nullptr;
+        }
 
 		bool USBDevice::ParseStdOut(QString StdOutput)
 		{
@@ -26,6 +62,13 @@ namespace RW{
 		bool USBDevice::Initialize()
 		{
             m_State = State::Init;
+            
+            for each (auto var in m_SwitchOnCondition)
+            {
+                var();
+            }
+
+            m_State = State::Running;
             return true;
 		}
 
@@ -64,7 +107,7 @@ namespace RW{
             return true;
 		}
 
-		bool USBDevice::Shutdown()
+        bool USBDevice::Deinitialize()
 		{
             m_State = State::Deinit;
             return true;

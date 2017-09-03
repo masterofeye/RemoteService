@@ -137,7 +137,7 @@ namespace RW{
 		{
             if (!m_isRunning)
             {
-                m_logger->trace("StartInactivityObservation", (int)spdlog::sinks::FilterType::InactivityWatcher);
+                m_logger->debug("StartInactivityObservation", (int)spdlog::sinks::FilterType::InactivityWatcher);
                 COM::Message msg;
                 msg.SetMessageID(COM::MessageDescription::EX_StartInactivityTimer);
                 msg.setIdentifier(COM::Message::GenUUID(COM::TypeofServer::RemoteHiddenHelper).toString());

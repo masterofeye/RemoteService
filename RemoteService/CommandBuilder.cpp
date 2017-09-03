@@ -23,8 +23,8 @@ namespace RW{
 				return new IOCommand(Obj);
             case RW::COM::MessageDescription::IN_RELAY:
 				return new RelayCommand(Obj);
-            case RW::COM::MessageDescription::IN_USB:
-				return new USBCommand(Obj);
+    //        case RW::COM::MessageDescription::IN_USB:
+				//return new USBCommand(Obj);
             case RW::COM::MessageDescription::IN_FHOST:
 				return nullptr;
             case RW::COM::MessageDescription::IN_ADC:

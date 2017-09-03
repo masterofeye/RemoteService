@@ -7,12 +7,17 @@
 #include "AbstractDevice.h"
 #include "RemoteDataConnectLibrary.h"
 #include "WinApiDeviceHelper.h"
+#include "DeviceFactory.h"
 
 namespace RW{
 	namespace HW{
 
 
 
+        bool ComparePeripheralCondition(const RW::SQL::Peripheral &v1, const RW::SQL::Peripheral &v2)
+        {
+            return v1.ConditionList()->rowCount() < v2.ConditionList()->rowCount();
+        }
 
         DeviceManager::DeviceManager(CORE::ConfigurationManager* CfgManager, QObject *Parent) : QObject(Parent),
             m_DeviceList(new QMap<PeripheralType, AbstractDevice*>()),
@@ -34,6 +39,9 @@ namespace RW{
             //Geräteliste durchgehen und jedes Geräte in der Liste, versuchen zu initialisieren und dann zu registrieren.
             m_ConfigManager->GetConfigValue(RW::CORE::ConfigurationName::PeripheralTable, var);
             QList<RW::SQL::Peripheral> list = var.value<QList<RW::SQL::Peripheral>>();
+
+            qSort(list.begin(), list.end(), ComparePeripheralCondition);
+
             for each (auto var in list)
             {
                 RegisterNewDevice(var);
@@ -49,7 +57,7 @@ namespace RW{
 			{
                 QMapIterator<PeripheralType, AbstractDevice*> i(*m_DeviceList);
 				while (i.hasNext()) {
-					i.next().value()->Shutdown();
+					i.next().value()->Deinitialize();
 				}
 			}
 			return true;
@@ -57,7 +65,18 @@ namespace RW{
 
 		DeviceManager::~DeviceManager()
 		{
+            
+            if (m_DeviceList != nullptr)
+            {
+                for each (auto var in *m_DeviceList)
+                {
+                    if (var != nullptr)
+                        delete var;
+                }
 
+                m_DeviceList->clear();
+                delete m_DeviceList;
+            }
 		}
 
         AbstractDevice* DeviceManager::GetDevice(PeripheralType Type)
@@ -65,37 +84,64 @@ namespace RW{
 			return (AbstractDevice*)m_DeviceList->value(Type);
 		}
 
-        bool DeviceManager::RegisterNewDevice(RW::SQL::Peripheral& Device)
-        {
-            if (m_WinHelper->QuerySpecificDevice(Device.HardwareID().first()))
-            {
-                m_DeviceList->insert(Device.InteralType(), new AnelHome(RW::PeripheralType::PowerStripe_Anel, this));
-                return true;
-            }
-            else if (Device.InteralType() == PeripheralType::PowerSupply_Voltcraft_FPS1136) //Sonderregel Netzteil werden nicht erfasst, durch WindowsHardware
-            {
-                m_DeviceList->insert(Device.InteralType(), new VoltCraft(RW::PeripheralType::PowerSupply_Voltcraft_FPS1136, this));
-                return true;
-            }
-            else if (Device.InteralType() == PeripheralType::PowerStripe_Anel) //Sonderregel Anel Home wird nicht über WindowsApi erfasst
-            {
-                m_DeviceList->insert(Device.InteralType(), new AnelHome(RW::PeripheralType::PowerStripe_Anel, this));
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-            Device.SetRegistered(true);
 
+
+        bool DeviceManager::RegisterNewDevice(QString DeviceName)
+        {
+            QVariant var;
+            //Geräteliste durchgehen und jedes Geräte in der Liste, versuchen zu initialisieren und dann zu registrieren.
+            m_ConfigManager->GetConfigValue(RW::CORE::ConfigurationName::PeripheralTable, var);
+            QList<RW::SQL::Peripheral> list = var.value<QList<RW::SQL::Peripheral>>();
+
+            qSort(list.begin(), list.end(), ComparePeripheralCondition);
+
+
+            QListIterator<RW::SQL::Peripheral> i(list);
+            while (i.hasNext()) {
+                RW::SQL::Peripheral peripheral = i.next();
+                if (peripheral.DeviceName() == DeviceName){
+                    auto ptrDevice = DeviceFactory::CreateDevice(peripheral,m_DeviceList);
+                    if (ptrDevice->Initialize())
+                    {
+                        m_DeviceList->insert(peripheral.InteralType(), ptrDevice);
+                        peripheral.SetRegistered(true);
+                    }
+                }
+            }
             return true;
         }
 
-        bool DeviceManager::DeregisterNewDevice(RW::SQL::Peripheral& Device)
+        bool DeviceManager::RegisterNewDevice(RW::SQL::Peripheral Device)
         {
-            Device.SetRegistered(false);
-            return false;
+
+            auto ptrDevice = DeviceFactory::CreateDevice(Device, m_DeviceList);
+            if (ptrDevice->Initialize())
+            {
+                m_DeviceList->insert(Device.InteralType(), ptrDevice);
+
+                Device.SetRegistered(true);
+            }
+            return true;
         }
 
+        bool DeviceManager::DeregisterNewDevice(QString DeviceName)
+        {
+            QVariant var;
+            //Geräteliste durchgehen und jedes Geräte in der Liste, versuchen zu initialisieren und dann zu registrieren.
+            m_ConfigManager->GetConfigValue(RW::CORE::ConfigurationName::PeripheralTable, var);
+            QList<RW::SQL::Peripheral> list = var.value<QList<RW::SQL::Peripheral>>();
+
+            QListIterator<RW::SQL::Peripheral> i(list);
+            while (i.hasNext()) {
+                RW::SQL::Peripheral peripheral = i.next();
+                if (peripheral.DeviceName() == DeviceName){
+                    auto ptrDevice = DeviceFactory::CreateDevice(peripheral, m_DeviceList);
+                    ptrDevice->Deinitialize();
+                    m_DeviceList->remove(peripheral.InteralType());
+                    peripheral.SetRegistered(false);
+                }
+            }
+            return true;
+        }
 	}
 }

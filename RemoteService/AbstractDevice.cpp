@@ -4,10 +4,11 @@
 namespace RW{
 	namespace HW{
 
-        AbstractDevice::AbstractDevice(PeripheralType DeviceType, QObject *parent) : QObject(parent),
+        AbstractDevice::AbstractDevice(PeripheralType DeviceType, QVector<std::function<void(void)>> SwitchOnCondition, QObject *parent) : QObject(parent),
 			m_DeviceName(""),
 			m_Logger(spdlog::get("remoteservice")),
-            m_DeviceType(DeviceType)
+            m_DeviceType(DeviceType),
+            m_SwitchOnCondition(SwitchOnCondition)
 		{
 		}
 

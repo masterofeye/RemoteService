@@ -385,7 +385,7 @@ namespace RW{
 		void PowerStripeCommand::SetDevice(QObject * const Device)
 		{
 			HW::DeviceManager* manager = qobject_cast<HW::DeviceManager*>(Device);
-            m_Device = (HW::PowerStripeDevice*) manager->GetDevice(PeripheralType::PowerStripe);
+            m_Device = (HW::PowerStripeDevice*) manager->GetDevice(PeripheralType::PowerStripe_Anel_NETPwrCtrl);
 		}
 
 
@@ -442,7 +442,7 @@ namespace RW{
 		void PowerSupplyCommand::SetDevice(QObject * const Device)
 		{
 			HW::DeviceManager* manager = qobject_cast<HW::DeviceManager*>(Device);
-			m_Device = (HW::PowerSupplyDevice*) manager->GetDevice(PeripheralType::PowerSupply);
+			m_Device = (HW::PowerSupplyDevice*) manager->GetDevice(PeripheralType::PowerSupply_Voltcraft_FPS1136);
 		}
 
 		bool PowerSupplyCommand::Execute()

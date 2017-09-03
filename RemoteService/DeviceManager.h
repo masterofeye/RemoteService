@@ -11,6 +11,11 @@ namespace RW{
         class WinApiDeviceHelper;
     }
 
+    namespace SQL
+    {
+        class Peripheral;
+    }
+
 	namespace HW{
         enum class State;
 		class AbstractDevice;
@@ -33,6 +38,15 @@ namespace RW{
             QMap<PeripheralType, AbstractDevice*> *m_DeviceList;
             CORE::ConfigurationManager* m_ConfigManager;
             CORE::WinApiDeviceHelper* m_WinHelper;
+        private:
+
+            /*!
+            @brief Wird intern verwendet um Geräte zu registrieren
+            @param [in] Device
+            @return True, sofern die Registrierung des Gerätes erfolgreich verlaufen ist.
+            */
+            bool RegisterNewDevice(RW::SQL::Peripheral Device);
+
 		public:
             DeviceManager(CORE::ConfigurationManager* CfgManager, QObject *Parent = nullptr);
 			virtual ~DeviceManager();
@@ -65,23 +79,20 @@ namespace RW{
 			bool DeInit();
 
             /*!
-            @brief Liest alle HW die vom System erkannt wird ein.
-            */
-            bool CollectHardwarePeripherie();
-
-            /*!
             @brief Registriert ein neues Geräte beim DeviceManager. 
             @param DeviceName Name des Gerätes, welches registriert werden soll.
             @return Gibt true zurück, wenn das Geräte registriert werden konnte.
             */
-            bool RegisterNewDevice(RW::SQL::Peripheral&);
+            bool RegisterNewDevice(QString DeviceName);
+
+
 
             /*!
             @brief Deregistriert ein Geräte vom DeviceManager. 
             @param DeviceName Name des Gerätes, welches deregistriert werden soll.
             @return Gibt true zurück, wenn das Geräte derigistriert werden konnte.
             */
-            bool DeregisterNewDevice(RW::SQL::Peripheral&);
+            bool DeregisterNewDevice(QString DeviceName);
 
 
 		};

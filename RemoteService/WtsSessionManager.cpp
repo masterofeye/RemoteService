@@ -63,7 +63,6 @@ namespace RW
 								break;
 							}
 
-							m_Logger->trace(QString::fromStdWString(pTmpBuf->wkui0_username).toStdString());
 							QString user = QString::fromStdWString(pTmpBuf->wkui0_username);
 							if (!user.contains("$"))
 								Username = user;
@@ -90,7 +89,6 @@ namespace RW
 			//
 			if (pBuf != NULL)
 				NetApiBufferFree(pBuf);
-			m_Logger->trace("Total of {0:d} entries enumerated", dwTotalCount);
 
 			if (Username.isEmpty())
 				return false;

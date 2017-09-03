@@ -3,7 +3,7 @@
 namespace RW{
 	namespace HW{
 
-        VoltCraft::VoltCraft(PeripheralType DeviceType, QObject *Parent) : PowerSupplyDevice(DeviceType, Parent)
+        VoltCraft::VoltCraft(PeripheralType DeviceType, QVector<std::function<void(void)>> SwitchOnCondition, QObject *Parent) : PowerSupplyDevice(DeviceType, SwitchOnCondition, Parent)
 		{
 		}
 
@@ -11,5 +11,18 @@ namespace RW{
 		VoltCraft::~VoltCraft()
 		{
 		}
+
+        void VoltCraft::OnProcessMessage(COM::Message Msg)
+        {
+        }
+
+        void VoltCraft::Callback()
+        {
+
+        }
+        std::function<void(void)> VoltCraft::GetCallback(TypeOfElement)
+        {
+            return nullptr;
+        }
 	}
 }

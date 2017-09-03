@@ -302,6 +302,9 @@
     <ClCompile Include="WinApiDeviceHelper.cpp">
       <Filter>Hardware</Filter>
     </ClCompile>
+    <ClCompile Include="DeviceFactory.cpp">
+      <Filter>Hardware</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ProcessObserverPrivate.h">
@@ -323,6 +326,9 @@
       <Filter>Helper\StateMachine</Filter>
     </ClInclude>
     <ClInclude Include="WinApiDeviceHelper.h">
+      <Filter>Hardware</Filter>
+    </ClInclude>
+    <ClInclude Include="DeviceFactory.h">
       <Filter>Hardware</Filter>
     </ClInclude>
   </ItemGroup>

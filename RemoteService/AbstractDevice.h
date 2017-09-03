@@ -2,9 +2,11 @@
 #include <QtCore>
 #include <spdlog\spdlog.h>
 #include <functional>
+#include "RemoteCommunicationLibrary.h"
+#include <functional>
 
 namespace RW{
-
+    enum class TypeOfElement;
     enum class PeripheralType;
 	namespace HW{
 
@@ -35,8 +37,7 @@ namespace RW{
             Failure,/*!< Gerät befinde sich im Fehlerzustand*/
 
         };
-
-
+        class AbstractDevice;
 
 		class AbstractDevice : public QObject
 		{
@@ -44,13 +45,17 @@ namespace RW{
 		private:
 			QString m_DeviceName;
             PeripheralType m_DeviceType;
+
 		protected:
-			std::shared_ptr<spdlog::logger> m_Logger;
-
-
+            std::shared_ptr<spdlog::logger> m_Logger;
             State m_State = State::Failure;
+            QVector<std::function<void(void)>> m_SwitchOnCondition;
+        public slots:
+        virtual void OnProcessMessage(COM::Message Msg) = 0;
+        signals:
+            void NewMessage(COM::Message Msg);
 		public:
-            AbstractDevice(PeripheralType DeviceType, QObject *parent = 0);
+            AbstractDevice(PeripheralType DeviceType, QVector<std::function<void(void)>> SwitchOnCondition, QObject *parent = 0);
 			AbstractDevice(std::shared_ptr<spdlog::logger> Logger, QObject *parent = 0);
 			~AbstractDevice();
 
@@ -58,7 +63,10 @@ namespace RW{
 
 			virtual bool Initialize() = 0;
 			virtual bool Reset() = 0;
-			virtual bool Shutdown() = 0;
+            virtual bool Deinitialize() = 0;
+            virtual void Callback() = 0;
+            virtual std::function<void(void)> GetCallback(TypeOfElement) = 0;
+
 		};
 	}
 }

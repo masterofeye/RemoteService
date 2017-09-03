@@ -4,7 +4,7 @@
 namespace RW{
 	namespace HW{
 
-        AnelHome::AnelHome(PeripheralType DeviceType, QObject *parent) : PowerStripeDevice(DeviceType,parent),
+        AnelHome::AnelHome(PeripheralType DeviceType, QVector<std::function<void(void)>> SwitchOnCondition, QObject *parent) : PowerStripeDevice(DeviceType, SwitchOnCondition, parent),
 			m_SendSocket(new QUdpSocket(this)),
 			m_ReceiveSocket(new QUdpSocket(this)),
 			m_logger(spdlog::get("remoteservice"))
@@ -17,6 +17,21 @@ namespace RW{
 		{
 			delete[] m_Sockets;
 		}
+
+        void AnelHome::OnProcessMessage(COM::Message Msg)
+        {
+        
+        }
+
+        void AnelHome::Callback()
+        {
+        
+        }
+        std::function<void(void)> AnelHome::GetCallback(TypeOfElement)
+        {
+            return nullptr;
+        }
+
 
 		bool AnelHome::Initialize()
 		{
@@ -147,7 +162,7 @@ namespace RW{
 		/*
 		@todo Need to be implemented
 		*/
-		bool AnelHome::Shutdown()
+        bool AnelHome::Deinitialize()
 		{
 			return true;
 		}

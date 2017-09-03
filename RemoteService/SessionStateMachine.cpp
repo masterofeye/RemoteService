@@ -108,6 +108,7 @@ namespace RW{
 
 		void SessionStateMachine::ST_Disconnect(EventData* Data)
 		{
+            Q_UNUSED(Data)
 			m_Logger->info("ST_DISCONNECT");
 			m_ConfigManager->InsertConfigValue(RW::CORE::ConfigurationName::UserName, "Occupy");
 			m_ConfigManager->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::OCCUPY));

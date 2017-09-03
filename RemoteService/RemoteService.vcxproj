@@ -246,6 +246,7 @@
     <ClCompile Include="AbstractDevice.cpp" />
     <ClCompile Include="AnelHome.cpp" />
     <ClCompile Include="CommandBuilder.cpp" />
+    <ClCompile Include="DeviceFactory.cpp" />
     <ClCompile Include="DeviceManager.cpp" />
     <ClCompile Include="FlashCmdProcessor.cpp" />
     <ClCompile Include="GeneratedFiles\Debug\moc_AbstractCommand.cpp">
@@ -379,6 +380,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AutoIncrement.h" />
+    <ClInclude Include="DeviceFactory.h" />
     <ClInclude Include="ProcessObserverPrivate.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="resource1.h" />
