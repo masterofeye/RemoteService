@@ -2,6 +2,7 @@
 #define INTACTIVITYWATCHER_H
 #include <QObject>
 #include <QTimer>
+#include <QTime>
 #include <spdlog\spdlog.h>
 #include "RemoteCommunicationLibrary.h"
 #include "Constants.h"
@@ -20,6 +21,8 @@ namespace RW{
 			QTimer *m_TimerLogout;
 			long long m_Timeout;
             bool m_isRunning = false;
+            QTime m_LogoutTimeStart;
+            QTime m_LogoutTimeEnd;
 		public:
             explicit InactivityWatcher(QString Version, ConfigurationManager* Configmanager, QObject *parent = 0);
         private:

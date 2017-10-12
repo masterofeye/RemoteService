@@ -34,11 +34,19 @@ namespace RW{
             m_ConfigManager->GetConfigValue(ConfigurationName::WorkstationType, type);
             workstationType = type.value<RW::WorkstationKind>();
 
+            /*Abfrage der Zeit, wann ein User spätestens ausgelogt werden soll*/
+            QVariant logoutTimeStart, logoutTimeEnd;
+            m_ConfigManager->GetConfigValue(ConfigurationName::LogoutTimeStart, logoutTimeStart);
+            m_ConfigManager->GetConfigValue(ConfigurationName::LogoutTimeEnd, logoutTimeEnd);
+            m_LogoutTimeStart = logoutTimeStart.toTime();
+            m_LogoutTimeEnd = logoutTimeEnd.toTime();
+
             if (workstationType == WorkstationKind::RemoteWorkstation)
             {
                 QVariant timeout;
                 m_ConfigManager->GetConfigValue(ConfigurationName::RwLogOutTimer, timeout);
                 m_Timeout = timeout.toInt();
+
                 m_logger->info("The current logout timeout is {}", (int)spdlog::sinks::FilterType::InactivityWatcher, m_Timeout);
             }
             else if (workstationType == WorkstationKind::BackendPC)
@@ -144,13 +152,15 @@ namespace RW{
                 msg.SetIsExternal(true);
                 QList<QVariant> paramList;
                 paramList.append(m_Timeout);
-			
+
 				/*Wir müssen den Usernamen an den RemoteHiddenhelper schicken um sicher zu sein, 
 				dass die richtige Session ausgeloggt wird.*/
 				QVariant username;
 				m_ConfigManager->GetConfigValue(ConfigurationName::UserName, username);
 				paramList.append(username.toString());
-                
+
+                paramList.append(m_LogoutTimeStart);
+                paramList.append(m_LogoutTimeEnd);
 				msg.SetParameterList(paramList);
                 connect(m_TimerLogout, &QTimer::timeout, this, &InactivityWatcher::OnTimeoutStart);
                 m_TimerLogout->setSingleShot(true);
@@ -184,7 +194,21 @@ namespace RW{
 
         void InactivityWatcher::OnTimeoutStop()
         {
-            m_logger->critical("Couldn't stop inactivity timer: {}", (int)spdlog::sinks::FilterType::InactivityWatcher, "Timeout");
+            QVariant val;
+            m_ConfigManager->GetConfigValue(ConfigurationName::WorkstationState, val);
+            WorkstationState state = val.value<RW::WorkstationState>();
+            //Prüfen, ob der User sich schon ausgelogt hat. 
+            //Wenn ja, dann nur eine Warnung absetzen und den Status auf stop(false) setzen,
+            //sonst ist dies als ein Fehler auszusehen.
+            if (state == WorkstationState::FREE)
+            {
+                m_logger->warn("Couldn't stop inactivity timer but User already logout: {}", (int)spdlog::sinks::FilterType::InactivityWatcher, "Timeout");
+                m_isRunning = false;
+            }
+            else
+            {
+                m_logger->critical("Couldn't stop inactivity timer: {}", (int)spdlog::sinks::FilterType::InactivityWatcher, "Timeout");
+            }
         }
 
 
