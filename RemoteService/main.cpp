@@ -197,14 +197,14 @@ void RemoteService::start()
         //else
         //    m_logger->info("Device manager initialized correct");
     }
-
-    m_logger->info("Start Scheduler now!");
+    
+    m_logger->trace("Start Scheduler now!");
 	m_Scheduler->start();
 
-    m_logger->info("Start CommunicationServer now!");
+    m_logger->trace("Start CommunicationServer now!");
     m_CommunicationServer->ListenJustLocal();
 
-    m_logger->info("Start RemoteHiddenhelper now!");
+    m_logger->trace("Start RemoteHiddenhelper now!");
     m_ProcessObserver = new RW::CORE::ProcessObserver(m_obj);
     m_ProcessObserver->setProgram("RemoteHiddenHelper.exe");
     m_ProcessObserver->start();
@@ -271,7 +271,6 @@ void RemoteService::SessionUnlock(){
 
 void RemoteService::RemoteConnect()
 {
-	m_logger->debug("CONNECT");
 	RW::COM::Message message;
 	message.SetMessageID(RW::COM::MessageDescription::IN_SESSIONCONNECT);
 	emit m_CommunicationServer->NewMessage(message);
@@ -281,7 +280,6 @@ void RemoteService::RemoteConnect()
 
 void RemoteService::RemoteDisconnect()
 {
-	m_logger->debug("DISCONNECT");
 	RW::COM::Message message;
 	message.SetMessageID(RW::COM::MessageDescription::IN_SESSIONDISCONNECT);
 	emit m_CommunicationServer->NewMessage(message);
@@ -302,8 +300,6 @@ void RemoteService::SessionLogOn()
     m_ProcessObserver->setProgram("RemoteHiddenHelper.exe");
     m_ProcessObserver->start();
 
-
-	m_logger->debug("LOGON");
 	RW::COM::Message message;
 	message.SetMessageID(RW::COM::MessageDescription::IN_SESSIONLOGON);
 	emit m_CommunicationServer->NewMessage(message);
@@ -317,7 +313,6 @@ void RemoteService::SessionLogOff()
     delete m_ProcessObserver;
     m_ProcessObserver = nullptr;
     m_Observer->StopInactivityObservation();
-	m_logger->debug("LOGOFF");
 	RW::COM::Message message;
 	message.SetMessageID(RW::COM::MessageDescription::IN_SESSIONLOGOFF);
 	emit m_CommunicationServer->NewMessage(message);
@@ -363,7 +358,6 @@ void RemoteService::DeviceRemoveComplete(QString DeviceName)
 void RemoteService::DeviceArrival(QString DeviceName)
 {
 	m_DeviceMng->RegisterNewDevice(DeviceName);
-
 }
 
 void RemoteService::DeviceQueryRemove(QString DeviceName)

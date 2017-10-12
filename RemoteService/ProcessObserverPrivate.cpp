@@ -308,7 +308,7 @@ namespace RW{
             {
                 bool res = TerminateProcess(pid->hProcess, 0xf291);
 
-                m_Logger->debug("HiddenHelper killed: Status {}",res);
+                m_Logger->trace("HiddenHelper killed: Status {}",res);
             }
         }
 
