@@ -20,14 +20,27 @@ namespace RW{
 		void SessionStateMachine::NewSession(SessionData* Data = nullptr)
 		{
 			BEGIN_TRANSITION_MAP						        // - Current State -
-                TRANSITION_MAP_ENTRY(ST_CONNECT)			    // ST_STARTSERVICE
+                TRANSITION_MAP_ENTRY(ST_LOGON)			        // ST_STARTSERVICE
 				TRANSITION_MAP_ENTRY(ST_LOGON)				    // ST_CONNECT
-				TRANSITION_MAP_ENTRY(ST_CONNECT)				// ST_DISCONNECT
+                TRANSITION_MAP_ENTRY(CANNOT_HAPPEN)				// ST_DISCONNECT
 				TRANSITION_MAP_ENTRY(CANNOT_HAPPEN)				// ST_LOGON
-				TRANSITION_MAP_ENTRY(ST_CONNECT)				// ST_LOGOFF
+                TRANSITION_MAP_ENTRY(ST_LOGON)				    // ST_LOGOFF
                 TRANSITION_MAP_ENTRY(ST_STARTSERVICE)		    // ST_SHUTDOWN
 			END_TRANSITION_MAP(Data)
 		}
+
+        void SessionStateMachine::NewRemoteSession(SessionData* Data = nullptr)
+        {
+            BEGIN_TRANSITION_MAP						        // - Current State -
+                TRANSITION_MAP_ENTRY(ST_CONNECT)			    // ST_STARTSERVICE
+                TRANSITION_MAP_ENTRY(CANNOT_HAPPEN)				// ST_CONNECT
+                TRANSITION_MAP_ENTRY(ST_CONNECT)				// ST_DISCONNECT
+                TRANSITION_MAP_ENTRY(CANNOT_HAPPEN)				// ST_LOGON
+                TRANSITION_MAP_ENTRY(ST_CONNECT)				// ST_LOGOFF
+                TRANSITION_MAP_ENTRY(ST_STARTSERVICE)		    // ST_SHUTDOWN
+                TRANSITION_MAP_ENTRY(ST_CONNECT)		        // ST_OCCUPY
+            END_TRANSITION_MAP(Data)
+        }
 
 		void SessionStateMachine::Disconnect(SessionData* Data = nullptr)
 		{
@@ -38,6 +51,7 @@ namespace RW{
 				TRANSITION_MAP_ENTRY(ST_DISCONNECT)				// ST_LOGON
 				TRANSITION_MAP_ENTRY(ST_LOGOFF)				    // ST_LOGOFF
 				TRANSITION_MAP_ENTRY(CANNOT_HAPPEN)				// ST_SHUTDOWN
+                TRANSITION_MAP_ENTRY(ST_DISCONNECT)		        // ST_OCCUPY
 			END_TRANSITION_MAP(Data)
 		}
 
@@ -50,6 +64,7 @@ namespace RW{
 				TRANSITION_MAP_ENTRY(ST_LOGOFF)				    // ST_LOGON
 				TRANSITION_MAP_ENTRY(ST_SHUTDOWN)				// ST_LOGOFF
 				TRANSITION_MAP_ENTRY(CANNOT_HAPPEN)				// ST_SHUTDOWN
+                TRANSITION_MAP_ENTRY(ST_LOGOFF)		            // ST_OCCUPY
 			END_TRANSITION_MAP(Data)
 		}
 
@@ -62,6 +77,7 @@ namespace RW{
                 TRANSITION_MAP_ENTRY(ST_SHUTDOWN)				// ST_LOGON
                 TRANSITION_MAP_ENTRY(ST_SHUTDOWN)				// ST_LOGOFF
                 TRANSITION_MAP_ENTRY(CANNOT_HAPPEN)				// ST_SHUTDOWN
+                TRANSITION_MAP_ENTRY(ST_SHUTDOWN)		        // ST_OCCUPY
             END_TRANSITION_MAP(Data)
         }
 
@@ -83,6 +99,7 @@ namespace RW{
 				m_ConfigManager->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::ON));
 				m_Logger->debug("RemoteService State is: {}", "ON");
 			}
+            m_Logger->flush();
 
 		}
 
@@ -92,8 +109,8 @@ namespace RW{
 			{
 				m_Logger->info("ST_CONNECT");
 				m_ConfigManager->InsertConfigValue(RW::CORE::ConfigurationName::UserName, Data->username);
-				m_ConfigManager->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::OCCUPY));
-				m_Logger->debug("RemoteService State is: {}", "OCCUPY");
+				m_ConfigManager->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::ON));
+				m_Logger->debug("RemoteService State is: {}", "ON");
 			}
 			else
 			{
@@ -102,17 +119,19 @@ namespace RW{
 				m_ConfigManager->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::FREE));
 				m_Logger->debug("RemoteService State is: {}", "FREE");
 			}
+            m_Logger->flush();
 
 		}
 
 
-		void SessionStateMachine::ST_Disconnect(EventData* Data)
+        void SessionStateMachine::ST_Disconnect(SessionData* Data)
 		{
             Q_UNUSED(Data)
 			m_Logger->info("ST_DISCONNECT");
-			m_ConfigManager->InsertConfigValue(RW::CORE::ConfigurationName::UserName, "Occupy");
+            m_ConfigManager->InsertConfigValue(RW::CORE::ConfigurationName::UserName, Data->username);
 			m_ConfigManager->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::OCCUPY));
 			m_Logger->debug("RemoteService State is: {}", "OCCUPY");
+            m_Logger->flush();
 		}
 
 		void SessionStateMachine::ST_Logon(SessionData* Data)
@@ -130,7 +149,9 @@ namespace RW{
 				m_ConfigManager->InsertConfigValue(RW::CORE::ConfigurationName::UserName, "Defect");
 				m_ConfigManager->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::DEFECT));
 				m_Logger->debug("RemoteService State is: {}", "DEFECT");
+
 			}
+            m_Logger->flush();
 
 		}
 
@@ -142,6 +163,7 @@ namespace RW{
 			m_ConfigManager->InsertConfigValue(RW::CORE::ConfigurationName::UserName, "Free");
 			m_ConfigManager->InsertConfigValue(RW::CORE::ConfigurationName::WorkstationState, qVariantFromValue(RW::WorkstationState::FREE));
 			m_Logger->debug("RemoteService State is: {}", "FREE");
+            m_Logger->flush();
 
 		}
 

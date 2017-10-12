@@ -79,7 +79,7 @@ namespace RW
                     if (wts.State == WTSActive)
                     {
                         SessioNumber = wts.SessionId;
-                        m_logger->debug("SessionNumber is: {}", SessioNumber);// << SessioNumber;
+                        m_logger->trace("SessionNumber is: {}", SessioNumber);// << SessioNumber;
                     }
                 }
                 WTSFreeMemory(pSessionsBuffer);

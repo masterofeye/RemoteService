@@ -114,7 +114,7 @@ namespace RW
 				UpdateSessionsState();
 				GetCurrentlyLoggedUser(username);
 				SessionData* data = new SessionData(username);
-				m_StateMachine->NewSession(data);
+                m_StateMachine->NewSession(data);
 				break;
 			}
 			case COM::MessageDescription::IN_SESSIONLOGON:
@@ -138,7 +138,7 @@ namespace RW
 				UpdateSessionsState();
 				GetCurrentlyLoggedUser(username);
 				SessionData* data = new SessionData(username);
-				m_StateMachine->NewSession(data);
+                m_StateMachine->NewRemoteSession(data);
 				break;
 			}
 			case COM::MessageDescription::IN_SESSIONDISCONNECT:

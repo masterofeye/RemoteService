@@ -26,6 +26,7 @@ namespace RW{
 			SessionStateMachine(ConfigurationManager* Configmanager);
 			~SessionStateMachine();
 
+            void NewRemoteSession(SessionData* Data);
 			void NewSession(SessionData* Data);
 			void Disconnect(SessionData* Data);
             void LogOff(SessionData* Data = nullptr);
@@ -35,7 +36,7 @@ namespace RW{
 			// state machine state functions
 			void ST_StartService(SessionData*);
 			void ST_Connect(SessionData*);
-			void ST_Disconnect(EventData*);
+            void ST_Disconnect(SessionData*);
 			void ST_Logon(SessionData*);
 			void ST_LogOff(EventData*);
 			void ST_Shutdown(EventData*);
@@ -59,6 +60,7 @@ namespace RW{
 				ST_LOGON,
 				ST_LOGOFF,
 				ST_SHUTDOWN,
+                ST_OCCUPY,
 				ST_MAX_STATES
 			};
 			Q_ENUM(E_States)
