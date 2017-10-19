@@ -59,15 +59,15 @@ private:
 	Device_Socket* m_Sockets;
 	std::shared_ptr<spdlog::logger> m_logger;
 public:
-    AnelHome(PeripheralType DeviceType, QVector<std::function<void(void)>> SwitchOnCondition, QObject *parent = 0);
+    AnelHome(PeripheralType DeviceType, QVector<std::function<bool(void)>> SwitchOnCondition, QObject *parent = 0);
 	~AnelHome();
 
 	bool Initialize();
 	bool Reset();
     bool Deinitialize();
 
-    virtual void Callback();
-    virtual std::function<void(void)> GetCallback(TypeOfElement);
+    virtual bool Callback(QString Pin, QString Port, QHostAddress IP);
+    virtual std::function<bool(void)> GetCallback(TypeOfElement, QString, QString, QHostAddress);
 
 	virtual bool SwitchPort(quint8 Port, PortState St);
 	virtual bool SwitchAll(PortState St);

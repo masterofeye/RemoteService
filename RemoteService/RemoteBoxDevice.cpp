@@ -5,7 +5,7 @@
 namespace RW{
 	namespace HW{
 
-        RemoteBoxDevice::RemoteBoxDevice(PeripheralType DeviceType, QVector<std::function<void(void)>> SwitchOnCondition, QObject *Parent) : AbstractDevice(DeviceType, SwitchOnCondition, Parent),
+        RemoteBoxDevice::RemoteBoxDevice(PeripheralType DeviceType, QVector<std::function<bool(void)>> SwitchOnCondition, QObject *Parent) : AbstractDevice(DeviceType, SwitchOnCondition, Parent),
 			m_Wrapper(new RemoteBoxWrapper::Wrapper())
 		{
 		}
@@ -65,9 +65,25 @@ namespace RW{
 
 		bool RemoteBoxDevice::Initialize(){
 			std::string res;
+            m_State = State::Init;
+
+            for each (auto var in m_SwitchOnCondition)
+            {
+                if (!var())
+                    return false;
+            }
+
+            Sleep(2000);
+
 			bool success = m_Wrapper->Init(res);
-			if (!success)
-				m_Logger->error("RemoteBox couldn't initialised: {}",res);
+            if (!success)
+            {
+                m_Logger->error("RemoteBox couldn't initialised: {}", res);
+                m_State = State::Failure;
+            }
+            else
+                m_State = State::Running;
+            
 			return success;
 		}
 
@@ -85,17 +101,19 @@ namespace RW{
 			m_Wrapper->Deinit(res); return true;
 		}
 
-        void RemoteBoxDevice::Callback()
+        bool RemoteBoxDevice::Callback(QString Pin, QString Port, QHostAddress IP)
         {
+            m_Logger->debug("RemoteBoxDevice callback was called");
+            return true;
         }
 
 
-        std::function<void(void)> RemoteBoxDevice::GetCallback(TypeOfElement Connection)
+        std::function<bool(void)> RemoteBoxDevice::GetCallback(TypeOfElement Connection, QString Pin, QString Port, QHostAddress Ip)
         {
             switch (Connection)
             {
             case TypeOfElement::USB:
-                return std::bind(&RemoteBoxDevice::Callback, this);
+                return std::bind(&RemoteBoxDevice::Callback, this, Pin, Port, Ip);
             default:
                 break;
             }

@@ -191,11 +191,11 @@ void RemoteService::start()
     if (workstationType.value<RW::WorkstationKind>() == RW::WorkstationKind::RemoteWorkstation)
     {
         m_logger->debug("Device manager initialize");
-        //m_DeviceMng->SetLogger(m_logger);
-        //if (!m_DeviceMng->Init())
-        //    m_logger->error("Device manager couldn't initialized correct");
-        //else
-        //    m_logger->info("Device manager initialized correct");
+        m_DeviceMng->SetLogger(m_logger);
+        if (!m_DeviceMng->Init())
+            m_logger->error("Device manager couldn't initialized correct");
+        else
+            m_logger->info("Device manager initialized correct");
     }
     
     m_logger->trace("Start Scheduler now!");

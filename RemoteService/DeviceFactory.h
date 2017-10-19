@@ -1,7 +1,7 @@
 #pragma once
 #include "qobject.h"
 #include <functional>
-
+#include <qhostaddress.h>
 
 namespace RW{
     enum class PeripheralType;
@@ -18,6 +18,7 @@ namespace RW{
         class DeviceFactory :
             public QObject
         {
+
         public:
             DeviceFactory();
             ~DeviceFactory();
@@ -27,7 +28,7 @@ namespace RW{
             */
             static AbstractDevice* CreateDevice(const RW::SQL::Peripheral &Device,QMap<PeripheralType, AbstractDevice*> *m_DeviceList);
 
-            static void CreateSwitchOnMessage(const RW::SQL::Peripheral &Device, QVector<std::function<void(void)>> &SwitchOnMessage, QMap<PeripheralType, AbstractDevice*> *m_DeviceList);
+            static void CreateSwitchOnMessage(const RW::SQL::Peripheral &Device, QVector<std::function<bool(void)>> &SwitchOnMessage, QMap<PeripheralType, AbstractDevice*> *m_DeviceList);
         };
     }
 }

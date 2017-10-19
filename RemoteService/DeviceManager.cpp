@@ -14,11 +14,6 @@ namespace RW{
 
 
 
-        bool ComparePeripheralCondition(const RW::SQL::Peripheral &v1, const RW::SQL::Peripheral &v2)
-        {
-            return v1.ConditionList()->rowCount() < v2.ConditionList()->rowCount();
-        }
-
         DeviceManager::DeviceManager(CORE::ConfigurationManager* CfgManager, QObject *Parent) : QObject(Parent),
             m_DeviceList(new QMap<PeripheralType, AbstractDevice*>()),
 			m_State(State::Init),
@@ -33,6 +28,21 @@ namespace RW{
 			m_logger = Logger;
 		}
 
+        bool caseInsensitiveLessThan(const RW::SQL::Peripheral &s1, const RW::SQL::Peripheral &s2)
+        {
+            QList<RW::SQL::Peripheral> temp;
+
+            while (!ToSort.isEmpty())
+            {
+                QList<RW::SQL::Peripheral>::iterator it = ToSort.begin();
+                while (it != ToSort.end())
+                {
+                    it->ConditionList()->peripheralCondition(0)->Priority()
+                }
+            }
+            ToSort = temp;
+        }
+
 		bool DeviceManager::Init()
 		{
             QVariant var;
@@ -40,7 +50,7 @@ namespace RW{
             m_ConfigManager->GetConfigValue(RW::CORE::ConfigurationName::PeripheralTable, var);
             QList<RW::SQL::Peripheral> list = var.value<QList<RW::SQL::Peripheral>>();
 
-            qSort(list.begin(), list.end(), ComparePeripheralCondition);
+            SortList(list);
 
             for each (auto var in list)
             {
@@ -92,9 +102,8 @@ namespace RW{
             //Geräteliste durchgehen und jedes Geräte in der Liste, versuchen zu initialisieren und dann zu registrieren.
             m_ConfigManager->GetConfigValue(RW::CORE::ConfigurationName::PeripheralTable, var);
             QList<RW::SQL::Peripheral> list = var.value<QList<RW::SQL::Peripheral>>();
-
-            qSort(list.begin(), list.end(), ComparePeripheralCondition);
-
+        
+            qSort(list.begin(), list.end(), SortList);
 
             QListIterator<RW::SQL::Peripheral> i(list);
             while (i.hasNext()) {
@@ -113,15 +122,21 @@ namespace RW{
 
         bool DeviceManager::RegisterNewDevice(RW::SQL::Peripheral Device)
         {
-
+            bool res = true;
             auto ptrDevice = DeviceFactory::CreateDevice(Device, m_DeviceList);
             if (ptrDevice->Initialize())
             {
                 m_DeviceList->insert(Device.InteralType(), ptrDevice);
 
                 Device.SetRegistered(true);
+                m_logger->info("Device was registered {}", Device.Description().toStdString());
+                m_logger->flush();
             }
-            return true;
+            else
+            {
+                res = false;
+            }
+            return res;
         }
 
         bool DeviceManager::DeregisterNewDevice(QString DeviceName)

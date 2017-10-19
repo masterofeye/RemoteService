@@ -47,6 +47,11 @@ namespace RW{
             */
             bool RegisterNewDevice(RW::SQL::Peripheral Device);
 
+            /*!
+            @brief Sortiert die Liste der Geräte die initial aus der Konfiguration ausgelesen werden;
+            */
+            void SortList(QList<RW::SQL::Peripheral> &ToSort);
+
 		public:
             DeviceManager(CORE::ConfigurationManager* CfgManager, QObject *Parent = nullptr);
 			virtual ~DeviceManager();

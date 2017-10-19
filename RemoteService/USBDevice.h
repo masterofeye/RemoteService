@@ -13,14 +13,14 @@ namespace RW{
             QString m_Hub = "";
             QString m_Port = "";
 		public:
-            USBDevice(PeripheralType DeviceType, QVector<std::function<void(void)>> SwitchOnCondition,  QObject *parent = 0);
+            USBDevice(PeripheralType DeviceType, QVector<std::function<bool(void)>> SwitchOnCondition, QObject *parent = 0);
 			virtual ~USBDevice();
 
 			virtual bool Initialize();
 			virtual bool Reset();
             virtual bool Deinitialize();
-            virtual void Callback();
-            virtual std::function<void(void)> GetCallback(TypeOfElement);
+            virtual bool Callback(QString Pin, QString Port, QHostAddress IP);
+            virtual std::function<bool(void)> GetCallback(TypeOfElement, QString, QString, QHostAddress);
 		private:
 			/*!
 			@brief Parst den Output des Devcon Prozess und überprüft ob ein Befehl richtig verarbeitet wurde.

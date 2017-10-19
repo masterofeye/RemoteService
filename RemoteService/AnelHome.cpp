@@ -1,16 +1,17 @@
 #include "AnelHome.h"
+#include "RemoteDataConnectLibrary.h"
 
 
 namespace RW{
 	namespace HW{
 
-        AnelHome::AnelHome(PeripheralType DeviceType, QVector<std::function<void(void)>> SwitchOnCondition, QObject *parent) : PowerStripeDevice(DeviceType, SwitchOnCondition, parent),
+        AnelHome::AnelHome(PeripheralType DeviceType, QVector<std::function<bool(void)>> SwitchOnCondition, QObject *parent) : PowerStripeDevice(DeviceType, SwitchOnCondition, parent),
 			m_SendSocket(new QUdpSocket(this)),
 			m_ReceiveSocket(new QUdpSocket(this)),
 			m_logger(spdlog::get("remoteservice"))
 		{
 			m_Sockets = new Device_Socket[8];
-			m_IpAddress.setAddress("192.168.0.24");
+			m_IpAddress.setAddress("192.168.111.92");
 		}
 
 		AnelHome::~AnelHome()
@@ -23,18 +24,39 @@ namespace RW{
         
         }
 
-        void AnelHome::Callback()
+        bool AnelHome::Callback(QString Pin, QString Port, QHostAddress IP)
         {
-        
+
+            m_logger->debug("Anel callback was called");
+            Switch(PortState::ON, Port.toInt());
+            return true;
         }
-        std::function<void(void)> AnelHome::GetCallback(TypeOfElement)
+
+        std::function<bool(void)> AnelHome::GetCallback(TypeOfElement Connection, QString Pin, QString Port, QHostAddress Ip)
         {
+            switch (Connection)
+            {
+            case TypeOfElement::USB:
+
+                return std::bind(&AnelHome::Callback, this, Pin, Port, Ip);
+            default:
+                break;
+            }
             return nullptr;
         }
 
 
 		bool AnelHome::Initialize()
 		{
+            m_State = State::Init;
+
+            for each (auto var in m_SwitchOnCondition)
+            {
+                if (!var())
+                    return false;
+            }
+
+
 			if (m_ReceiveSocket->bind(PORT_RECEIVE))
 			{
 				connect(m_ReceiveSocket, SIGNAL(readyRead()), this, SLOT(ReceiveAsk()));
@@ -56,7 +78,14 @@ namespace RW{
 			}
 			//qApp->processEvents();
 			SendAsk("wer da?");
-			//qApp->processEvents();
+			
+            quint8 counter = 0;
+            while (counter < 100)
+            {
+                qApp->processEvents();
+                Sleep(100);
+                counter++;
+            }
 			return true;
 		}
 
@@ -149,6 +178,7 @@ namespace RW{
 				Parse(datagram);
 			}
 			Parse(datagram);
+            m_State = State::Running;
 		}
 
 		/*

@@ -9,7 +9,7 @@
 namespace RW{
 	namespace HW{
 
-        USBDevice::USBDevice(PeripheralType DeviceType, QVector<std::function<void(void)>> SwitchOnCondition, QObject *Parent) : AbstractDevice(DeviceType, SwitchOnCondition, Parent)
+        USBDevice::USBDevice(PeripheralType DeviceType, QVector<std::function<bool(void)>> SwitchOnCondition, QObject *Parent) : AbstractDevice(DeviceType, SwitchOnCondition, Parent)
 		{
 		}
 
@@ -45,13 +45,14 @@ namespace RW{
             }
         }
 
-        void USBDevice::Callback()
+        bool USBDevice::Callback(QString Pin, QString Port, QHostAddress IP)
         {
-
+            m_Logger->debug("USB Callback was called");
+            return true;
         }
-        std::function<void(void)> USBDevice::GetCallback(TypeOfElement)
+        std::function<bool(void)> USBDevice::GetCallback(TypeOfElement, QString Pin, QString Port, QHostAddress Ip)
         {
-            return nullptr;
+            return std::bind(&USBDevice::Callback, this, Pin, Port, Ip);
         }
 
 		bool USBDevice::ParseStdOut(QString StdOutput)
@@ -65,7 +66,8 @@ namespace RW{
             
             for each (auto var in m_SwitchOnCondition)
             {
-                var();
+                if (!var())
+                    return false;
             }
 
             m_State = State::Running;

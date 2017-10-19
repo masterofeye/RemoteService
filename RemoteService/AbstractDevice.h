@@ -1,9 +1,9 @@
 #pragma once
 #include <QtCore>
+#include <qhostaddress.h>
+#include <functional>
 #include <spdlog\spdlog.h>
-#include <functional>
 #include "RemoteCommunicationLibrary.h"
-#include <functional>
 
 namespace RW{
     enum class TypeOfElement;
@@ -39,6 +39,9 @@ namespace RW{
         };
         class AbstractDevice;
 
+
+
+
 		class AbstractDevice : public QObject
 		{
 			Q_OBJECT
@@ -49,23 +52,28 @@ namespace RW{
 		protected:
             std::shared_ptr<spdlog::logger> m_Logger;
             State m_State = State::Failure;
-            QVector<std::function<void(void)>> m_SwitchOnCondition;
+            QVector<std::function<bool(void)>> m_SwitchOnCondition;
         public slots:
-        virtual void OnProcessMessage(COM::Message Msg) = 0;
+            virtual void OnProcessMessage(COM::Message Msg) = 0;
         signals:
             void NewMessage(COM::Message Msg);
 		public:
-            AbstractDevice(PeripheralType DeviceType, QVector<std::function<void(void)>> SwitchOnCondition, QObject *parent = 0);
+            AbstractDevice(PeripheralType DeviceType, QVector<std::function<bool(void)>> SwitchOnCondition, QObject *parent = 0);
 			AbstractDevice(std::shared_ptr<spdlog::logger> Logger, QObject *parent = 0);
 			~AbstractDevice();
 
 			inline QString DeviceName(){ return m_DeviceName; }
 
+            /*
+            @brief Initialisiert das Geräte und führt alle notwendigen Schritte für die Inbetriebnahme aus. Dies beinhaltet auch, 
+            dass das manipulieren von anderen Geräten.
+            @return Liefer true zurück, sofern das Gerät initialisiert ist.
+            */
 			virtual bool Initialize() = 0;
 			virtual bool Reset() = 0;
             virtual bool Deinitialize() = 0;
-            virtual void Callback() = 0;
-            virtual std::function<void(void)> GetCallback(TypeOfElement) = 0;
+            virtual bool Callback(QString Pin, QString Port, QHostAddress IP) = 0;
+            virtual std::function<bool(void)> GetCallback(TypeOfElement, QString, QString, QHostAddress) = 0;
 
 		};
 	}
