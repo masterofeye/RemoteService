@@ -63,7 +63,21 @@
 #include "WtsSessionManager.h"
 
 
+QDataStream &operator >>(QDataStream &in, RW::WorkstationKind &dataStruct)
+{
+    quint16 e;
+    in >> e;
+    dataStruct = (RW::WorkstationKind) e;
+    return in;
+}
 
+QDataStream &operator <<(QDataStream &out, const RW::WorkstationKind &dataStruct)
+{
+    out.startTransaction();
+    out << (quint16)dataStruct;
+    out.commitTransaction();
+    return out;
+}
 
 typedef SERVICE_STATUS_HANDLE(WINAPI*PRegisterServiceCtrlHandler)(const wchar_t*,LPHANDLER_FUNCTION_EX);
 static PRegisterServiceCtrlHandler pRegisterServiceCtrlHandler = 0;
@@ -141,6 +155,8 @@ void RemoteService::start()
 #ifdef DEBUG
 	Sleep(10000);
 #endif
+
+    qRegisterMetaTypeStreamOperators<RW::WorkstationKind>("WorkstationKind");
 
 	m_logger = spdlog::get("remoteservice");
 	if (m_logger == nullptr)

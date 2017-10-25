@@ -21,7 +21,6 @@ namespace RW{
 		/*
 		@brief
 		@param Version Specified the configuration version for the DB query.
-		
 		*/
         InactivityWatcher::InactivityWatcher(QString Version, ConfigurationManager* ConfigManager, QObject *parent) : QObject(parent),
 			m_logger(spdlog:: get("remoteservice")),
@@ -129,8 +128,20 @@ namespace RW{
                 }
             break;
             case COM::MessageDescription::IN_LogoutImmediately:
+                if (Msg.IsProcessed())
+                {
                     LogOutUserImmediately();
-                break;
+                    break;
+                }
+            case COM::MessageDescription::EX_PermanentLogin:
+                if (!Msg.IsProcessed())
+                {
+                    QList<QVariant> list = Msg.ParameterList();
+                    bool isPermanent = list.first().toBool();
+                    m_ConfigManager->InsertConfigValue(ConfigurationName::PermanentLogin, isPermanent);
+                    m_logger->info("Permanent Login was changed to {}.", isPermanent ? "activated" : "deactivated", (int)spdlog::sinks::FilterType::InactivityWatcher);
+                    break;
+                }
             default:
                 break;
 #ifdef DEBUG
@@ -151,16 +162,34 @@ namespace RW{
                 msg.setIdentifier(COM::Message::GenUUID(COM::TypeofServer::RemoteHiddenHelper).toString());
                 msg.SetIsExternal(true);
                 QList<QVariant> paramList;
+                /*Param 1*/
                 paramList.append(m_Timeout);
 
 				/*Wir müssen den Usernamen an den RemoteHiddenhelper schicken um sicher zu sein, 
 				dass die richtige Session ausgeloggt wird.*/
 				QVariant username;
 				m_ConfigManager->GetConfigValue(ConfigurationName::UserName, username);
+                /*Param 2*/
 				paramList.append(username.toString());
-
+                /*Param 3*/
                 paramList.append(m_LogoutTimeStart);
+                /*Param 4*/
                 paramList.append(m_LogoutTimeEnd);
+
+                QVariant workstationType;
+                m_ConfigManager->GetConfigValue(ConfigurationName::WorkstationType, workstationType);
+                /*Param 5*/
+                paramList.append(workstationType);
+                /*Param 6*/
+                QVariant permanent;
+                m_ConfigManager->GetConfigValue(ConfigurationName::PermanentLogin, permanent);
+                paramList.append(permanent.toBool());
+                
+                /*Param 7*/
+                QVariant logouttime;
+                m_ConfigManager->GetConfigValue(ConfigurationName::MaxPermanentLoginTime, logouttime);
+                paramList.append(logouttime);
+     
 				msg.SetParameterList(paramList);
                 connect(m_TimerLogout, &QTimer::timeout, this, &InactivityWatcher::OnTimeoutStart);
                 m_TimerLogout->setSingleShot(true);
