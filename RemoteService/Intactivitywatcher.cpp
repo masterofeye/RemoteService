@@ -40,6 +40,9 @@ namespace RW{
             m_LogoutTimeStart = logoutTimeStart.toTime();
             m_LogoutTimeEnd = logoutTimeEnd.toTime();
 
+            m_logger->trace("The m_LogoutTimeStart is {}", (int)spdlog::sinks::FilterType::InactivityWatcher, m_LogoutTimeStart.toString().toStdString());
+            m_logger->trace("The m_LogoutTimeStart is {}", (int)spdlog::sinks::FilterType::InactivityWatcher, m_LogoutTimeEnd.toString().toStdString());
+
             if (workstationType == WorkstationKind::RemoteWorkstation)
             {
                 QVariant timeout;
